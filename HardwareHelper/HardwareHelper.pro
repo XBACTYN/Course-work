@@ -14,7 +14,7 @@ SOURCES += \
     processor.cpp
 
 HEADERS += \
-    IElement.h \
+    Element.h \
     mainwindow.h \
     processor.h
 
