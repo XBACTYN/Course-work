@@ -1,8 +1,8 @@
 #pragma once
 #ifndef PROCESSOR_H
 #define PROCESSOR_H
-#include "IElement.h"
-class Processor:public IElement
+#include "Element.h"
+class Processor:public Element
 {  
 private:
     QString _name;
@@ -22,7 +22,7 @@ private:
                                 //Тип линии PCI express. Помним про односторонюю совместимость.
     bool _multThreading;        //Многопоточность
     //QString _link;
-    //QString _vendCode         //Артикул в магазине
+    //QString _vendCode         //Артикул в магазине! Скорее всего буду использовать как ключ для хеш таблицы.
     //кажется забыл еще потребляемую энергию
 
 public:

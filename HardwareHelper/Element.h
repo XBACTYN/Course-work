@@ -1,13 +1,13 @@
 #pragma once
-#ifndef IELEMENT_H
-#define IELEMENT_H
+#ifndef ELEMENT_H
+#define ELEMENT_H
 #include <QTextStream>
-class IElement{
+class Element{
 public:
    // QTextStream out(stdout);//
     //дописать чисто виртуальные функции.
-    IElement(){}
-    virtual ~IElement(){}
+    Element(){}
+    ~Element(){}
 };
 
 #endif // IELEMENT_H
