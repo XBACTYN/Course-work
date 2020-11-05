@@ -1,10 +1,11 @@
 #include "mainwindow.h"
-
+#include "Element.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     //test
+    QHash <QString,Element>_hash;
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
