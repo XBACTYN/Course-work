@@ -1,3 +1,4 @@
+#pragma once
 #ifndef PARSEMACHINE_H
 #define PARSEMACHINE_H
 #include "Element.h"
@@ -8,13 +9,19 @@
 #include <QFile>
 #include <QUrl>
 #include <QDebug>
+#include <QMap>
 class ParseMachine
 {
 
 public:
-    QHash <QString,Element>_hash;
+    QMap<QString,Element>map;
+
 
     ParseMachine();
+
+    void Insert(QString str,Element el);
+
+
 };
 
 #endif // PARSEMACHINE_H
