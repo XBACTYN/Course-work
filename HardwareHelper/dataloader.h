@@ -11,19 +11,12 @@
 
 class DataLoader : public QObject
 {
-    Q_OBJECT
+
 public:
-    explicit DataLoader(QObject *parent = 0);
+    DataLoader();
 
-signals:
-    void onReady();
 
-public slots:
-    void getData();     // Метод инициализации запроса на получение данных
-    void onResult(QNetworkReply *reply);    // Слот обработки ответа о полученных данных
+}
 
-private:
-    QNetworkAccessManager *manager; // менеджер сетевого доступа
-};
 
 #endif // DOWNLOADER_H
