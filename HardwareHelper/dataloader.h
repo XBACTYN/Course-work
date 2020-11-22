@@ -1,22 +1,25 @@
 #ifndef DATALOADER_H
 #define DATALOADER_H
 
-#include <QObject>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QFile>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
 #include <QUrl>
-#include <QDebug>
+#include <QTextCodec>
+#include <QFile>
+#include <QEventLoop>
 
 class DataLoader : public QObject
 {
 
+    QNetworkAccessManager* manager;
+    QUrl url;
+
 public:
     DataLoader();
+    void ParsePage();//test
 
-
-}
+};
 
 
 #endif // DOWNLOADER_H
