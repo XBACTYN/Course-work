@@ -4,10 +4,11 @@
 #include <QTextStream>
 class Element{
 public:
+    QString _modArticle;
    // QTextStream out(stdout);//
-    //дописать чисто виртуальные функции.
+
     Element(){}
-    ~Element(){}
+   // ~Element(){}
 };
 
 #endif // IELEMENT_H

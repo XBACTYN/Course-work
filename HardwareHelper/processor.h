@@ -21,11 +21,11 @@ private:
     double _maxMemFreq;
                                 //Тип линии PCI express. Помним про односторонюю совместимость.
     bool _multThreading;        //Многопоточность
-    //QString _link;
-    //QString _vendCode         //Артикул в магазине! Скорее всего буду использовать как ключ для хеш таблицы.
+    //QString _link;        //Артикул в магазине! Скорее всего буду использовать как ключ для хеш таблицы.
     //кажется забыл еще потребляемую энергию
 
 public:
+    //есть родительское поле QString _article
     Processor();
     Processor(QString name,QString manuf,QString socket,QString memType,
               QString graphic,size_t kernels,size_t maxMem,size_t heat,
