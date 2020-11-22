@@ -5,17 +5,20 @@ Form::Form(QWidget *parent) :
     ui(new Ui::Form)
 {
     ui->setupUi(this);
-    ui->lineEdit->setText("https://yandex.ru/");
-     QUrl url("https://yandex.ru/");
+    ui->lineEdit1->setText("http://findhard.ru/motherboards?send=1&orderdir=desc&orderby=ShopCount");
+     QUrl url("http://findhard.ru/motherboards?send=1&orderdir=desc&orderby=ShopCount");
        // Создаем объект менеджера
        manager = new QNetworkAccessManager(this);
        //QNetworkAccessManager manager;
            QNetworkReply *response = manager->get(QNetworkRequest(url));
            QEventLoop event;
            connect(response,SIGNAL(finished()),&event,SLOT(quit()));
-           //event.exec();
+           event.exec();
            QString html = response->readAll();
-           qDebug()<<html;
+           //qDebug()<<html;
+           if (html.contains("/motherboards/model?id=1527&amp;m=asus-j1800i-c"))
+               qDebug()<<"YES";
+           else qDebug()<<"NO";
 }
 
 void Form::on_pushButton_clicked()
@@ -24,7 +27,7 @@ void Form::on_pushButton_clicked()
 
    // берем адрес введенный в текстовое поле
 
-   QUrl url(ui->lineEdit->text());
+   QUrl url(ui->lineEdit1->text());
 
    // создаем объект для запроса
 

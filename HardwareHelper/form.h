@@ -12,6 +12,7 @@
 
 #include <QTextCodec>
 
+
 namespace Ui {
 class Form;
 }
