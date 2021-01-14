@@ -6,8 +6,8 @@
 int main(int argc, char *argv[])
 {
     //test
-   // DataLoader loader;
- //   loader.ParsePage();
+    //DataLoader loader;
+    //loader.ParseProcessors();
 
 
     QApplication a(argc, argv);
