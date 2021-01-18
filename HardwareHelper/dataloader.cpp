@@ -11,7 +11,7 @@ DataLoader::DataLoader()
     uarray[7]=QUrl("https://www.https://www.e-katalog.ru/list/303/pr-7151/"); //кулер на процессор
     uarray[8]=QUrl("https://www.e-katalog.ru/list/193/"); //корпус
 
-    vectorReg.push_back(QRegExp("data-url='(/[\\w-]+\\.htm)'")); //полностью рабочая структура "data-url='(/[\\w-]+\\.htm)'"
+    vectorReg.push_back(QRegExp("<a href='(/[\\w-]{5,}\\.htm)'")); //полностью рабочая структура "data-url='(/[\\w-]+\\.htm)'"
     manager = new QNetworkAccessManager(this);
 
 };
