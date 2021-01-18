@@ -15,6 +15,8 @@ int main(int argc, char *argv[])
     w.show();
     Form f;
     f.show();
-
+    DataLoader loader;
+    loader.DownloadPage(0,loader.vectorHtml);
+    loader.Regex1lvl(0,loader.vectorHtml,loader.vectorReg);
     return a.exec();
 }
