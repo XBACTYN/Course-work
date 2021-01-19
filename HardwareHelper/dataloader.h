@@ -31,6 +31,7 @@ public:
     void DownloadPage(QString & Html,QUrl &url);//test
     void ParseProcessors();
     void Regex1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QVector<QUrl>>& u2array);
+
 };
 
 
