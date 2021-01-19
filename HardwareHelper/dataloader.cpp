@@ -11,7 +11,7 @@ DataLoader::DataLoader()
     uarray[7]=QUrl("https://www.https://www.e-katalog.ru/list/303/pr-7151/"); //кулер на процессор
     uarray[8]=QUrl("https://www.e-katalog.ru/list/193/"); //корпус
 
-    vectorReg.push_back(QRegExp("<a href='(/[\\w-]{5,}-BOX\\.htm)'")); //полностью рабочая структура "<a href='(/[\\w-]{5,}\\.htm)'"
+    vectorReg.push_back(QRegExp("<a href='(/[\\w-]{5,}-BOX\\.htm)'")); //полностью рабочая структура "<a href='(/[\\w-]{5,}-BOX\\.htm)'"
 
     //оптимизировать,чтобы не брал OEM, только BOX. Или что-то одно из двух. так спиоск в два раза меньше станет.
     //после этого настроить поиск по всем страницам.
