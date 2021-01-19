@@ -11,7 +11,7 @@ DataLoader::DataLoader()
     uarray[7]=QUrl("https://www.https://www.e-katalog.ru/list/303/pr-7151/"); //кулер на процессор
     uarray[8]=QUrl("https://www.e-katalog.ru/list/193/"); //корпус
 
-    vectorReg.push_back(QRegExp("<a href='(/[\\w-]{5,}\\.htm)'")); //полностью рабочая структура "data-url='(/[\\w-]+\\.htm)'"
+    vectorReg.push_back(QRegExp("<a href='(/[\\w-]{5,}-BOX\\.htm)'")); //полностью рабочая структура "<a href='(/[\\w-]{5,}\\.htm)'"
 
     //оптимизировать,чтобы не брал OEM, только BOX. Или что-то одно из двух. так спиоск в два раза меньше станет.
     //после этого настроить поиск по всем страницам.
@@ -31,10 +31,10 @@ DataLoader::DataLoader()
     connect(response,SIGNAL(finished()),&event,SLOT(quit()));
     event.exec();
     vectorHtml.push_back(QString(response->readAll()));
+
     if (vectorHtml[0].contains("/AMD-3600-OEM.htm"))
         qDebug()<<"YES1";
     else qDebug()<<"NO1";
-    //<пусто>теперь Функция с регулярными выражениями принимающая vector[i] по ссылке.
 
 }
 
