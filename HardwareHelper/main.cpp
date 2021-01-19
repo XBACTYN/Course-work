@@ -16,7 +16,8 @@ int main(int argc, char *argv[])
     Form f;
     f.show();
     DataLoader loader;
-    loader.DownloadPage(0,loader.vectorHtml);
-    loader.Regex1lvl(0,loader.vectorHtml,loader.vectorReg);
+    loader.DownloadPage(loader.Html,loader.uarray[0]);
+    loader.Regex1lvl(0,loader.Html,loader.vectorReg,loader.u2array);
+    qDebug()<<loader.u2array[0]<<"\n"<<loader.u2arrayI[0];
     return a.exec();
 }
