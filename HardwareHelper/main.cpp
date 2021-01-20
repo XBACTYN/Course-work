@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     int pages=3;
    // for(int i=0;i<9;++i)
 {
-       int i=6;
+       int i=8;
     //loader.DownloadPage(loader.Html,loader.uarray[i]);
     loader.Parse1lvl(i,loader.Html,loader.vectorReg,loader.u2array,pages);
 

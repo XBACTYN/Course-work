@@ -12,7 +12,7 @@ DataLoader::DataLoader()
     uarray[6]=QUrl("https://www.e-katalog.ru/ek-list.php?katalog_=61&presets_=3680,32956&page_=");  //ssd
     uarray[7]=QUrl("https://www.e-katalog.ru/list/351/"); //блок питания
     //нужна доп фильтрация для уменьшения выборки
-    uarray[8]=QUrl("https://www.e-katalog.ru/list/193/"); //корпус
+    uarray[8]=QUrl("https://www.e-katalog.ru/ek-list.php?katalog_=193&presets_=5469,5470,5473&page_="); //корпус
 
     vectorReg.push_back(QRegExp("<a href='/([\\w-]{5,}-OEM\\.htm)'"));//проц //полностью рабочая структура "<a href='(/[\\w-]{5,}\\.htm)'"
     vectorReg.push_back(QRegExp("<a href='/([\\w-]{5,}\\.htm)'"));//мать  ВРОДЕ ФИЛЬТРЫ НА МАТЬ СТАВИТЬ СМЫСЛА НЕТ
@@ -21,8 +21,8 @@ DataLoader::DataLoader()
     vectorReg.push_back(QRegExp("<a href='/([\\w-]{5,}\\.htm)'"));//кулер на проц БЕЗ ФИЛЬРАЦИИ
     vectorReg.push_back(QRegExp("<a href='/(SEAGATE[\\w-]{5,}\\.htm)'"));//hdd только от seagate
     vectorReg.push_back(QRegExp("<a href='/(KINGSTON[\\w-]{5,}\\.htm)'"));//ssd только от kingston
-    vectorReg.push_back(QRegExp("<a href='/([\\w-]{5,}\\.htm)'"));//БП
-    vectorReg.push_back(QRegExp("<a href='/([\\w-]{5,}\\.htm)'"));//корпус
+    vectorReg.push_back(QRegExp("<a href='/(AEROCOOL[\\w-]{5,}\\.htm)'"));//БП только от AEROCOOL
+    vectorReg.push_back(QRegExp("<a href='/(AEROCOOL[\\w-]{5,}\\.htm)'"));//корпус
     //после этого настроить поиск по всем страницам.
     //сформировать структуру в которую занести все ссылки типа /amd. или /intel ..... и проч. скорее всего опять вектор который будет vectorProc
     //
