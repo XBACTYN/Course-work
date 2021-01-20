@@ -27,6 +27,11 @@ DataLoader::DataLoader()
     manager = new QNetworkAccessManager(this);
     for(int i=0;i<9;++i)
         u2arrayI[i]=0;
+    for(int i=0;i<9;++i)
+        pages[i]=3;
+    pages[4]=2;
+    pages[5]=1;
+    pages[7]=2;
 };
 
 

@@ -26,7 +26,7 @@ public:
 
     //есть родительское поле QString _article
 
-    //Processor();
+    Processor();
 
 };
 
