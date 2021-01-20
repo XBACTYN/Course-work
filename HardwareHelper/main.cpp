@@ -5,9 +5,9 @@
 #include <form.h>
 int main(int argc, char *argv[])
 {
-    //main
-    DataLoader loader;
-    loader.ParsePage();
+    //experimental
+    //DataLoader loader;
+    //loader.ParseProcessors();
 
 
     QApplication a(argc, argv);
@@ -15,6 +15,8 @@ int main(int argc, char *argv[])
     w.show();
     Form f;
     f.show();
-
+    DataLoader loader;
+    loader.DownloadPage(0,loader.vectorHtml);
+    loader.Regex1lvl(0,loader.vectorHtml,loader.vectorReg);
     return a.exec();
 }

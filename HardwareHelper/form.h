@@ -12,6 +12,7 @@
 
 #include <QTextCodec>
 
+
 namespace Ui {
 class Form;
 }
@@ -19,7 +20,7 @@ class Form;
 class Form : public QWidget
 {
     Q_OBJECT
-private slots:
+private slots: //для интерактивных элементов
 
     void on_pushButton_clicked();
 
@@ -30,10 +31,11 @@ public:
     explicit Form(QWidget *parent = nullptr);
     ~Form();
 
-private:
+
+private://создание формы
     Ui::Form *ui;
 
-   QNetworkAccessManager* manager;
+   QNetworkAccessManager* manager;// !! относится к парсеру
 };
 
 #endif // FORM_H

@@ -1,6 +1,4 @@
 #include "dataloader.h"
-<<<<<<< Updated upstream
-=======
 DataLoader::DataLoader()
 {
     uarray[0]=QUrl("https://www.e-katalog.ru/list/186/"); //проц
@@ -13,40 +11,43 @@ DataLoader::DataLoader()
     uarray[7]=QUrl("https://www.https://www.e-katalog.ru/list/303/pr-7151/"); //кулер на процессор
     uarray[8]=QUrl("https://www.e-katalog.ru/list/193/"); //корпус
 
-    vectorReg.push_back(QRegExp("<a href='(/[\\w-]+\\.htm)'")); //полностью рабочая структура "data-url='(/[\\w-]+\\.htm)'" но перчатает по три раза
+    vectorReg.push_back(QRegExp("data-url='(/[\\w-]+\\.htm)'")); //полностью рабочая структура "data-url='(/[\\w-]+\\.htm)'"
     manager = new QNetworkAccessManager(this);
 
 };
 
->>>>>>> Stashed changes
 
-DataLoader::DataLoader(){
-    url=QUrl("https://www.dns-shop.ru/catalog/17a899cd16404e77/processory.html");
-}
 
-void DataLoader::ParsePage()
+ void DataLoader::DownloadPage(int i,QVector<QString>&vectorHtml) //максимально 24 процессора на странице. потом /(n-1)/ к адресу страницы
 {
-   /* QNetworkRequest request(url);
-    manager = new QNetworkAccessManager(this);
-    QNetworkReply* reply=  manager->get(request);
-    connect( reply, SIGNAL(finished()), this, SLOT(replyFinished()) );
-    if (reply->error() == QNetworkReply::NoError)
-
-    {
-      QFile file("1.html");
-
-      if( file.open(QIODevice::WriteOnly) )
-
-      {
-
-        QByteArray content= reply->readAll();
-
-        file.write(content); // пишем в файл
-
-        file.close();
-      }
-    }*/
+   //добавить в параметры ссылку на массив с регулярными выражениями.
+    QNetworkReply *response = manager->get(QNetworkRequest(uarray[i]));
+    QEventLoop event;
+    connect(response,SIGNAL(finished()),&event,SLOT(quit()));
+    event.exec();
+    vectorHtml.push_back(QString(response->readAll()));
+    if (vectorHtml[0].contains("/AMD-3600-OEM.htm"))
+        qDebug()<<"YES1";
+    else qDebug()<<"NO1";
+    //<пусто>теперь Функция с регулярными выражениями принимающая vector[i] по ссылке.
 
 }
 
+void DataLoader::Regex1lvl(int i,QVector<QString>&vectorHtml,QVector<QRegExp>&vectorReg)//максимально 24 процессора на странице. потом /(n-1)/ к адресу страницы
+{ //по задумке там должны высветиться все ссылки для 24х процессоров с нулевой страницы. пока я их не сохраняю
+  // qDebug()<<"Regular expression:"<<vectorReg[i]<<"\n";//<<vectorHtml[i]<<"\n\n\n";
+
+
+       int lastPos = 0;
+       while( ( lastPos = vectorReg[i].indexIn( vectorHtml[i], lastPos ) ) != -1 )
+       {
+           qDebug()<<"in while"<<endl;
+           lastPos += vectorReg[i].matchedLength();
+           qDebug() <<vectorReg[i].cap( 0 ) << ":" << vectorReg[i].cap( 1 );
+       }
+ qDebug()<<"end"<<endl;
+
+
+
+}
 
