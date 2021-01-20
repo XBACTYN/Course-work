@@ -16,12 +16,14 @@ int main(int argc, char *argv[])
     Form f;
     f.show();
     DataLoader loader;
-
-    for(int i=0;i<8;++i)
+    int pages=3;
+   // for(int i=0;i<9;++i)
 {
-    loader.DownloadPage(loader.Html,loader.uarray[i]);
-    loader.Regex1lvl(i,loader.Html,loader.vectorReg,loader.u2array);
-    qDebug()<<"in main"<<loader.u2array[i]<<"\n"<<loader.u2arrayI[i]<<"\n";
+       int i=6;
+    //loader.DownloadPage(loader.Html,loader.uarray[i]);
+    loader.Parse1lvl(i,loader.Html,loader.vectorReg,loader.u2array,pages);
+
+    qDebug()<<"in main"<<loader.u2array[0]<<"\n"<<loader.u2arrayI[i]<<"\n";
 }
     return a.exec();
 }

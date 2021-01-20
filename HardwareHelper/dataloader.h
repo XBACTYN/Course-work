@@ -21,16 +21,16 @@ class DataLoader : public QObject
 public:
     //QVector<QString> vectorHtml;//массив со страницами первого уровня в формате строк.
    //int vectorHtmlc;
-    QUrl uarray[8];
+    QUrl uarray[9];
     QVector<QRegExp> vectorReg;//двухмерный массив регулярок
     int vectorRegc;
     QString Html;
     QVector <QVector<QUrl>> u2array;//массив с адресами на дочерние страницы  //массив должен быть двумерным!!!!!!!!!!!!!!!!!!!!!!!!
-    int u2arrayI[8];// ячейка содержит количество ссылок на каждый тип комплектующих. например u2array[0]==81 это 81 url процессоров.
+    int u2arrayI[9];// ячейка содержит количество ссылок на каждый тип комплектующих. например u2array[0]==81 это 81 url процессоров.
     DataLoader();
     void DownloadPage(QString & Html,QUrl &url);//test
-    void ParseProcessors();
-    void Regex1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QVector<QUrl>>& u2array);
+    void Parse1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QVector<QUrl>>& u2array,int pages);
+    void Regex1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QUrl>&tempVector);
 
 };
 

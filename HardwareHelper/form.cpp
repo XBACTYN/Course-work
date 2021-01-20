@@ -7,7 +7,7 @@ Form::Form(QWidget *parent) :
     ui->setupUi(this);
     //Ниже парсинг страницы в str
     //
-    QUrl uarray[]={QUrl("https://www.e-katalog.ru/list/186/"),QUrl("https://www.e-katalog.ru/list/187/"),
+   /* QUrl uarray[]={QUrl("https://www.e-katalog.ru/list/186/"),QUrl("https://www.e-katalog.ru/list/187/"),
                    QUrl("https://www.e-katalog.ru/list/189/"),QUrl("https://www.e-katalog.ru/list/188/"),
                    QUrl("https://www.e-katalog.ru/list/190/"),QUrl("https://www.e-katalog.ru/list/61/"),
                    QUrl("https://www.e-katalog.ru/list/351/"),QUrl("https://www.https://www.e-katalog.ru/list/303/pr-7151/"),
@@ -28,6 +28,7 @@ Form::Form(QWidget *parent) :
                qDebug()<<"YES";
            else qDebug()<<"NO";
      //Выше парсинг страницы в str
+     */
 }
 
 void Form::on_pushButton_clicked()
