@@ -13,7 +13,6 @@ SOURCES += \
     form.cpp \
     main.cpp \
     mainwindow.cpp \
-    parsemachine.cpp \
     processor.cpp
 
 HEADERS += \
@@ -21,7 +20,6 @@ HEADERS += \
     dataloader.h \
     form.h \
     mainwindow.h \
-    parsemachine.h \
     processor.h
 
 FORMS += \

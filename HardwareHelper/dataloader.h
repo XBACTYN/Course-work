@@ -23,7 +23,7 @@ public:
    //int vectorHtmlc;
     QUrl uarray[9];
     QVector<QRegExp> vectorReg;//двухмерный массив регулярок
-    int vectorRegc;
+    int vectorRegc; //под сомнением
     QString Html;
     QVector <QVector<QUrl>> u2array;//массив с адресами на дочерние страницы  //массив должен быть двумерным!!!!!!!!!!!!!!!!!!!!!!!!
     int u2arrayI[9];// ячейка содержит количество ссылок на каждый тип комплектующих. например u2array[0]==81 это 81 url процессоров.
