@@ -22,7 +22,8 @@ public:
     //QVector<QString> vectorHtml;//массив со страницами первого уровня в формате строк.
    //int vectorHtmlc;
     QUrl uarray[9];
-    QVector<QRegExp> vectorReg;//двухмерный массив регулярок
+    QVector<QRegExp> vectorReg;//массив регулярок
+    QVector<QRegExp> vectorReg2;
     int vectorRegc; //под сомнением
     QString Html;
     QVector <QVector<QUrl>> u2array;//массив с адресами на дочерние страницы  //массив должен быть двумерным!!!!!!!!!!!!!!!!!!!!!!!!
@@ -32,7 +33,8 @@ public:
     void DownloadPage(QString & Html,QUrl &url);//test
     void Parse1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QVector<QUrl>>& u2array,int  pages);
     void Regex1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QUrl>&tempVector);
-
+    void Parse2lvl();
+    void Regex2lvl(int i,QString & Html,QVector<QRegExp>&vectorReg2);
 };
 
 

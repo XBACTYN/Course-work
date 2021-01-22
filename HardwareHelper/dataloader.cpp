@@ -24,6 +24,11 @@ DataLoader::DataLoader()
     vectorReg.push_back(QRegExp("<a href='/(AEROCOOL[\\w-]{5,}\\.htm)'"));//БП только от AEROCOOL                   [7]
     vectorReg.push_back(QRegExp("<a href='/(AEROCOOL[\\w-]{5,}\\.htm)'"));//корпус только от AEROCOOL               [8]
     //
+
+    vectorReg2.push_back(QRegExp("class=.op3.>(6).nbsp.cores<.td>.*class=.op3.>(12).nbsp.threads<.td>"));
+    /*
+        class=.op3.>(\\d).nbsp.cores</td></tr> - для извлечения количества потоков \\d
+    */
     manager = new QNetworkAccessManager(this);
     for(int i=0;i<9;++i)
         u2arrayI[i]=0;
@@ -79,5 +84,22 @@ void DataLoader::Parse1lvl(int i, QString &Html, QVector<QRegExp> &vectorReg, QV
         }
     u2array.push_back(tempVector);
 
+}
+
+void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)
+{
+    qDebug()<<"in Regex2lvl()\n";
+    qDebug()<<vectorReg2[i];
+    int lastPos = 0;
+    while( ( lastPos = vectorReg2[i].indexIn( Html, lastPos ) ) != -1 )
+    {
+        qDebug()<<"in while";
+        lastPos += vectorReg2[i].matchedLength();
+        qDebug() <<vectorReg2[i].cap( 0 ) << ":\n\n" << vectorReg2[i].cap( 1 )<<vectorReg2[i].cap(2);
+        //tempVector.push_back(QUrl("https://www.e-katalog.ru/"+vectorReg[i].cap(1)));
+        //++u2arrayI[i];
+
+    }
+    qDebug()<<"end regex2lvl";
 }
 

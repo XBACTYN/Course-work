@@ -10,7 +10,6 @@ CONFIG += c++11
 
 SOURCES += \
     dataloader.cpp \
-    form.cpp \
     main.cpp \
     mainwindow.cpp \
     processor.cpp
@@ -18,12 +17,10 @@ SOURCES += \
 HEADERS += \
     Element.h \
     dataloader.h \
-    form.h \
     mainwindow.h \
     processor.h
 
 FORMS += \
-    form.ui \
     mainwindow.ui
 
 # Default rules for deployment.
