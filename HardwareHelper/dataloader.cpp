@@ -24,10 +24,7 @@ DataLoader::DataLoader()
     vectorReg.push_back(QRegExp("<a href='/(AEROCOOL[\\w-]{5,}\\.htm)'"));//БП только от AEROCOOL                   [7]
     vectorReg.push_back(QRegExp("<a href='/(AEROCOOL[\\w-]{5,}\\.htm)'"));//корпус только от AEROCOOL               [8]
     //
-
-    vectorReg2.push_back(QRegExp("<div class=.op1-tt.>(.+)  <span class='item"
-                                 ".*class=.op3.>(\\d{1,2}).nbsp.cores<.td>"
-                                 ".*class=.op3.>(\\d{1,2}).nbsp.threads<.td>"));
+    SetRegexProcessor();
     /*
         "class=.op3.>(\\d{1,2}).nbsp.cores<.td>.*class=.op3.>(\\d{1,2}).nbsp.threads<.td>" - для извлечения количества потоков \\d
     */
@@ -40,8 +37,14 @@ DataLoader::DataLoader()
     pages[5]=1;
     pages[7]=2;
 };
-
-
+void DataLoader::SetRegexProcessor()
+{   qDebug()<<"in set process()";
+    vectorReg2.push_back(QRegExp("<div class=.op1-tt.>(.+)  <span class='item-conf-name ib nobr'>"
+                                 "(.+ OEM)</span><.div><div class='m-c-f1'>"
+                                 ".*class=.op3.><a href='.+'>(.+)</a></td>"
+                                 ".*class=.op3.>(\\d{1,2}).nbsp.cores<.td>"
+                                 ".*class=.op3.>(\\d{1,2}).nbsp.threads<.td>"));
+}
 
  void DataLoader::DownloadPage(QString &Html,QUrl &url) //максимально 24 процессора на странице. потом /(n-1)/ к адресу страницы
 {
@@ -98,7 +101,9 @@ void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)
         qDebug()<<"in while";
         lastPos += vectorReg2[i].matchedLength();
        // qDebug()<<vectorReg2[i].cap(0);
-        qDebug() << vectorReg2[i].cap( 1 )<<vectorReg2[i].cap(2)<<vectorReg2[i].cap(3)<<vectorReg2[i].cap(4);
+        qDebug() << vectorReg2[i].cap( 1 )<<vectorReg2[i].cap(2)
+                 <<vectorReg2[i].cap(3)<<vectorReg2[i].cap(4)
+                 <<vectorReg2[i].cap(5)<<vectorReg2[i].cap(6);
         //tempVector.push_back(QUrl("https://www.e-katalog.ru/"+vectorReg[i].cap(1)));
         //++u2arrayI[i];
 
