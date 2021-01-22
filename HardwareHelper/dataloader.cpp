@@ -43,7 +43,9 @@ void DataLoader::SetRegexProcessor()
                                  "(.+ OEM)</span><.div><div class='m-c-f1'>"
                                  ".*class=.op3.><a href='.+'>(.+)</a></td>"
                                  ".*class=.op3.>(\\d{1,2}).nbsp.cores<.td>"
-                                 ".*class=.op3.>(\\d{1,2}).nbsp.threads<.td>"));
+                                 ".*class=.op3.>(\\d{1,2}).nbsp.threads<.td>"
+                                 ".*Тактовая <span class='nobr ib'>частота<.span><.span><.td><td width=.\\d\\d.. class=.op3.>(\\d.\\d).nbsp.ГГц"
+                                 ".*Техпроцесс</span></span></td><td width=.\\d\\d.. class=.op3.>(\\d{1,2}).nbsp.нм</td>"));
 }
 
  void DataLoader::DownloadPage(QString &Html,QUrl &url) //максимально 24 процессора на странице. потом /(n-1)/ к адресу страницы
@@ -103,7 +105,8 @@ void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)
        // qDebug()<<vectorReg2[i].cap(0);
         qDebug() << vectorReg2[i].cap( 1 )<<vectorReg2[i].cap(2)
                  <<vectorReg2[i].cap(3)<<vectorReg2[i].cap(4)
-                 <<vectorReg2[i].cap(5)<<vectorReg2[i].cap(6);
+                 <<vectorReg2[i].cap(5)<<vectorReg2[i].cap(6)
+                 <<vectorReg2[i].cap(7)<<vectorReg2[i].cap(8);
         //tempVector.push_back(QUrl("https://www.e-katalog.ru/"+vectorReg[i].cap(1)));
         //++u2arrayI[i];
 
