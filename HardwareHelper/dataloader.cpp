@@ -25,7 +25,7 @@ DataLoader::DataLoader()
     vectorReg.push_back(QRegExp("<a href='/(AEROCOOL[\\w-]{5,}\\.htm)'"));//корпус только от AEROCOOL               [8]
     //
 
-    vectorReg2.push_back(QRegExp("class=.op3.>(6).nbsp.cores<.td>.*class=.op3.>(12).nbsp.threads<.td>"));
+    vectorReg2.push_back(QRegExp("class=.op3.>(\\d{1,2}).nbsp.cores<.td>.*class=.op3.>(\\d{1,2}).nbsp.threads<.td>"));
     /*
         class=.op3.>(\\d).nbsp.cores</td></tr> - для извлечения количества потоков \\d
     */
