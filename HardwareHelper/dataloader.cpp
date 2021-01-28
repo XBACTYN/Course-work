@@ -25,6 +25,7 @@ DataLoader::DataLoader()
     vectorReg.push_back(QRegExp("<a href='/(AEROCOOL[\\w-]{5,}\\.htm)'"));//корпус только от AEROCOOL               [8]
     //
     SetRegexProcessor();
+    SetRegexMotherboard();
     /*
         "class=.op3.>(\\d{1,2}).nbsp.cores<.td>.*class=.op3.>(\\d{1,2}).nbsp.threads<.td>" - для извлечения количества потоков \\d
     */
@@ -38,14 +39,50 @@ DataLoader::DataLoader()
     pages[7]=2;
 };
 void DataLoader::SetRegexProcessor()
-{   qDebug()<<"in set process()";
+{
     vectorReg2.push_back(QRegExp("<div class=.op1-tt.>(.+)  <span class='item-conf-name ib nobr'>"
                                  "(.+ OEM)</span><.div><div class='m-c-f1'>"
                                  ".*class=.op3.><a href='.+'>(.+)</a></td>"
                                  ".*class=.op3.>(\\d{1,2}).nbsp.cores<.td>"
                                  ".*class=.op3.>(\\d{1,2}).nbsp.threads<.td>"
                                  ".*Тактовая <span class='nobr ib'>частота<.span><.span><.td><td width=.\\d\\d.. class=.op3.>(\\d.\\d).nbsp.ГГц"
-                                 ".*Техпроцесс</span></span></td><td width=.\\d\\d.. class=.op3.>(\\d{1,2}).nbsp.нм</td>"));
+                                 ".*Техпроцесс</span></span></td><td width=.\\d\\d.. class=.op3.>(\\d{1,2}).nbsp.нм</td>"
+                                 ".*class=.op3.>(\\d{1,4}).nbsp.КБ</td>"
+                                 ".*class=.op3.>(\\d{1,4}).nbsp.КБ</td>"
+                                 ".*class=.op3.>(\\d{1,4}).nbsp.МБ</td>"
+                                 ".*class=.op3.>(\\d{1,4}).nbsp.Вт</td>"
+                                 ".*class=.op3.>(\\d{1,4}).nbsp.ГБ</td>"
+                                 ".*class=.op3.>(\\d{1,4}).nbsp.МГц</td>"
+                                 ".*class=.op3.>(\\d).nbsp.шт</td>"));
+    fields[0]=14;
+    //https://www.e-katalog.ru/AMD-2600X-OEM.htm
+}
+void DataLoader::RefMotherboardsPrepare()
+{
+    QRegExp cutter("https://www.e-katalog.ru/([\\w-]{5,})\\.htm");
+    for(int j=0;j<u2arrayI[1];++j)
+    {
+
+        int lastPos = 0;
+        while( ( lastPos = cutter.indexIn( u2array[1][j].toString(), lastPos ) ) != -1 )
+        {
+            lastPos += cutter.matchedLength();
+            u2array[1][j]=QUrl("https://www.e-katalog.ru/ek-item.php?resolved_name_="+cutter.cap(1)+"&view_=tbl");
+        }
+        qDebug()<<u2array[1][j];
+    }
+
+}
+void DataLoader::SetRegexMotherboard()
+{
+    vectorReg2.push_back(QRegExp("<div class=.op1-tt.>(.{5,40})</div>"));
+
+    /*<span class=.blue.>(.{5,35})</span></div>"
+                                 ".*(?:Socket:|Форм-фактор:)</span>(.{3,15})<div class=.sn-shadow.>"
+                                 ".*(?:Форм-фактор ОЗУ:|Чипсет:)</span>(.{3,12})<div class=.sn-shadow.>"
+                                 ".*(?:Звук .каналов.:|Слоты ОЗУ:)</span>(.{1,12})<div class=.sn-shadow.>"
+                                 */
+    fields[1]=4;
 }
 
  void DataLoader::DownloadPage(QString &Html,QUrl &url) //максимально 24 процессора на странице. потом /(n-1)/ к адресу страницы
@@ -95,6 +132,7 @@ void DataLoader::Parse1lvl(int i, QString &Html, QVector<QRegExp> &vectorReg, QV
 
 void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)
 {
+    //настроить на прием количества полей для каждого элемента
     qDebug()<<"in Regex2lvl()\n";
     qDebug()<<vectorReg2[i];
     int lastPos = 0;
@@ -102,13 +140,9 @@ void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)
     {
         qDebug()<<"in while";
         lastPos += vectorReg2[i].matchedLength();
-       // qDebug()<<vectorReg2[i].cap(0);
-        qDebug() << vectorReg2[i].cap( 1 )<<vectorReg2[i].cap(2)
-                 <<vectorReg2[i].cap(3)<<vectorReg2[i].cap(4)
-                 <<vectorReg2[i].cap(5)<<vectorReg2[i].cap(6)
-                 <<vectorReg2[i].cap(7)<<vectorReg2[i].cap(8);
-        //tempVector.push_back(QUrl("https://www.e-katalog.ru/"+vectorReg[i].cap(1)));
-        //++u2arrayI[i];
+
+        for(int j=1;j<=fields[i];++j)
+            qDebug()<<vectorReg2[i].cap(j);
 
     }
     qDebug()<<"end regex2lvl";

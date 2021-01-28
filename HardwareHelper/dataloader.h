@@ -24,12 +24,14 @@ public:
     QUrl uarray[9];
     QVector<QRegExp> vectorReg;//массив регулярок
     QVector<QRegExp> vectorReg2;
-    int vectorRegc; //под сомнением
+    int fields[9];
     QString Html;
     QVector <QVector<QUrl>> u2array;//массив с адресами на дочерние страницы  //массив должен быть двумерным!!!!!!!!!!!!!!!!!!!!!!!!
     int u2arrayI[9];// ячейка содержит количество ссылок на каждый тип комплектующих. например u2array[0]==81 это 81 url процессоров.
     int pages[9];
     void SetRegexProcessor();
+    void RefMotherboardsPrepare();
+    void SetRegexMotherboard();
     DataLoader();
     void DownloadPage(QString & Html,QUrl &url);//test
     void Parse1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QVector<QUrl>>& u2array,int  pages);
