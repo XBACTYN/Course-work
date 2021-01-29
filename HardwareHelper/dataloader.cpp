@@ -25,7 +25,8 @@ DataLoader::DataLoader()
     vectorReg.push_back(QRegExp("<a href='/(AEROCOOL[\\w-]{5,}\\.htm)'"));//корпус только от AEROCOOL               [8]
     //
     SetRegexProcessor();
-    SetRegexMotherboard();
+    SetRegexMotherBoard();
+    SetRegexGraphicsCard();
     /*
         "class=.op3.>(\\d{1,2}).nbsp.cores<.td>.*class=.op3.>(\\d{1,2}).nbsp.threads<.td>" - для извлечения количества потоков \\d
     */
@@ -69,22 +70,47 @@ void DataLoader::RefMotherboardsPrepare()
             lastPos += cutter.matchedLength();
             u2array[1][j]=QUrl("https://www.e-katalog.ru/ek-item.php?resolved_name_="+cutter.cap(1)+"&view_=tbl");
         }
-        qDebug()<<u2array[1][j];
+        //qDebug()<<u2array[1][j];
     }
 
 }
-void DataLoader::SetRegexMotherboard()
+void DataLoader::SetRegexMotherBoard()
 {
-    vectorReg2.push_back(QRegExp("<div class=.op1-tt.>(.{5,40})</div>"));
+    vectorReg2.push_back(QRegExp("<div class=.op1-tt.>(.{5,40})</div>"
+                                 ".*class=.op3.><a href='.{20,40}'>(.{3,15})</a></td></tr>"
+                                 ".*class=.op3.><a href='.{20,40}'>(.{3,15})</a></td></tr>"
+                                 ".*class=.op3.><a href='.{20,40}'>(\\d{1,2}).nbsp.слот"
+                                 ".*class=.op3.>(.{3,7})</td></tr>"
+                                 ".*class=.op3.>(\\d{3,5}).nbsp.МГц</td></tr>"
+                                 ".*class=.op3.>(\\d{1,2}).nbsp.ГБ</td></tr>"
+                                 ".*Аудиочип</span></span></td><td width=..... class=.op3.>(.{10,20})</td></tr>"
+                                 ".*SATA3 .+</span></span></td><td width=..... class=.op3.>(\\d{1,2}).nbsp.шт</td></tr>"
+                                 ".*M.2 .+</span></span></td><td width=..... class=.op3.>(\\d{1,2}).nbsp.шт</td></tr>"
+                                 ".*Поддержка PCI .+</span></span></td><td width=..... class=.op3.>(\\d\\.\\d)</td></tr>"
+                                 ".*USB.+2\\..+</span></span></td><td width=..... class=.op3.>(\\d{1,2}).nbsp.шт</td></tr>"
+                                 ".*USB.+3\\..+</span></span></td><td width=..... class=.op3.>(\\d{1,2}).nbsp.шт</td></tr>"
+                                 ".*Основной разъем .+</span></span></td><td width=..... class=.op3.>(\\d{1,2})-контактный</td></tr>"
+                                 ".*процессора.+</td><td width=..... class=.op3.>(\\d{1,2})-контакт"));
 
-    /*<span class=.blue.>(.{5,35})</span></div>"
-                                 ".*(?:Socket:|Форм-фактор:)</span>(.{3,15})<div class=.sn-shadow.>"
-                                 ".*(?:Форм-фактор ОЗУ:|Чипсет:)</span>(.{3,12})<div class=.sn-shadow.>"
-                                 ".*(?:Звук .каналов.:|Слоты ОЗУ:)</span>(.{1,12})<div class=.sn-shadow.>"
-                                 */
-    fields[1]=4;
+
+    fields[1]=15;
 }
 
+void DataLoader::SetRegexGraphicsCard()
+{
+    vectorReg2.push_back(QRegExp("<div class=.op1-tt.>(.{5,40})</div>"
+                                 ".*class=.op3.>PCI-E v(\\d\\.\\d)</td>"
+                                 ".*class=.op3.>(\\d{1,2}).nbsp.ГБ</td>"
+                                 ".*class=.op3.>(GDDR\\d)</td>"
+                                 ".*class=.op3.>(\\d{2,3}).nbsp.бит</td>"
+                                 ".*памяти.*class=.op3.>(\\d{3,6}).nbsp.МГц</td>"
+                                 ".*разрешение.*class=.op3.>(\\d{4,6}x\\d{4,6}).nbsp.пикс</td>"
+                                 ".*(?:DVI-D.*class=.op3.>(\\d).nbsp.шт</td>)?"
+                                 ".*(?:HDMI.*class=.op3.>(\\d).nbsp.шт</td>)?"
+                                 ".*мониторов.*class=.op3.>(\\d)</td>"
+                                 ".*class=.op3.>(\\d{2,3}).nbsp.Вт</td>"));
+    fields[2]=11;
+}
  void DataLoader::DownloadPage(QString &Html,QUrl &url) //максимально 24 процессора на странице. потом /(n-1)/ к адресу страницы
 {
     qDebug()<<"in DownloadPage()\n";
@@ -99,12 +125,12 @@ void DataLoader::SetRegexMotherboard()
 void DataLoader::Regex1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QUrl> &tempVector)//максимально 24 процессора на странице. потом /(n-1)/ к адресу страницы
 {
     qDebug()<<"in Regex1lvl()\n";
-    qDebug()<<vectorReg[i];
+   // qDebug()<<vectorReg[i];
        int lastPos = 0;
        while( ( lastPos = vectorReg[i].indexIn( Html, lastPos ) ) != -1 )
        {
            lastPos += vectorReg[i].matchedLength();
-           qDebug() <<vectorReg[i].cap( 0 ) << ":" << vectorReg[i].cap( 1 )<<u2arrayI[i]<<"\n";
+          // qDebug() <<vectorReg[i].cap( 0 ) << ":" << vectorReg[i].cap( 1 )<<u2arrayI[i]<<"\n";
            tempVector.push_back(QUrl("https://www.e-katalog.ru/"+vectorReg[i].cap(1)));
            ++u2arrayI[i];
        }

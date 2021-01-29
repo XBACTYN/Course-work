@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 
     QUrl u=QUrl("https://www.e-katalog.ru/ek-item.php?resolved_name_=GIGABYTE-B450M-S2H-REV--1-0&view_=tbl");
 
-    for(int i=0;i<9;++i)
+    for(int i=0;i<3;++i)// 9 поменял на 2.
 {
       // int i=8;
    //loader.DownloadPage(loader.Html,u);
@@ -27,6 +27,9 @@ int main(int argc, char *argv[])
     //qDebug()<<"in main"<<loader.u2array[i]<<"\n"<<loader.u2arrayI[i]<<"\n";
     //qDebug()<<loader.Html;
 }
+
    loader.RefMotherboardsPrepare();
+   loader.DownloadPage(loader.Html,loader.u2array[2][8]);
+   loader.Regex2lvl(2,loader.Html,loader.vectorReg2);
     return a.exec();
 }

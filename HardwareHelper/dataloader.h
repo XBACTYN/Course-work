@@ -31,7 +31,8 @@ public:
     int pages[9];
     void SetRegexProcessor();
     void RefMotherboardsPrepare();
-    void SetRegexMotherboard();
+    void SetRegexMotherBoard();
+    void SetRegexGraphicsCard();
     DataLoader();
     void DownloadPage(QString & Html,QUrl &url);//test
     void Parse1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QVector<QUrl>>& u2array,int  pages);
