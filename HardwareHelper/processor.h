@@ -2,22 +2,24 @@
 #ifndef PROCESSOR_H
 #define PROCESSOR_H
 #include "Element.h"
+#include <QUrl>
 class Processor:public Element
 {  
 public:
     int position;
-    QString _name;
-    QString _manuf;
-    QString _socket;
-    QString _iGraphic;//или bool
-    size_t _kernels;
-    size_t _threads;
-    size_t _maxMem; //пример 64гб
-    size_t _TDP;
-    size_t _channels; //количество каналов у оперативы.
-    size_t _techprocess; //7,14 нм и прочее.
-    double _kerFreq; //частота ядра ГГц
-    double _price;
+    int lowPrice;
+    int HighPrice;
+    QUrl url;
+    QString name;//состоит из двух строк
+    QString socket;
+    int kernels;
+    int threads;
+    double kerFreq;
+    double kerTurbo;
+    int techprocess;
+    QString iGraphic;
+    int TDP;
+    int maxMem;
     double _maxMemFreqDDR3; //МГЦ
     double _maxMemFreqDDR4;
                                 //Тип линии PCI express. Помним про односторонюю совместимость.

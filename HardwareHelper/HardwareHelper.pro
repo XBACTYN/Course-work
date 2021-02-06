@@ -12,12 +12,14 @@ SOURCES += \
     dataloader.cpp \
     main.cpp \
     mainwindow.cpp \
+    motherboard.cpp \
     processor.cpp
 
 HEADERS += \
     Element.h \
     dataloader.h \
     mainwindow.h \
+    motherboard.h \
     processor.h
 
 FORMS += \

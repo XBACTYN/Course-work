@@ -41,21 +41,26 @@ DataLoader::DataLoader()
 };
 void DataLoader::SetRegexProcessor()
 {
-    vectorReg2.push_back(QRegExp("<div class=.op1-tt.>(.+)  <span class='item-conf-name ib nobr'>"
+    vectorReg2.push_back(QRegExp("<meta name=.description. content=.Цена: от (\\d{3,6}) р. до (\\d{3,6}) р."
+                                 ".*hreflang=.ru-RU. href=.(https://www.e-katalog.ru/.{5,50}.htm).><link rel=.alternate"
+                                 ".*<div class=.op1-tt.>(.{5,50})  <span class='item-conf-name ib nobr'>"
                                  "(.+ OEM)</span><.div><div class='m-c-f1'>"
-                                 ".*class=.op3.><a href='.+'>(.+)</a></td>"
+                                 ".*Socket.*class=.op3.><a href='.{20,40}'>(.{3,20})</a></td></tr>"
                                  ".*class=.op3.>(\\d{1,2}).nbsp.cores<.td>"
                                  ".*class=.op3.>(\\d{1,2}).nbsp.threads<.td>"
-                                 ".*Тактовая <span class='nobr ib'>частота<.span><.span><.td><td width=.\\d\\d.. class=.op3.>(\\d.\\d).nbsp.ГГц"
+                                 ".*Тактовая <span class='nobr ib'>частота<.span><.span><.td><td width=.\\d\\d.. class=.op3.>(\\d.?\\d?).nbsp.ГГц"
+                                 ".*(?:Частота TurboBoost / <span class='nobr ib'>TurboCore</span></span></td><td width=...%. class=.op3.>(\\d.?\\d?)&nbsp;ГГц)?"
                                  ".*Техпроцесс</span></span></td><td width=.\\d\\d.. class=.op3.>(\\d{1,2}).nbsp.нм</td>"
-                                 ".*class=.op3.>(\\d{1,4}).nbsp.КБ</td>"
-                                 ".*class=.op3.>(\\d{1,4}).nbsp.КБ</td>"
-                                 ".*class=.op3.>(\\d{1,4}).nbsp.МБ</td>"
+                                 ".*(?:Модель <span class='nobr ib'>IGP</span></span></td><td width=...%. class=.op3.>(.{5,25})</td></tr>)?"
                                  ".*class=.op3.>(\\d{1,4}).nbsp.Вт</td>"
-                                 ".*class=.op3.>(\\d{1,4}).nbsp.ГБ</td>"
-                                 ".*class=.op3.>(\\d{1,4}).nbsp.МГц</td>"
-                                 ".*class=.op3.>(\\d).nbsp.шт</td>"));
-    fields[0]=14;
+                                 ".*(?:class=.op3.>(\\d{1,4}).nbsp.ГБ</td>)?"
+                                 ".*(?:Макс. частота <span class='nobr ib'>DDR3</span></span></td><td width=...%. class=.op3.>(\\d{3,5})&nbsp;МГц</td>)?"
+                                 ".*(?:Макс. частота <span class='nobr ib'>DDR4</span></span></td><td width=...%. class=.op3.>(\\d{3,5})&nbsp;МГц</td>)?"
+                                 ".*Официальный сайт"
+                             ));
+
+
+    fields[0]=16;
     //https://www.e-katalog.ru/AMD-2600X-OEM.htm
 }
 void DataLoader::RefMotherboardsPrepare()
@@ -76,29 +81,38 @@ void DataLoader::RefMotherboardsPrepare()
 }
 void DataLoader::SetRegexMotherBoard()
 {
-    vectorReg2.push_back(QRegExp("<div class=.op1-tt.>(.{5,40})</div>"
-                                 ".*class=.op3.><a href='.{20,40}'>(.{3,15})</a></td></tr>"
-                                 ".*class=.op3.><a href='.{20,40}'>(.{3,15})</a></td></tr>"
-                                 ".*class=.op3.><a href='.{20,40}'>(\\d{1,2}).nbsp.слот"
-                                 ".*class=.op3.>(.{3,7})</td></tr>"
+    vectorReg2.push_back(QRegExp("<meta name=.description. content=.Цена: от (\\d{3,6}) р. до (\\d{3,6}) р."
+                                 ".*hreflang=.ru-RU. href=.(https://www.e-katalog.ru/.{5,100}=tbl).><link rel=.alternate. hreflang=.ru-UA."
+                                 ".*<div class=.op1-tt.>(.{5,50})</div>"
+                                 ".*Socket.*class=.op3.><a href='.{20,40}'>(.{3,20})</a></td></tr>"
+                                 ".*Форм-фактор</span></span></td><td width=...%. class=.op3.><a href='.{20,40}'>(.{3,20})</a></td></tr>"
+                                 ".*(?:DDR4</span></span></td><td width=...%. class=.op3.><a href='.{20,40}'>(\\d{1,2}).nbsp.слота.ов.)?"
+                                 ".*Форм-фактор слота для <span class='nobr ib'>памяти</span></span></td><td width=.51%. class=.op3.>(.{3,7})</td></tr>"
                                  ".*class=.op3.>(\\d{3,5}).nbsp.МГц</td></tr>"
-                                 ".*class=.op3.>(\\d{1,2}).nbsp.ГБ</td></tr>"
+                                 ".*class=.op3.>(\\d{1,3}).nbsp.ГБ</td></tr>"
+                                 ".*(VGA)?"
+                                 ".*(DVI)?"
+                                 ".*(HDMI)?"
+                                 ".*(DisplayPort)?"
                                  ".*Аудиочип</span></span></td><td width=..... class=.op3.>(.{10,20})</td></tr>"
-                                 ".*SATA3 .+</span></span></td><td width=..... class=.op3.>(\\d{1,2}).nbsp.шт</td></tr>"
-                                 ".*M.2 .+</span></span></td><td width=..... class=.op3.>(\\d{1,2}).nbsp.шт</td></tr>"
+                                 ".*SATA3 .. <span class='nobr ib'>Гбит/с.</span></span></td><td width=...%. class=.op3.>(\\d)&nbsp;шт</td>"
+                                 ".*(?:M.2 .+</span></span></td><td width=..... class=.op3.>(\\d{1,2}).nbsp.шт</td></tr>)?"
                                  ".*Поддержка PCI .+</span></span></td><td width=..... class=.op3.>(\\d\\.\\d)</td></tr>"
-                                 ".*USB.+2\\..+</span></span></td><td width=..... class=.op3.>(\\d{1,2}).nbsp.шт</td></tr>"
-                                 ".*USB.+3\\..+</span></span></td><td width=..... class=.op3.>(\\d{1,2}).nbsp.шт</td></tr>"
-                                 ".*Основной разъем .+</span></span></td><td width=..... class=.op3.>(\\d{1,2})-контактный</td></tr>"
-                                 ".*процессора.+</td><td width=..... class=.op3.>(\\d{1,2})-контакт"));
+                                 ".*USB <span class='nobr ib'>2.0</span></span></td><td width=...%. class=.op3.>(\\d)&nbsp;шт</td>"
+                                 ".*(?:USB 3.2 <span class='nobr ib'>gen1</span></span></td><td width=...%. class=.op3.>(\\d)&nbsp;шт</td></tr>)?"
+                                 ".*(?:USB C 3...<span class='nobr ib'>gen2</span></span></td><td width=...%. class=.op3.>(\\d)&nbsp)?"
+                                 ".*Официальный сайт"
+                                ));
 
 
-    fields[1]=15;
+    fields[1]=20;
 }
 
 void DataLoader::SetRegexGraphicsCard()
 {
-    vectorReg2.push_back(QRegExp("<div class=.op1-tt.>(.{5,40})</div>"
+    vectorReg2.push_back(QRegExp("<meta name=.description. content=.Цена: от (\\d{3,6}) р. до (\\d{3,6}) р."
+                                 ".*hreflang=.ru-RU. href=.(https://www.e-katalog.ru/.{5,50}.htm).><link rel=.alternate"
+                                 ".*<div class=.op1-tt.>(.{5,50})</div>"
                                  ".*class=.op3.>PCI-E v(\\d\\.\\d)</td>"
                                  ".*class=.op3.>(\\d{1,2}).nbsp.ГБ</td>"
                                  ".*class=.op3.>(GDDR\\d)</td>"
@@ -109,7 +123,7 @@ void DataLoader::SetRegexGraphicsCard()
                                  ".*(?:HDMI.*class=.op3.>(\\d).nbsp.шт</td>)?"
                                  ".*мониторов.*class=.op3.>(\\d)</td>"
                                  ".*class=.op3.>(\\d{2,3}).nbsp.Вт</td>"));
-    fields[2]=11;
+    fields[2]=14;
 }
  void DataLoader::DownloadPage(QString &Html,QUrl &url) //максимально 24 процессора на странице. потом /(n-1)/ к адресу страницы
 {
@@ -124,13 +138,13 @@ void DataLoader::SetRegexGraphicsCard()
 
 void DataLoader::Regex1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QUrl> &tempVector)//максимально 24 процессора на странице. потом /(n-1)/ к адресу страницы
 {
-    qDebug()<<"in Regex1lvl()\n";
+   // qDebug()<<"in Regex1lvl()\n";
    // qDebug()<<vectorReg[i];
        int lastPos = 0;
        while( ( lastPos = vectorReg[i].indexIn( Html, lastPos ) ) != -1 )
        {
            lastPos += vectorReg[i].matchedLength();
-          // qDebug() <<vectorReg[i].cap( 0 ) << ":" << vectorReg[i].cap( 1 )<<u2arrayI[i]<<"\n";
+           qDebug() <<vectorReg[i].cap( 0 ) << ":" << vectorReg[i].cap( 1 )<<u2arrayI[i]<<"\n";
            tempVector.push_back(QUrl("https://www.e-katalog.ru/"+vectorReg[i].cap(1)));
            ++u2arrayI[i];
        }
@@ -139,7 +153,7 @@ void DataLoader::Regex1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVect
 
 void DataLoader::Parse1lvl(int i, QString &Html, QVector<QRegExp> &vectorReg, QVector<QVector<QUrl> > &u2array,int pages)
 {
-    qDebug()<<"in Parse1lvl()\n";
+    //qDebug()<<"in Parse1lvl()\n";
     DownloadPage(Html,uarray[i]);
     QVector<QUrl> tempVector;
     Regex1lvl(i,Html,vectorReg,tempVector);
@@ -159,8 +173,8 @@ void DataLoader::Parse1lvl(int i, QString &Html, QVector<QRegExp> &vectorReg, QV
 void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)
 {
     //настроить на прием количества полей для каждого элемента
-    qDebug()<<"in Regex2lvl()\n";
-    qDebug()<<vectorReg2[i];
+   // qDebug()<<"in Regex2lvl()\n";
+   // qDebug()<<vectorReg2[i];
     int lastPos = 0;
     while( ( lastPos = vectorReg2[i].indexIn( Html, lastPos ) ) != -1 )
     {
@@ -171,6 +185,6 @@ void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)
             qDebug()<<vectorReg2[i].cap(j);
 
     }
-    qDebug()<<"end regex2lvl";
+   // qDebug()<<"end regex2lvl";
 }
 

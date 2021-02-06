@@ -27,9 +27,12 @@ int main(int argc, char *argv[])
     //qDebug()<<"in main"<<loader.u2array[i]<<"\n"<<loader.u2arrayI[i]<<"\n";
     //qDebug()<<loader.Html;
 }
-
+    int k=1;
+    int pos=72;
    loader.RefMotherboardsPrepare();
-   loader.DownloadPage(loader.Html,loader.u2array[2][8]);
-   loader.Regex2lvl(2,loader.Html,loader.vectorReg2);
+   loader.DownloadPage(loader.Html,loader.u2array[k][pos]);
+   qDebug()<<loader.Html;
+   qDebug()<<loader.u2array[k][pos];
+   loader.Regex2lvl(k,loader.Html,loader.vectorReg2);
     return a.exec();
 }
