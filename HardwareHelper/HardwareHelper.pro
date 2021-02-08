@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     dataloader.cpp \
+    graphicscard.cpp \
     main.cpp \
     mainwindow.cpp \
     motherboard.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
 HEADERS += \
     Element.h \
     dataloader.h \
+    graphicscard.h \
     mainwindow.h \
     motherboard.h \
     processor.h

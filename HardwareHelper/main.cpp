@@ -15,9 +15,9 @@ int main(int argc, char *argv[])
     DataLoader loader;
     //int pages=3;
 
-    QUrl u=QUrl("https://www.e-katalog.ru/ek-item.php?resolved_name_=GIGABYTE-B450M-S2H-REV--1-0&view_=tbl");
+    //QUrl u=QUrl("https://www.e-katalog.ru/ek-item.php?resolved_name_=GIGABYTE-B450M-S2H-REV--1-0&view_=tbl");
 
-    for(int i=0;i<3;++i)// 9 поменял на 2.
+    for(int i=0;i<6;++i)// 9 поменял на 2.
 {
       // int i=8;
    //loader.DownloadPage(loader.Html,u);
@@ -27,11 +27,12 @@ int main(int argc, char *argv[])
     //qDebug()<<"in main"<<loader.u2array[i]<<"\n"<<loader.u2arrayI[i]<<"\n";
     //qDebug()<<loader.Html;
 }
-    int k=1;
-    int pos=72;
-   loader.RefMotherboardsPrepare();
+    int k=5;
+    int pos=0;
+   loader.RefPrepare(1);//для материнки
+   loader.RefPrepare(4);//для кулера
    loader.DownloadPage(loader.Html,loader.u2array[k][pos]);
-   qDebug()<<loader.Html;
+  // qDebug()<<loader.Html;
    qDebug()<<loader.u2array[k][pos];
    loader.Regex2lvl(k,loader.Html,loader.vectorReg2);
     return a.exec();

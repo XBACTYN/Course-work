@@ -4,9 +4,9 @@ DataLoader::DataLoader()
     uarray[0]=QUrl("https://www.e-katalog.ru/list/186/"); //проц
     uarray[1]=QUrl("https://www.e-katalog.ru/list/187/"); //мать
     uarray[2]=QUrl("https://www.e-katalog.ru/list/189/"); //видео
-    uarray[3]=QUrl("https://www.e-katalog.ru/list/188/"); //оператива
+    uarray[3]=QUrl("https://www.e-katalog.ru/list/188/pr-4480/"); //оператива
     uarray[4]=QUrl("https://www.e-katalog.ru/list/303/pr-7151/");//кулер на процессор,т.к. OEM
-    uarray[5]=QUrl("https://www.e-katalog.ru/ek-list.php?katalog_=190&presets_=3573,24728&page_="); //hdd////////////изменено.
+    uarray[5]=QUrl("https://www.e-katalog.ru/ek-list.php?katalog_=190&presets_=3573,24728,33111&page_="); //hdd////////////изменено. https://www.e-katalog.ru/ek-list.php?katalog_=190&presets_=3573,24728&page_=
     //нужна доп фильтрация для уменьшения выборки
     //https://www.e-katalog.ru/ek-list.php?katalog_=190&presets_=3573,24728&page_=5/ для 6 страницы
     uarray[6]=QUrl("https://www.e-katalog.ru/ek-list.php?katalog_=61&presets_=3680,32956&page_=");  //ssd
@@ -27,16 +27,17 @@ DataLoader::DataLoader()
     SetRegexProcessor();
     SetRegexMotherBoard();
     SetRegexGraphicsCard();
-    /*
-        "class=.op3.>(\\d{1,2}).nbsp.cores<.td>.*class=.op3.>(\\d{1,2}).nbsp.threads<.td>" - для извлечения количества потоков \\d
-    */
+    SetRegexRAM();
+    SetRegexCooler();
+    SetRegexHDD();
+
     manager = new QNetworkAccessManager(this);
     for(int i=0;i<9;++i)
         u2arrayI[i]=0;
     for(int i=0;i<9;++i)
         pages[i]=3;
     pages[4]=2;
-    pages[5]=1;
+    pages[5]=2;
     pages[7]=2;
 };
 void DataLoader::SetRegexProcessor()
@@ -63,22 +64,23 @@ void DataLoader::SetRegexProcessor()
     fields[0]=16;
     //https://www.e-katalog.ru/AMD-2600X-OEM.htm
 }
-void DataLoader::RefMotherboardsPrepare()
+void DataLoader::RefPrepare(int i)
 {
     QRegExp cutter("https://www.e-katalog.ru/([\\w-]{5,})\\.htm");
-    for(int j=0;j<u2arrayI[1];++j)
+    for(int j=0;j<u2arrayI[i];++j)
     {
 
         int lastPos = 0;
-        while( ( lastPos = cutter.indexIn( u2array[1][j].toString(), lastPos ) ) != -1 )
+        while( ( lastPos = cutter.indexIn( u2array[i][j].toString(), lastPos ) ) != -1 )
         {
             lastPos += cutter.matchedLength();
-            u2array[1][j]=QUrl("https://www.e-katalog.ru/ek-item.php?resolved_name_="+cutter.cap(1)+"&view_=tbl");
+            u2array[i][j]=QUrl("https://www.e-katalog.ru/ek-item.php?resolved_name_="+cutter.cap(1)+"&view_=tbl");
         }
-        //qDebug()<<u2array[1][j];
+        //qDebug()<<u2array[i][j];
     }
 
 }
+
 void DataLoader::SetRegexMotherBoard()
 {
     vectorReg2.push_back(QRegExp("<meta name=.description. content=.Цена: от (\\d{3,6}) р. до (\\d{3,6}) р."
@@ -117,15 +119,65 @@ void DataLoader::SetRegexGraphicsCard()
                                  ".*class=.op3.>(\\d{1,2}).nbsp.ГБ</td>"
                                  ".*class=.op3.>(GDDR\\d)</td>"
                                  ".*class=.op3.>(\\d{2,3}).nbsp.бит</td>"
-                                 ".*памяти.*class=.op3.>(\\d{3,6}).nbsp.МГц</td>"
+                                 ".*памяти.*class=.op3.>(\\d{3,7}).nbsp.МГц</td>"
                                  ".*разрешение.*class=.op3.>(\\d{4,6}x\\d{4,6}).nbsp.пикс</td>"
+                                 ".*(?:VGA.*class=.op3.>(\\d).nbsp.шт</td>)?"
                                  ".*(?:DVI-D.*class=.op3.>(\\d).nbsp.шт</td>)?"
                                  ".*(?:HDMI.*class=.op3.>(\\d).nbsp.шт</td>)?"
                                  ".*мониторов.*class=.op3.>(\\d)</td>"
                                  ".*class=.op3.>(\\d{2,3}).nbsp.Вт</td>"));
-    fields[2]=14;
+    fields[2]=15;
 }
- void DataLoader::DownloadPage(QString &Html,QUrl &url) //максимально 24 процессора на странице. потом /(n-1)/ к адресу страницы
+
+void DataLoader::SetRegexRAM()
+{
+    vectorReg2.push_back(QRegExp("<meta name=.description. content=.Цена: от (\\d{3,6}) р. до (\\d{3,6}) р."
+                                 ".*hreflang=.ru-RU. href=.(https://www.e-katalog.ru/.{5,50}.htm).><link rel=.alternate"
+                                 ".*<div class=.op1-tt.>(.{5,50})</div>"
+                                 ".*комплекта</span></span></div></td><td class=.val.>(\\d{1,3})&nbsp;ГБ</td>"
+                                 ".*комплекте</span></span></div></td><td class=.val.>(\\d)&nbsp;шт</td>"
+                                 ".*Форм-фактор <span class='nobr ib'>памяти</span></span></div></td><td class=.val.>(.{4,})</td>"
+                                 ".*Тип <span class='nobr ib'>памяти</span></span></div></td><td class=.val.>(.{4,})</td>"
+                                 ".*Тактовая <span class='nobr ib'>частота</span></span></div></td><td class=.val.>(\\d{3,4})&nbsp;МГц</td>"
+
+                             ));
+   fields[3]=9;
+}
+
+void DataLoader::SetRegexCooler()
+{
+    vectorReg2.push_back(QRegExp("<meta name=.description. content=.Цена: от (\\d{3,6}) р. до (\\d{3,6}) р."
+                                 ".*hreflang=.ru-RU. href=.(https://www.e-katalog.ru/.{5,100}=tbl).><link rel=.alternate. hreflang=.ru-UA."
+                                 ".*<div class=.op1-tt.>(.{5,50})</div>"
+                                 ".*Вентиляторов</span></span></td><td width=...%. class=.op3.>(\\d)&nbsp;шт</td>"
+                                 ".*Socket</span></span></td><td width=...%. class=.op3.>(.*)<BR></td></tr></table>"
+                                 ".*(?:Минимальные <span class=.nobr ib.>обороты</span></span></td><td width=...%. class=.op3.>(\\d{3,5})&nbsp;об/мин)?"
+                                 ".*Максимальные <span class=.nobr ib.>обороты</span></span></td><td width=...%. class=.op3.>(\\d{3,5})&nbsp;об/мин"
+                                 ".*(?:поток</span></span></td><td width=...%. class=.op3.>(\\d{2,4})&nbsp;CFM)?"
+                                 ".*TDP</span></span></td><td width=...%. class=.op3.>(\\d{2,4})&nbsp;Вт"
+                                 ".*(?:Уровень <span class=.nobr ib.>шума</span></span></td><td width=...%. class=.op3.>(\\d{1,3})&nbsp;дБ)?"
+                                 ".*Дата добавления"
+
+                             )); //при возникновении прблем обратить внимание на <BR>. возможно в некоторых местах <br>
+    fields[4]=11;
+}
+void DataLoader::SetRegexHDD()
+{
+    vectorReg2.push_back(QRegExp("<meta name=.description. content=.Цена: от (\\d{3,6}) р. до (\\d{3,6}) р."
+                                 ".*hreflang=.ru-RU. href=.(https://www.e-katalog.ru/.{5,50}.htm).><link rel=.alternate"
+                                 ".*<div class=.op1-tt.>(.{5,50})(?:</div>|<span class)"
+                                 ".*Объем</span></span>(?:</td><td width=...%. class=.op3.>|</div></td><td class=.val.>)?(\\d{3,5})&nbsp;ГБ"
+                                 ".*подключения</span></span>(?:</td><td width=...%. class=.op3.>|</div></td><td class=.val.>)?(.{3,35})</td></tr>"
+                                 ".*обмена</span></span>(?:</td><td width=...%. class=.op3.>|</div></td><td class=.val.>)?(\\d{1,3})&nbsp;МБ"
+                                 ".*шпинделя</span></span>(?:</td><td width=...%. class=.op3.>|</div></td><td class=.val.>)?(\\d{3,5}) об/мин"
+                                 ".*Потребляемая мощность при <span class=.nobr ib.>работе</span></span>(?:</td><td width=...%. class=.op3.>|</div></td><td class=.val.>)?(.{1,5})&nbsp;Вт"
+                                 ".*(?:чтении</span></span>(?:</td><td width=...%. class=.op3.>|</div></td><td class=.val.>)?(\\d{1,3})&nbsp;дБ)?"
+                                 ".*Дата добавления"
+
+                                 ));
+     fields[5]=10;
+}
+void DataLoader::DownloadPage(QString &Html,QUrl &url) //максимально 24 процессора на странице. потом /(n-1)/ к адресу страницы
 {
     qDebug()<<"in DownloadPage()\n";
     QNetworkReply *response = manager->get(QNetworkRequest(url));

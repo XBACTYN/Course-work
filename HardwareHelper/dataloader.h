@@ -1,3 +1,4 @@
+#pragma once
 #ifndef DATALOADER_H
 #define DATALOADER_H
 
@@ -30,9 +31,12 @@ public:
     int u2arrayI[9];// ячейка содержит количество ссылок на каждый тип комплектующих. например u2array[0]==81 это 81 url процессоров.
     int pages[9];
     void SetRegexProcessor();
-    void RefMotherboardsPrepare();
+    void RefPrepare(int i); //i-номер векторов комплектущих. 1-видеокарта, 4-кулер...
     void SetRegexMotherBoard();
     void SetRegexGraphicsCard();
+    void SetRegexRAM();
+    void SetRegexCooler();
+    void SetRegexHDD();
     DataLoader();
     void DownloadPage(QString & Html,QUrl &url);//test
     void Parse1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QVector<QUrl>>& u2array,int  pages);
