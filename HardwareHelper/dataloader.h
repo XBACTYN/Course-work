@@ -37,6 +37,9 @@ public:
     void SetRegexRAM();
     void SetRegexCooler();
     void SetRegexHDD();
+    void SetRegexSSD();
+    void SetRegexPower();
+    //НАПОМИНАНИЕ! Если не парсится сам элемент,вместо него выводить в консоль адрес.
     DataLoader();
     void DownloadPage(QString & Html,QUrl &url);//test
     void Parse1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QVector<QUrl>>& u2array,int  pages);

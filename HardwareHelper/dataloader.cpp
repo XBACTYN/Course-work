@@ -7,8 +7,6 @@ DataLoader::DataLoader()
     uarray[3]=QUrl("https://www.e-katalog.ru/list/188/pr-4480/"); //оператива
     uarray[4]=QUrl("https://www.e-katalog.ru/list/303/pr-7151/");//кулер на процессор,т.к. OEM
     uarray[5]=QUrl("https://www.e-katalog.ru/ek-list.php?katalog_=190&presets_=3573,24728,33111&page_="); //hdd////////////изменено. https://www.e-katalog.ru/ek-list.php?katalog_=190&presets_=3573,24728&page_=
-    //нужна доп фильтрация для уменьшения выборки
-    //https://www.e-katalog.ru/ek-list.php?katalog_=190&presets_=3573,24728&page_=5/ для 6 страницы
     uarray[6]=QUrl("https://www.e-katalog.ru/ek-list.php?katalog_=61&presets_=3680,32956&page_=");  //ssd
     uarray[7]=QUrl("https://www.e-katalog.ru/list/351/"); //блок питания
     //нужна доп фильтрация для уменьшения выборки
@@ -30,6 +28,8 @@ DataLoader::DataLoader()
     SetRegexRAM();
     SetRegexCooler();
     SetRegexHDD();
+    SetRegexSSD();
+    SetRegexPower();
 
     manager = new QNetworkAccessManager(this);
     for(int i=0;i<9;++i)
@@ -177,6 +177,44 @@ void DataLoader::SetRegexHDD()
                                  ));
      fields[5]=10;
 }
+
+void DataLoader::SetRegexSSD()
+{
+    vectorReg2.push_back((QRegExp("<meta name=.description. content=.Цена: от (\\d{3,6}) р. до (\\d{3,6}) р."
+                                  ".*hreflang=.ru-RU. href=.(https://www.e-katalog.ru/.{5,50}.htm).><link rel=.alternate"
+                                  ".*<div class=.op1-tt.>(.{5,50})</div>"
+                                  ".*Объем</span></span></div></td><td class=.val.>(\\d{2,4})&nbsp;ГБ"
+                                  ".*Форм-фактор</span></span></div></td><td class=.val.>(.{1,12})(?:\")?</td>"
+                                  ".*(?:Интерфейс <span class=.nobr ib.>M.2</span></span></div></td><td class=.val.>(.{3,15})</td>)?"
+                                  ".*(?:Разъем</span></span></div></td><td class=.val.>(.{2,15})</td>)?"
+                                  ".*(?:обмена</span></span></div></td><td class=.val.>(\\d{2,4})&nbsp;МБ)?"
+                                  ".*записи</span></span></div></td><td class=.val.>(\\d{2,4})&nbsp;МБ/с"
+                                  ".*считывания</span></span></div></td><td class=.val.>(\\d{2,4})&nbsp;МБ/с"
+                                  ".*TBW</span></span></div></td><td class=.val.>(\\d{1,4})&nbsp;ТБ"
+                                  ".*Дата добавления"
+
+                              )));
+
+    fields[6]=12;
+}
+
+void DataLoader::SetRegexPower()
+{
+    vectorReg2.push_back(QRegExp("<meta name=.description. content=.Цена: от (\\d{3,6}) р. до (\\d{3,6}) р."
+                                 ".*hreflang=.ru-RU. href=.(https://www.e-katalog.ru/.{5,50}.htm).><link rel=.alternate"
+                                 ".*<div class=.op1-tt.>(.{5,50})(?:</div>|<span class)"
+                                 ".*Мощность</span></span></td><td width=...%. class=.op3.>(\\d{1,4})&nbsp;Вт"
+                                 ".*Форм-фактор</span></span></td><td width=...%. class=.op3.>(.{3,4})</td>"
+                                 ".*вентилятора</span></span></td><td width=...%. class=.op3.>(\\d{1,4})&nbsp;мм"
+                                 ".*SATA</span></span></td><td width=...%. class=.op3.>(\\d{1,2})&nbsp;шт"
+                                 ".*(?:MOLEX</span></span></td><td width=...%. class=.op3.>(\\d{1,2})&nbsp;шт)?"
+                                 ".*(?:PCI-E.{1,10}<span class=.nobr ib.>.{1,10}</span></span></td><td width=...%. class=.op3.>(\\d{1,2})&nbsp;шт)?"
+                                 ".*(?:шума</span></span></td><td width=...%. class=.op3.>(\\d{1,3})&nbsp;дБ)?"
+                                 ".*Дата добавления"
+
+                             ));
+    fields[7]=11;
+}
 void DataLoader::DownloadPage(QString &Html,QUrl &url) //максимально 24 процессора на странице. потом /(n-1)/ к адресу страницы
 {
     qDebug()<<"in DownloadPage()\n";
@@ -225,7 +263,7 @@ void DataLoader::Parse1lvl(int i, QString &Html, QVector<QRegExp> &vectorReg, QV
 void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)
 {
     //настроить на прием количества полей для каждого элемента
-   // qDebug()<<"in Regex2lvl()\n";
+    qDebug()<<"in Regex2lvl()\n";
    // qDebug()<<vectorReg2[i];
     int lastPos = 0;
     while( ( lastPos = vectorReg2[i].indexIn( Html, lastPos ) ) != -1 )
