@@ -3,25 +3,24 @@
 #define PROCESSOR_H
 #include "Element.h"
 #include <QUrl>
-class Processor:public Element
+class Processor
 {  
 private:
-    int position;
-    //int lowPrice;
-    //int HighPrice;
+    int price;
     QUrl url;
+    QString name;
    // QString name;//состоит из двух строк
     QString socket;
-    int kernels;
+    int cores;
     int threads;
-    double kerFreq;
-    double kerTurbo;
+    double freq;
+    double turbo;
     int techprocess;
     QString iGraphic;
     int TDP;
     int maxMem;
-    double _maxMemFreqDDR3; //МГЦ
-    double _maxMemFreqDDR4;
+    double maxMemFreqDDR3; //МГЦ
+    double maxMemFreqDDR4;
                                 //Тип линии PCI express. Помним про односторонюю совместимость.
     //QString _link;        //Артикул в магазине! Скорее всего буду использовать как ключ для хеш таблицы.
     //кажется забыл еще потребляемую энергию
@@ -29,21 +28,20 @@ private:
     //есть родительское поле QString _article
 public:
     Processor();
+    Processor(QVector<QString>& data);
 
-    int getPosition() const;
-    void setPosition(int value);
     QUrl getUrl() const;
     void setUrl(const QUrl &value);
     QString getSocket() const;
     void setSocket(const QString &value);
-    int getKernels() const;
-    void setKernels(int value);
+    int getCores() const;
+    void setCores(int value);
     int getThreads() const;
     void setThreads(int value);
-    double getKerFreq() const;
-    void setKerFreq(double value);
-    double getKerTurbo() const;
-    void setKerTurbo(double value);
+    double getFreq() const;
+    void setFreq(double value);
+    double getTurbo() const;
+    void setTurbo(double value);
     int getTechprocess() const;
     void setTechprocess(int value);
     QString getIGraphic() const;
@@ -56,6 +54,10 @@ public:
     void setMaxMemFreqDDR3(double maxMemFreqDDR3);
     double getMaxMemFreqDDR4() const;
     void setMaxMemFreqDDR4(double maxMemFreqDDR4);
+    int getPrice() const;
+    void setPrice(int value);
+    QString getName() const;
+    void setName(const QString &value);
 };
 
 #endif // PROCESSOR_H

@@ -4,8 +4,7 @@
 #include <QTextStream>
 class Element{
 public:
-    QString name;
-    int price;
+
    // QTextStream out(stdout);//
 
     Element(){}

@@ -1,14 +1,6 @@
 #include "motherboard.h"
 
-int MotherBoard::getPosition() const
-{
-    return position;
-}
 
-void MotherBoard::setPosition(int value)
-{
-    position = value;
-}
 
 QUrl MotherBoard::getUrl() const
 {
@@ -190,7 +182,32 @@ void MotherBoard::setUSBC(int value)
     USBC = value;
 }
 
+int MotherBoard::getPrice() const
+{
+    return price;
+}
+
+void MotherBoard::setPrice(int value)
+{
+    price = value;
+}
+
+QString MotherBoard::getName() const
+{
+    return name;
+}
+
+void MotherBoard::setName(const QString &value)
+{
+    name = value;
+}
+
 MotherBoard::MotherBoard()
 {
     
+}
+
+MotherBoard::MotherBoard(QVector<QString> data)
+{
+
 }

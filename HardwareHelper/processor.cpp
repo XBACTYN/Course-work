@@ -1,14 +1,6 @@
 #include "processor.h"
 
-int Processor::getPosition() const
-{
-    return position;
-}
 
-void Processor::setPosition(int value)
-{
-    position = value;
-}
 
 QUrl Processor::getUrl() const
 {
@@ -30,14 +22,14 @@ void Processor::setSocket(const QString &value)
     socket = value;
 }
 
-int Processor::getKernels() const
+int Processor::getCores() const
 {
-    return kernels;
+    return cores;
 }
 
-void Processor::setKernels(int value)
+void Processor::setCores(int value)
 {
-    kernels = value;
+    cores = value;
 }
 
 int Processor::getThreads() const
@@ -50,24 +42,24 @@ void Processor::setThreads(int value)
     threads = value;
 }
 
-double Processor::getKerFreq() const
+double Processor::getFreq() const
 {
-    return kerFreq;
+    return freq;
 }
 
-void Processor::setKerFreq(double value)
+void Processor::setFreq(double value)
 {
-    kerFreq = value;
+    freq = value;
 }
 
-double Processor::getKerTurbo() const
+double Processor::getTurbo() const
 {
-    return kerTurbo;
+    return turbo;
 }
 
-void Processor::setKerTurbo(double value)
+void Processor::setTurbo(double value)
 {
-    kerTurbo = value;
+    turbo = value;
 }
 
 int Processor::getTechprocess() const
@@ -112,25 +104,63 @@ void Processor::setMaxMem(int value)
 
 double Processor::getMaxMemFreqDDR3() const
 {
-    return _maxMemFreqDDR3;
+    return maxMemFreqDDR3;
 }
 
 void Processor::setMaxMemFreqDDR3(double maxMemFreqDDR3)
 {
-    _maxMemFreqDDR3 = maxMemFreqDDR3;
+    maxMemFreqDDR3 = maxMemFreqDDR3;
 }
 
 double Processor::getMaxMemFreqDDR4() const
 {
-    return _maxMemFreqDDR4;
+    return maxMemFreqDDR4;
 }
 
 void Processor::setMaxMemFreqDDR4(double maxMemFreqDDR4)
 {
-    _maxMemFreqDDR4 = maxMemFreqDDR4;
+    maxMemFreqDDR4 = maxMemFreqDDR4;
+}
+
+int Processor::getPrice() const
+{
+    return price;
+}
+
+void Processor::setPrice(int value)
+{
+    price = value;
+}
+
+QString Processor::getName() const
+{
+    return name;
+}
+
+void Processor::setName(const QString &value)
+{
+    name = value;
 }
 
 Processor::Processor(){}
+
+Processor::Processor(QVector<QString>& data)
+{
+    setPrice((data[0].toInt()+data[1].toInt())/2);
+    setUrl(QUrl(data[2]));
+    setName(data[3]+data[4]);
+    setSocket(data[5]);
+    setCores(data[6].toInt());
+    setThreads(data[7].toInt());
+    setFreq(data[8].toDouble());
+    setTurbo(data[9].toDouble());
+    setTechprocess(data[10].toInt());
+    setIGraphic(data[11]);
+    setTDP(data[12].toInt());
+    setMaxMem(data[13].toInt());
+    setMaxMemFreqDDR3(data[14].toInt());
+    setMaxMemFreqDDR4(data[15].toInt());
+}
 
 
 

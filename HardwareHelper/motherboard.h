@@ -4,12 +4,12 @@
 #include "Element.h"
 #include <QString>
 #include <QUrl>
-class MotherBoard:public Element
+class MotherBoard
 {
 private:
-    int position;
+    int price;
     QUrl url;
-   // QString name;
+    QString name;
     QString socket;
     QString form;
     int DDR4count;
@@ -30,8 +30,7 @@ private:
 
 public:
     MotherBoard();
-    int getPosition() const;
-    void setPosition(int value);
+    MotherBoard(QVector<QString>data);
     QUrl getUrl() const;
     void setUrl(const QUrl &value);
     QString getSocket() const;
@@ -68,6 +67,10 @@ public:
     void setUSB3(int value);
     int getUSBC() const;
     void setUSBC(int value);
+    int getPrice() const;
+    void setPrice(int value);
+    QString getName() const;
+    void setName(const QString &value);
 };
 
 #endif // MOTHERBOARD_H
