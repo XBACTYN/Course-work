@@ -80,32 +80,32 @@ void GraphicsCard::setResolution(const QString &value)
     resolution = value;
 }
 
-QString GraphicsCard::getVGA() const
+int GraphicsCard::getVGA() const
 {
     return VGA;
 }
 
-void GraphicsCard::setVGA(const QString &value)
+void GraphicsCard::setVGA( int value)
 {
     VGA = value;
 }
 
-QString GraphicsCard::getDVI() const
+int GraphicsCard::getDVI() const
 {
     return DVI;
 }
 
-void GraphicsCard::setDVI(const QString &value)
+void GraphicsCard::setDVI(int value)
 {
     DVI = value;
 }
 
-QString GraphicsCard::getHDMI() const
+int GraphicsCard::getHDMI() const
 {
     return HDMI;
 }
 
-void GraphicsCard::setHDMI(const QString &value)
+void GraphicsCard::setHDMI(int value)
 {
     HDMI = value;
 }
@@ -130,7 +130,57 @@ void GraphicsCard::setPower(int value)
     power = value;
 }
 
+int GraphicsCard::getPrice() const
+{
+    return price;
+}
+
+void GraphicsCard::setPrice(int value)
+{
+    price = value;
+}
+
+QString GraphicsCard::getName() const
+{
+    return name;
+}
+
+void GraphicsCard::setName(const QString &value)
+{
+    name = value;
+}
+
+int GraphicsCard::getDisplayPort() const
+{
+    return DisplayPort;
+}
+
+void GraphicsCard::setDisplayPort(int value)
+{
+    DisplayPort = value;
+}
+
 GraphicsCard::GraphicsCard()
 {
 
+}
+
+GraphicsCard::GraphicsCard(QVector<QString> &data)
+{
+    setPrice((data[0].toInt()+data[1].toInt())/2);
+    setUrl(data[2]);
+    setName(data[3]);
+    setPCIE(data[4].toDouble());
+    setMemory(data[5].toInt());
+    setMemoryType(data[6]);
+    setBus(data[7].toInt());
+    setFreqGPU(data[8].toInt());
+    setFreqMem(data[9].toInt());
+    setResolution(data[10]);
+    setVGA(data[11].toInt());
+    setDVI(data[12].toInt());
+    setHDMI(data[13].toInt());
+    setDisplayPort(data[14].toInt());
+    setMonitors(data[15].toInt());
+    setPower(data[16].toInt());
 }

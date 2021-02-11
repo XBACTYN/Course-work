@@ -3,10 +3,12 @@
 #include "Element.h"
 #include <QUrl>
 #include <QString>
-class GraphicsCard:public Element
+class GraphicsCard
 {
 private:
+    int price;
     QUrl url;
+    QString name;
     double PCIE;
     int memory;
     QString memoryType;
@@ -14,15 +16,17 @@ private:
     int freqGPU;
     int freqMem;
     QString resolution;
-    QString VGA;
-    QString DVI;
-    QString HDMI;
+    int VGA;
+    int DVI;
+    int HDMI;
+    int DisplayPort;
     int monitors;
     int power;
 
 
 public:
     GraphicsCard();
+    GraphicsCard(QVector<QString>&data);
     QUrl getUrl() const;
     void setUrl(const QUrl &value);
     double getPCIE() const;
@@ -39,16 +43,22 @@ public:
     void setFreqMem(int value);
     QString getResolution() const;
     void setResolution(const QString &value);
-    QString getVGA() const;
-    void setVGA(const QString &value);
-    QString getDVI() const;
-    void setDVI(const QString &value);
-    QString getHDMI() const;
-    void setHDMI(const QString &value);
+    int getVGA() const;
+    void setVGA(int value);
+    int getDVI() const;
+    void setDVI(int value);
+    int getHDMI() const;
+    void setHDMI(int value);
     int getMonitors() const;
     void setMonitors(int value);
     int getPower() const;
     void setPower(int value);
+    int getPrice() const;
+    void setPrice(int value);
+    QString getName() const;
+    void setName(const QString &value);
+    int getDisplayPort() const;
+    void setDisplayPort(int value);
 };
 
 #endif // GRAPHICSCARD_H

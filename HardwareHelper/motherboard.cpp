@@ -202,12 +202,42 @@ void MotherBoard::setName(const QString &value)
     name = value;
 }
 
+int MotherBoard::getDDR3count() const
+{
+    return DDR3count;
+}
+
+void MotherBoard::setDDR3count(int value)
+{
+    DDR3count = value;
+}
+
 MotherBoard::MotherBoard()
 {
     
 }
 
-MotherBoard::MotherBoard(QVector<QString> data)
+MotherBoard::MotherBoard(QVector<QString>& data)
 {
-
+    setPrice((data[0].toInt()+data[1].toInt()/2));
+    setUrl(QUrl(data[2]));
+    setName(data[3]);
+    setSocket(data[4]);
+    setForm(data[5]);
+    setDDR3count(data[6].toInt());
+    setDDR4count(data[7].toInt());
+    setFormDDR(data[8]);
+    setMaxFreq(data[9].toInt());
+    setMaxMem(data[10].toInt());
+    setVGA(data[11]);
+    setDVI(data[12]);
+    setHDMI(data[13]);
+    setDispayPort(data[14]);
+    setAudio(data[15]);
+    setSATA3(data[16].toInt());
+    setM2(data[17].toInt());
+    setPCIE(data[18].toDouble());
+    setUSB2(data[19].toInt());
+    setUSB3(data[20].toInt());
+    setUSBC(data[21].toInt());
 }

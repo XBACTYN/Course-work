@@ -12,6 +12,7 @@ private:
     QString name;
     QString socket;
     QString form;
+    int DDR3count;
     int DDR4count;
     QString formDDR;
     int maxFreq;
@@ -30,7 +31,7 @@ private:
 
 public:
     MotherBoard();
-    MotherBoard(QVector<QString>data);
+    MotherBoard(QVector<QString> & data);
     QUrl getUrl() const;
     void setUrl(const QUrl &value);
     QString getSocket() const;
@@ -71,6 +72,8 @@ public:
     void setPrice(int value);
     QString getName() const;
     void setName(const QString &value);
+    int getDDR3count() const;
+    void setDDR3count(int value);
 };
 
 #endif // MOTHERBOARD_H

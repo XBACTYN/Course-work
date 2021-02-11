@@ -103,7 +103,7 @@ void DataLoader::SetRegexMotherBoard()
                                  ".*(?:M.2 <span class=.nobr ib.>разъем</span></span></td><td width=..... class=.op3.>(\\d{1,2}).nbsp.шт</td></tr>)?"
                                  ".*(?:Поддержка PCI .+</span></span></td><td width=..... class=.op3.>(\\d\\.\\d)</td></tr>)?"
                                  ".*USB <span class='nobr ib'>2.0</span></span></td><td width=...%. class=.op3.>(\\d)&nbsp;шт</td>"
-                                 ".*(?:USB 3.2 <span class='nobr ib'>gen1</span></span></td><td width=...%. class=.op3.>(\\d)&nbsp;шт</td></tr>)?"
+                                 ".*(?:USB 3.2 <span class='nobr ib'>gen.</span></span></td><td width=...%. class=.op3.>(\\d)&nbsp;шт</td></tr>)?"
                                  ".*(?:USB C 3...<span class='nobr ib'>gen.</span></span></td><td width=...%. class=.op3.>(\\d)&nbsp)?"
                                  ".*Дата добавления"
                                 ));
@@ -119,16 +119,21 @@ void DataLoader::SetRegexGraphicsCard()
                                  ".*<div class=.op1-tt.>(.{5,50})</div>"
                                  ".*class=.op3.>PCI-E v(\\d\\.\\d)</td>"
                                  ".*class=.op3.>(\\d{1,2}).nbsp.ГБ</td>"
-                                 ".*class=.op3.>(GDDR\\d)</td>"
+                                 ".*class=.op3.>(GDDR\\d.?)</td>"
                                  ".*class=.op3.>(\\d{2,3}).nbsp.бит</td>"
+                                 ".*GPU</span></span></td><td width=...%. class=.op3.>(\\d{2,4}).nbsp.МГц</td>"
                                  ".*памяти.*class=.op3.>(\\d{3,7}).nbsp.МГц</td>"
                                  ".*разрешение.*class=.op3.>(\\d{4,6}x\\d{4,6}).nbsp.пикс</td>"
                                  ".*(?:VGA.*class=.op3.>(\\d).nbsp.шт</td>)?"
                                  ".*(?:DVI-D.*class=.op3.>(\\d).nbsp.шт</td>)?"
-                                 ".*(?:HDMI.*class=.op3.>(\\d).nbsp.шт</td>)?"
+                                 ".*(?:HDMI</span></span></td><td width=...%. class=.op3.>(\\d).nbsp.шт</td>)?"
+                                 ".*(?:DisplayPort</span></span></td><td width=...%. class=.op3.>(\\d).nbsp.шт</td>)?"
                                  ".*мониторов.*class=.op3.>(\\d)</td>"
-                                 ".*class=.op3.>(\\d{2,3}).nbsp.Вт</td>"));
-    fields[2]=15;
+                                 ".*(?:class=.op3.>(\\d{2,3}).nbsp.Вт</td>)?"
+                                 ".*Дата добавления"));
+
+
+    fields[2]=17;
 }
 
 void DataLoader::SetRegexRAM()
@@ -275,17 +280,17 @@ void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)
      for(int j=1;j<=fields[i];++j)
      {
 
-           qDebug()<<j<<":"<<vectorReg2[i].cap(j);
-           //data.push_back(vectorReg2[i].cap(j));
+           //qDebug()<<j<<":"<<vectorReg2[i].cap(j);
+           data.push_back(vectorReg2[i].cap(j));
 
      }
 
     }
 
-   /*qDebug()<<data.size();
+   qDebug()<<data.size();
     for(int k=0;k<data.size();++k)
         qDebug()<<k<<"."<<data[k];
-    */
+
     data.clear();
     data.squeeze();
     qDebug()<<"\n\n";
