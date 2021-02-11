@@ -14,7 +14,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     motherboard.cpp \
-    processor.cpp
+    processor.cpp \
+    ram.cpp
 
 HEADERS += \
     Element.h \
@@ -22,7 +23,8 @@ HEADERS += \
     graphicscard.h \
     mainwindow.h \
     motherboard.h \
-    processor.h
+    processor.h \
+    ram.h
 
 FORMS += \
     mainwindow.ui

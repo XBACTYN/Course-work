@@ -60,10 +60,7 @@ void DataLoader::SetRegexProcessor()
                                  ".*(?:Макс. частота <span class='nobr ib'>DDR4</span></span></td><td width=...%. class=.op3.>(\\d{3,5})&nbsp;МГц</td>)?"
                                  ".*Дата добавления"
                              ));
-
-
     fields[0]=16;
-    //https://www.e-katalog.ru/AMD-2600X-OEM.htm
 }
 void DataLoader::RefPrepare(int i)
 {
@@ -77,7 +74,6 @@ void DataLoader::RefPrepare(int i)
             lastPos += cutter.matchedLength();
             u2array[i][j]=QUrl("https://www.e-katalog.ru/ek-item.php?resolved_name_="+cutter.cap(1)+"&view_=tbl");
         }
-        //qDebug()<<u2array[i][j];
     }
 
 }
@@ -107,8 +103,6 @@ void DataLoader::SetRegexMotherBoard()
                                  ".*(?:USB C 3...<span class='nobr ib'>gen.</span></span></td><td width=...%. class=.op3.>(\\d)&nbsp)?"
                                  ".*Дата добавления"
                                 ));
-
-
     fields[1]=22;
 }
 
@@ -131,8 +125,6 @@ void DataLoader::SetRegexGraphicsCard()
                                  ".*мониторов.*class=.op3.>(\\d)</td>"
                                  ".*(?:class=.op3.>(\\d{2,3}).nbsp.Вт</td>)?"
                                  ".*Дата добавления"));
-
-
     fields[2]=17;
 }
 
@@ -144,10 +136,9 @@ void DataLoader::SetRegexRAM()
                                  ".*комплекта</span></span></div></td><td class=.val.>(\\d{1,3})&nbsp;ГБ</td>"
                                  ".*комплекте</span></span></div></td><td class=.val.>(\\d)&nbsp;шт</td>"
                                  ".*Форм-фактор <span class='nobr ib'>памяти</span></span></div></td><td class=.val.>(.{4,})</td>"
-                                 ".*Тип <span class='nobr ib'>памяти</span></span></div></td><td class=.val.>(.{4,})</td>"
+                                 ".*Тип <span class='nobr ib'>памяти</span></span></div></td><td class=.val.>(.{4,6})</td>"
                                  ".*Тактовая <span class='nobr ib'>частота</span></span></div></td><td class=.val.>(\\d{3,4})&nbsp;МГц</td>"
-
-                             ));
+                                 ));
    fields[3]=9;
 }
 
@@ -287,7 +278,7 @@ void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)
 
     }
 
-   qDebug()<<data.size();
+  // qDebug()<<data.size();
     for(int k=0;k<data.size();++k)
         qDebug()<<k<<"."<<data[k];
 
