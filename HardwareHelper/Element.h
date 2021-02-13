@@ -4,7 +4,7 @@
 #include <QTextStream>
 class Element{
 public:
-    QString _modArticle;
+
    // QTextStream out(stdout);//
 
     Element(){}

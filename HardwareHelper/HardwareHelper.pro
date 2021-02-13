@@ -9,23 +9,34 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    case.cpp \
+    cooler.cpp \
     dataloader.cpp \
-    form.cpp \
+    graphicscard.cpp \
+    hdd.cpp \
     main.cpp \
     mainwindow.cpp \
-    parsemachine.cpp \
-    processor.cpp
+    motherboard.cpp \
+    power.cpp \
+    processor.cpp \
+    ram.cpp \
+    ssd.cpp
 
 HEADERS += \
     Element.h \
+    case.h \
+    cooler.h \
     dataloader.h \
-    form.h \
+    graphicscard.h \
+    hdd.h \
     mainwindow.h \
-    parsemachine.h \
-    processor.h
+    motherboard.h \
+    power.h \
+    processor.h \
+    ram.h \
+    ssd.h
 
 FORMS += \
-    form.ui \
     mainwindow.ui
 
 # Default rules for deployment.

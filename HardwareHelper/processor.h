@@ -2,57 +2,62 @@
 #ifndef PROCESSOR_H
 #define PROCESSOR_H
 #include "Element.h"
-class Processor:public Element
+#include <QUrl>
+class Processor
 {  
 private:
-    QString _name;
-    QString _manuf;
-    QString _socket;
-    QString _memType;
-    QString _iGraphic;
-    size_t _kernels;
-    size_t _maxMem;
-    size_t _heat;
-    size_t _pciExpress;
-    size_t _date;
-    double _kerFreq;
-    double _price;
-    double _minMemFreq;
-    double _maxMemFreq;
+    int price;
+    QUrl url;
+    QString name;
+   // QString name;//состоит из двух строк
+    QString socket;
+    int cores;
+    int threads;
+    double freq;
+    double turbo;
+    int techprocess;
+    QString iGraphic;
+    int TDP;
+    int maxMem;
+    double maxMemFreqDDR3; //МГЦ
+    double maxMemFreqDDR4;
                                 //Тип линии PCI express. Помним про односторонюю совместимость.
-    bool _multThreading;        //Многопоточность
     //QString _link;        //Артикул в магазине! Скорее всего буду использовать как ключ для хеш таблицы.
     //кажется забыл еще потребляемую энергию
 
-public:
     //есть родительское поле QString _article
+public:
     Processor();
-    Processor(QString name,QString manuf,QString socket,QString memType,
-              QString graphic,size_t kernels,size_t maxMem,size_t heat,
-              size_t PCI,size_t date,double kerFreq,double price,double minMemF,double maxMemF,bool mthreading):
+    Processor(QVector<QString>& data);
 
-        _name(name),_manuf(manuf),_socket(socket),_memType(memType),
-        _iGraphic(graphic),_kernels(kernels),_maxMem(maxMem),_heat(heat),
-        _pciExpress(PCI),_date(date),_kerFreq(kerFreq),_price(price),_minMemFreq(minMemF),
-        _maxMemFreq(maxMemF),_multThreading(mthreading){}
-
-    const QString &GetName();
-    const QString &GetManuf();
-    const QString &GetSocket();
-    const QString &GetMemType();
-    const QString &GetGraphic();
-    size_t GetKernels();
-    size_t GetmaxMem();
-    size_t GetHeat();
-    size_t GetPCI();
-    size_t GetDate();
-    double GetKerFreq();
-    double GetPrice();
-    double GetMinMemFreq();
-    double GetMaxMemFreq();
-    bool GetMultiThreading();
-
-
+    QUrl getUrl() const;
+    void setUrl(const QUrl &value);
+    QString getSocket() const;
+    void setSocket(const QString &value);
+    int getCores() const;
+    void setCores(int value);
+    int getThreads() const;
+    void setThreads(int value);
+    double getFreq() const;
+    void setFreq(double value);
+    double getTurbo() const;
+    void setTurbo(double value);
+    int getTechprocess() const;
+    void setTechprocess(int value);
+    QString getIGraphic() const;
+    void setIGraphic(const QString &value);
+    int getTDP() const;
+    void setTDP(int value);
+    int getMaxMem() const;
+    void setMaxMem(int value);
+    double getMaxMemFreqDDR3() const;
+    void setMaxMemFreqDDR3(double maxMemFreqDDR3);
+    double getMaxMemFreqDDR4() const;
+    void setMaxMemFreqDDR4(double maxMemFreqDDR4);
+    int getPrice() const;
+    void setPrice(int value);
+    QString getName() const;
+    void setName(const QString &value);
 };
 
 #endif // PROCESSOR_H
