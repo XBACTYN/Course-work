@@ -20,6 +20,7 @@ private:
 
 public:
     Cooler();
+    Cooler(QVector<QString> & data);
     void RepairSockets(QString & str);
     int getPrice() const;
     void setPrice(int value);

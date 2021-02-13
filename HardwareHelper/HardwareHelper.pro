@@ -12,21 +12,25 @@ SOURCES += \
     cooler.cpp \
     dataloader.cpp \
     graphicscard.cpp \
+    hdd.cpp \
     main.cpp \
     mainwindow.cpp \
     motherboard.cpp \
     processor.cpp \
-    ram.cpp
+    ram.cpp \
+    ssd.cpp
 
 HEADERS += \
     Element.h \
     cooler.h \
     dataloader.h \
     graphicscard.h \
+    hdd.h \
     mainwindow.h \
     motherboard.h \
     processor.h \
-    ram.h
+    ram.h \
+    ssd.h
 
 FORMS += \
     mainwindow.ui

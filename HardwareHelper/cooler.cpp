@@ -106,6 +106,20 @@ Cooler::Cooler()
 
 }
 
+Cooler::Cooler(QVector<QString> &data)
+{
+    setPrice((data[0].toInt()+data[1].toInt())/2);
+    setUrl(data[2]);
+    setName(data[3]);
+    setVentcount(data[4].toInt());
+    setSockets(data[5]);
+    setMinspeed(data[6].toInt());
+    setMaxspeed(data[7].toInt());
+    setAirstream(data[8].toDouble());
+    setTDP(data[9].toInt());
+    setNoise(data[10].toInt());
+}
+
 void Cooler::RepairSockets(QString &str)
 {
     QRegExp reg("R>(.{3,20})(?:/|<B)");

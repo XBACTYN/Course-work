@@ -38,6 +38,7 @@ public:
     void SetRegexCooler();
     void RepairCooler(QString & str);
     void SetRegexHDD();
+    void RepairHDD(QString & str);
     void SetRegexSSD();
     void SetRegexPower();
     //НАПОМИНАНИЕ! Если не парсится сам элемент,вместо него выводить в консоль адрес.

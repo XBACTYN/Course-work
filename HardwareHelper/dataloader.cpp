@@ -148,25 +148,27 @@ void DataLoader::SetRegexCooler()
                                  ".*hreflang=.ru-RU. href=.(https://www.e-katalog.ru/.{5,100}=tbl).><link rel=.alternate. hreflang=.ru-UA."
                                  ".*<div class=.op1-tt.>(.{5,50})</div>"
                                  ".*Вентиляторов</span></span></td><td width=...%. class=.op3.>(\\d)&nbsp;шт</td>"
-                                 ".*Socket</span></span></td><td width=...%. class=.op3.>(.+)<BR></td></tr></table>"
-                                 ".*(?:Минимальные <span class=.nobr ib.>обороты</span></span></td><td width=...%. class=.op3.>(\\d{3,5})&nbsp;об/мин)?"
+                                 ".*Socket</span></span></td><td width=...%. class=.op3.>(.*)(?:<BR>|<br>)</td></tr>"
+                                ".*(?:Минимальные <span class=.nobr ib.>обороты</span></span></td><td width=...%. class=.op3.>(\\d{3,5})&nbsp;об/мин)?"
                                  ".*Максимальные <span class=.nobr ib.>обороты</span></span></td><td width=...%. class=.op3.>(\\d{3,5})&nbsp;об/мин"
                                  ".*(?:поток</span></span></td><td width=...%. class=.op3.>(\\d{2,4}.?\\d?\\d?)&nbsp;CFM)?"
-                                 ".*TDP</span></span></td><td width=...%. class=.op3.>(\\d{2,4})&nbsp;Вт"
+                                 ".*(?:TDP</span></span></td><td width=...%. class=.op3.>(\\d{2,4})&nbsp;Вт)?"
                                  ".*(?:Уровень <span class=.nobr ib.>шума</span></span></td><td width=...%. class=.op3.>(\\d{1,3})&nbsp;дБ)?"
                                  ".*Дата добавления"
 
-                             )); //.*Socket</span></span></td><td width=...%. class=.op3.>(.*)<BR></td></tr></table>//при возникновении прблем обратить внимание на <BR>. возможно в некоторых местах <br>
+                             )); // обратить внимание на <BR>. возможно в некоторых местах <br>
     fields[4]=11;
 }
 
-void DataLoader::RepairCooler(QString & str)
+void DataLoader::RepairCooler(QString & str) //              УДАЛИТЬ
 {
-   QRegExp reg("R>(.{3,20})(?:/|<B)");
+   QRegExp reg("R>(.{2,22})(?:/|<B)");
    QString nstr="<BR>";
    nstr+=str;
    nstr+="<BR>";
   // qDebug()<<nstr;
+   nstr.replace("/","//");
+   qDebug()<<nstr;
    str.clear();
    int lastPos = 0;
    while( ( lastPos = reg.indexIn( nstr, lastPos ) ) != -1 )
@@ -188,14 +190,30 @@ void DataLoader::SetRegexHDD()
                                  ".*подключения</span></span>(?:</td><td width=...%. class=.op3.>|</div></td><td class=.val.>)?(.{3,35})</td></tr>"
                                  ".*обмена</span></span>(?:</td><td width=...%. class=.op3.>|</div></td><td class=.val.>)?(\\d{1,3})&nbsp;МБ"
                                  ".*шпинделя</span></span>(?:</td><td width=...%. class=.op3.>|</div></td><td class=.val.>)?(\\d{3,5}) об/мин"
-                                 ".*Потребляемая мощность при <span class=.nobr ib.>работе</span></span>(?:</td><td width=...%. class=.op3.>|</div></td><td class=.val.>)?(.{1,5})&nbsp;Вт"
+                                 ".*(?:Потребляемая мощность при <span class=.nobr ib.>работе</span></span>(?:</td><td width=...%. class=.op3.>|</div></td><td class=.val.>)?(.{1,5})&nbsp;Вт)?"
                                  ".*(?:чтении</span></span>(?:</td><td width=...%. class=.op3.>|</div></td><td class=.val.>)?(\\d{1,3})&nbsp;дБ)?"
                                  ".*Дата добавления"
 
                                  ));
      fields[5]=10;
 }
+void DataLoader::RepairHDD(QString &str)     //              УДАЛИТЬ
+{
+    QRegExp reg("R>(.{4,6})<B");
+    QString nstr="<BR>";
+    nstr+=str;
+    nstr.replace("<br>","<BR>");
+    str.clear();
+    int lastPos = 0;
+    while( ( lastPos = reg.indexIn( nstr, lastPos ) ) != -1 )
+    {
+        lastPos += reg.matchedLength();
+            qDebug()<<reg.cap(1);
+            str+=reg.cap(1)+" ";
 
+    }
+   qDebug()<<str;
+}
 void DataLoader::SetRegexSSD()
 {
     vectorReg2.push_back((QRegExp("<meta name=.description. content=.Цена: от (\\d{3,6}) р. до (\\d{3,6}) р."
@@ -299,11 +317,16 @@ void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)
     }
 
    qDebug()<<data.size();
-    for(int k=0;k<data.size();++k)
-        qDebug()<<k<<"."<<data[k];
-    RepairCooler(data[5]);
-    qDebug()<<data[5];
-    data.clear();
+
+   if(data.size()!=0)
+   {for(int k=0;k<data.size();++k)
+           qDebug()<<k<<"."<<data[k];
+      // qDebug()<<data[5];
+
+
+       data.clear();//только если массив не пуст
+   }
+  data.clear();//на время продублирую.
     data.squeeze();
     qDebug()<<"\n\n";
 }
