@@ -4,7 +4,7 @@
 #include <dataloader.h>
 int main(int argc, char *argv[])
 {
-    //test
+    //main
 
 
     QApplication a(argc, argv);
