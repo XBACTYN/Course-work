@@ -36,6 +36,7 @@ public:
     void SetRegexGraphicsCard();
     void SetRegexRAM();
     void SetRegexCooler();
+    void RepairCooler(QString & str);
     void SetRegexHDD();
     void SetRegexSSD();
     void SetRegexPower();

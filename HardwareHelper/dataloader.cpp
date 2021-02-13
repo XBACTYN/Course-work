@@ -148,16 +148,36 @@ void DataLoader::SetRegexCooler()
                                  ".*hreflang=.ru-RU. href=.(https://www.e-katalog.ru/.{5,100}=tbl).><link rel=.alternate. hreflang=.ru-UA."
                                  ".*<div class=.op1-tt.>(.{5,50})</div>"
                                  ".*Вентиляторов</span></span></td><td width=...%. class=.op3.>(\\d)&nbsp;шт</td>"
-                                 ".*Socket</span></span></td><td width=...%. class=.op3.>(.*)<BR></td></tr></table>"
+                                 ".*Socket</span></span></td><td width=...%. class=.op3.>(.+)<BR></td></tr></table>"
                                  ".*(?:Минимальные <span class=.nobr ib.>обороты</span></span></td><td width=...%. class=.op3.>(\\d{3,5})&nbsp;об/мин)?"
                                  ".*Максимальные <span class=.nobr ib.>обороты</span></span></td><td width=...%. class=.op3.>(\\d{3,5})&nbsp;об/мин"
-                                 ".*(?:поток</span></span></td><td width=...%. class=.op3.>(\\d{2,4})&nbsp;CFM)?"
+                                 ".*(?:поток</span></span></td><td width=...%. class=.op3.>(\\d{2,4}.?\\d?\\d?)&nbsp;CFM)?"
                                  ".*TDP</span></span></td><td width=...%. class=.op3.>(\\d{2,4})&nbsp;Вт"
                                  ".*(?:Уровень <span class=.nobr ib.>шума</span></span></td><td width=...%. class=.op3.>(\\d{1,3})&nbsp;дБ)?"
                                  ".*Дата добавления"
 
-                             )); //при возникновении прблем обратить внимание на <BR>. возможно в некоторых местах <br>
+                             )); //.*Socket</span></span></td><td width=...%. class=.op3.>(.*)<BR></td></tr></table>//при возникновении прблем обратить внимание на <BR>. возможно в некоторых местах <br>
     fields[4]=11;
+}
+
+void DataLoader::RepairCooler(QString & str)
+{
+   QRegExp reg("R>(.{3,20})(?:/|<B)");
+   QString nstr="<BR>";
+   nstr+=str;
+   nstr+="<BR>";
+  // qDebug()<<nstr;
+   str.clear();
+   int lastPos = 0;
+   while( ( lastPos = reg.indexIn( nstr, lastPos ) ) != -1 )
+   {
+       lastPos += reg.matchedLength();
+           qDebug()<<reg.cap(1);
+           str+=reg.cap(1)+" ";
+
+   }
+  qDebug()<<str;
+
 }
 void DataLoader::SetRegexHDD()
 {
@@ -271,17 +291,18 @@ void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)
      for(int j=1;j<=fields[i];++j)
      {
 
-           //qDebug()<<j<<":"<<vectorReg2[i].cap(j);
+          // qDebug()<<j<<":"<<vectorReg2[i].cap(j);
            data.push_back(vectorReg2[i].cap(j));
 
      }
 
     }
 
-  // qDebug()<<data.size();
+   qDebug()<<data.size();
     for(int k=0;k<data.size();++k)
         qDebug()<<k<<"."<<data[k];
-
+    RepairCooler(data[5]);
+    qDebug()<<data[5];
     data.clear();
     data.squeeze();
     qDebug()<<"\n\n";
