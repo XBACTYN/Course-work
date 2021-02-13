@@ -41,6 +41,7 @@ public:
     void RepairHDD(QString & str);
     void SetRegexSSD();
     void SetRegexPower();
+    void SetRegexCase();
     //НАПОМИНАНИЕ! Если не парсится сам элемент,вместо него выводить в консоль адрес.
     DataLoader();
     void DownloadPage(QString & Html,QUrl &url);//test

@@ -30,6 +30,7 @@ DataLoader::DataLoader()
     SetRegexHDD();
     SetRegexSSD();
     SetRegexPower();
+    SetRegexCase();
 
     manager = new QNetworkAccessManager(this);
     for(int i=0;i<9;++i)
@@ -251,6 +252,24 @@ void DataLoader::SetRegexPower()
                              ));
     fields[7]=11;
 }
+
+void DataLoader::SetRegexCase() //нету поля длины видеокарты. остается на совести.
+{
+     vectorReg2.push_back(QRegExp("<meta name=.description. content=.Цена: от (\\d{3,6}) р. до (\\d{3,6}) р."
+                                  ".*hreflang=.ru-RU. href=.(https://www.e-katalog.ru/.{5,100}=tbl).><link rel=.alternate. hreflang=.ru-UA."
+                                  ".*<div class=.op1-tt.>(.{5,50})(?:</div>|<span class)"
+                                  ".*Форм-фактор</span></span></td><td width=...%. class=.op3.>(.{3,12})</td>"
+                                 ".*платы</span></span></td><td width=...%. class=.op3.><a href='.{20,40}'>(.{2,12})</a>(?:</td>|<span class)?"
+                                 ".*БП</span></span></td><td width=...%. class=.op3.><a href='.{20,40}'>(.{2,20})</a></td>"
+                                  ".*Внутренних отсеков <span class=.nobr ib.>3.5.</span></span></td><td width=...%. class=.op3.>(\\d{1,2})&nbsp;шт"
+                                  ".*Внутренних отсеков <span class=.nobr ib.>2.5.</span></span></td><td width=...%. class=.op3.>(\\d{1,2})&nbsp;шт"
+                                  ".*(?:вентиляторов</span></span></td><td width=...%. class=.op3.>(\\d)</td>)?"
+                                  ".*(?:USB <span class=.nobr ib.>2..</span></span></td><td width=...%. class=.op3.>(\\d{1,2})&nbsp;шт)?"
+                                  ".*(?:USB 3.. <span class=.nobr ib.>gen.</span></span></td><td width=...%. class=.op3.>(\\d{1,2})&nbsp;шт)?"
+                                  ".*Дата добавления"
+                                  ));
+     fields[8]=12;
+}
 void DataLoader::DownloadPage(QString &Html,QUrl &url) //максимально 24 процессора на странице. потом /(n-1)/ к адресу страницы
 {
     qDebug()<<"in DownloadPage()";
@@ -279,7 +298,6 @@ void DataLoader::Regex1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVect
 
 void DataLoader::Parse1lvl(int i, QString &Html, QVector<QRegExp> &vectorReg, QVector<QVector<QUrl> > &u2array,int pages)
 {
-    //qDebug()<<"in Parse1lvl()";
     DownloadPage(Html,uarray[i]);
     QVector<QUrl> tempVector;
     Regex1lvl(i,Html,vectorReg,tempVector);
@@ -293,13 +311,12 @@ void DataLoader::Parse1lvl(int i, QString &Html, QVector<QRegExp> &vectorReg, QV
             Regex1lvl(i,Html,vectorReg,tempVector);
         }
     u2array.push_back(tempVector);
-
 }
 
 void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)
 {
-    //настроить на прием количества полей для каждого элемента
     qDebug()<<"in Regex2lvl()";
+   // qDebug()<<vectorReg2[i];
     QVector <QString> data;
     int lastPos = 0;
     while( ( lastPos = vectorReg2[i].indexIn( Html, lastPos ) ) != -1 )
