@@ -1,11 +1,16 @@
 #pragma once
 #ifndef ELEMENT_H
 #define ELEMENT_H
-#include <QTextStream>
+#include <QString>
 class Element{
-public:
+protected:
+    int price;
+    QString name;
 
-   // QTextStream out(stdout);//
+public:
+    QString GetName()const{return name;}
+    int GetPrice()const{return price;}
+
 
     Element(){}
    // ~Element(){}

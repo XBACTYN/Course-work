@@ -12,6 +12,7 @@
 #include <QString>
 #include <QVector>
 #include <QRegExp>
+#include "processor.h"
 
 class DataLoader : public QObject
 {
@@ -30,6 +31,10 @@ public:
     QVector <QVector<QUrl>> u2array;//массив с адресами на дочерние страницы  //массив должен быть двумерным!!!!!!!!!!!!!!!!!!!!!!!!
     int u2arrayI[9];// ячейка содержит количество ссылок на каждый тип комплектующих. например u2array[0]==81 это 81 url процессоров.
     int pages[9];
+    //как вариант QVector<QVector
+    QVector<Processor> arrProcessors;
+
+    //Element * elptr=arrProcessors;
     void SetRegexProcessor();
     void RefPrepare(int i); //i-номер векторов комплектущих. 1-видеокарта, 4-кулер...
     void SetRegexMotherBoard();

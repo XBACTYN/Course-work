@@ -43,7 +43,7 @@ private:
     QVector<QString> confNames{"Процессор","Материнская плата","Видеокарта",
                            "Оперативная память","Кулер на процессор","Жесткий диск",
                            "Твердотельный накопитель","Блок питания","Корпус"};
-    QVector<QLabel*>      arrlab;
+    QVector<QLabel*>      arrlab;   //QVector<QLabel*>      arrlab;
     QVector<QLineEdit*>   arrline;
     QVector<QHBoxLayout*> arrlay;
     QVector<QPushButton*> infbn;

@@ -107,9 +107,9 @@ double Processor::getMaxMemFreqDDR3() const
     return maxMemFreqDDR3;
 }
 
-void Processor::setMaxMemFreqDDR3(double maxMemFreqDDR3)
+void Processor::setMaxMemFreqDDR3(double value)
 {
-    maxMemFreqDDR3 = maxMemFreqDDR3;
+    maxMemFreqDDR3 = value;
 }
 
 double Processor::getMaxMemFreqDDR4() const
@@ -117,9 +117,9 @@ double Processor::getMaxMemFreqDDR4() const
     return maxMemFreqDDR4;
 }
 
-void Processor::setMaxMemFreqDDR4(double maxMemFreqDDR4)
+void Processor::setMaxMemFreqDDR4(double value)
 {
-    maxMemFreqDDR4 = maxMemFreqDDR4;
+    maxMemFreqDDR4 = value;
 }
 
 int Processor::getPrice() const
@@ -142,7 +142,9 @@ void Processor::setName(const QString &value)
     name = value;
 }
 
-Processor::Processor(){}
+Processor::Processor(){
+
+}
 
 Processor::Processor(QVector<QString>& data)
 {

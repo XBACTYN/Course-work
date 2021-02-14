@@ -2,9 +2,12 @@
 #include <QApplication>
 #include <dataloader.h>
 #include <modelviewwidget.h>
+#include <processor.h>
+#include <motherboard.h>
 int main(int argc, char *argv[])
 {
     //test
+
 
 
     QApplication a(argc, argv);

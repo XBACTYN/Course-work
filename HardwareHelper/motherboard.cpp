@@ -214,7 +214,7 @@ void MotherBoard::setDDR3count(int value)
 
 MotherBoard::MotherBoard()
 {
-    
+
 }
 
 MotherBoard::MotherBoard(QVector<QString>& data)

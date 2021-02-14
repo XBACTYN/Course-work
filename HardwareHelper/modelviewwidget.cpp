@@ -11,10 +11,12 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     QHBoxLayout * settingsLayout=new QHBoxLayout;
     buttonload=new QPushButton("Загрузка данных");
     connect(buttonload,SIGNAL(clicked()),SLOT (load_data()));
+
     combocreate=new QComboBox(this);
     combocreate->addItem("Авто режим");
     combocreate->addItem("Ручной режим");
     connect(combocreate, SIGNAL(activated(int)), SLOT(available_to_create(int)));
+
     //combocreate->setEnabled(false);
     combotype=new QComboBox(this);
     combotype->addItem("Игровой ПК");
@@ -114,7 +116,11 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
 
 }
 
-ModelViewWidget::~ModelViewWidget() {}
+ModelViewWidget::~ModelViewWidget()
+{
+    qDebug()<<"DESTRUCTOR MODELVIEW";
+    delete tabw;
+}
 
 /*
 void ModelViewWidget::selectionChangedSlot(const QItemSelection & , const QItemSelection & )
@@ -132,12 +138,15 @@ void ModelViewWidget::load_data()
     loader->Parse1lvl(i,loader->Html,loader->vectorReg,loader->u2array,loader->pages[i]);
     }
 
+
    int k=0;
    loader->RefPrepare(1);//для материнки
    loader->RefPrepare(4);//для кулера
    loader->RefPrepare(8);
                 //QUrl urltest("https://www.e-katalog.ru/ek-item.php?resolved_name_=AEROCOOL-BOLT&view_=tbl");
-  for(int p=0;p<loader->u2arrayI[k];++p)
+ //for(int k=0;k<9;++k)
+ //{
+  for(int p=0;p<loader->u2arrayI[k];++p) //switch(k) , конструкторы классов. 9 массивов в dataloader, ссылки Element * ptr= processor[2]
    {
    loader->DownloadPage(loader->Html,loader->u2array[k][p]);
    qDebug()<<loader->u2array[k][p];
@@ -146,6 +155,7 @@ void ModelViewWidget::load_data()
                  // qDebug()<<"\n\n"<<urltest;
    loader->Regex2lvl(k,loader->Html,loader->vectorReg2);
   }
+ //}
 }
 void ModelViewWidget::on_clicked()
 {

@@ -313,7 +313,7 @@ void DataLoader::Parse1lvl(int i, QString &Html, QVector<QRegExp> &vectorReg, QV
     u2array.push_back(tempVector);
 }
 
-void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)
+void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)//cюда захуярить tempVector& data
 {
     qDebug()<<"in Regex2lvl()";
    // qDebug()<<vectorReg2[i];
