@@ -56,6 +56,7 @@ private slots:
     void on_clicked();
     void available_to_create(int);
     void tab_clicked(int);
+    void get_info();
 public:
     ModelViewWidget( QWidget* parent = 0 );
     ~ModelViewWidget();

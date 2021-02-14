@@ -67,10 +67,10 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     //connect
     panelLayout->addWidget(rbExpens);
     QPushButton* bAdd = new QPushButton("Добавить");
-    connect( bAdd, SIGNAL( clicked() ), SLOT( on_clicked() ) );
+   // connect( bAdd, SIGNAL( clicked() ), SLOT( on_clicked() ) );
     panelLayout->addWidget( bAdd );
     QPushButton* bInfo = new QPushButton("Информация");
-   //connect( bInfo, SIGNAL( clicked() ), SLOT( //on_clicked() ) );
+    connect( bInfo, SIGNAL( clicked() ), SLOT( get_info() ) );
     panelLayout->addWidget( bInfo,0,Qt::AlignTop );
    /* QPushButton* bCompare = new QPushButton("Сравнить");
    //connect( bCompare, SIGNAL( clicked() ), SLOT( //on_clicked() ) );
@@ -127,12 +127,12 @@ void ModelViewWidget::selectionChangedSlot(const QItemSelection & , const QItemS
 
 void ModelViewWidget::load_data()
 {
-    for(int i=0;i<2;++i)// i<9!
+    for(int i=0;i<1;++i)// i<9!
     {
     loader->Parse1lvl(i,loader->Html,loader->vectorReg,loader->u2array,loader->pages[i]);
     }
 
-   int k=1;
+   int k=0;
    loader->RefPrepare(1);//для материнки
    loader->RefPrepare(4);//для кулера
    loader->RefPrepare(8);
@@ -149,20 +149,7 @@ void ModelViewWidget::load_data()
 }
 void ModelViewWidget::on_clicked()
 {
-    qDebug()<<tabIndex;
-    TabForm * form=NULL;
-    //QWidget * pWidget=tabw->widget(index);
-    form=(TabForm*)tabw->widget(tabIndex);
 
-        if(form->listptr->selectionModel()->hasSelection())
-            {
-            const QModelIndex index = form->listptr->selectionModel()->currentIndex();
-            int field2=form->infomodel->box.vec[index.row()].price;
-            int field3=form->infomodel->box.vec[index.row()].b;
-            QMessageBox msg;
-             msg.setText("Second field: "+QString::number(field2)+"\nThird field: "+QString::number(field3));
-              msg.exec();
-            }
 }
 
 void ModelViewWidget::available_to_create(int idx)
@@ -186,9 +173,27 @@ void ModelViewWidget::available_to_create(int idx)
 
 void ModelViewWidget::tab_clicked(int index)
 {
+    qDebug()<<"tab_clicked";
     tabIndex=index;
 
+}
 
+void ModelViewWidget::get_info()
+{
+    qDebug()<<tabIndex;
+    TabForm * form=NULL;
+    //QWidget * pWidget=tabw->widget(index);
+    form=(TabForm*)tabw->widget(tabIndex);
+
+        if(form->listptr->selectionModel()->hasSelection())
+            {
+            const QModelIndex index = form->listptr->selectionModel()->currentIndex();
+            int field2=form->infomodel->box.vec[index.row()].price;
+            int field3=form->infomodel->box.vec[index.row()].b;
+            QMessageBox msg;
+             msg.setText("Second field: "+QString::number(field2)+"\nThird field: "+QString::number(field3));
+              msg.exec();
+            }
 }
 
 

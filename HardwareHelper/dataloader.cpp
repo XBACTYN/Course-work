@@ -330,7 +330,6 @@ void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)
            data.push_back(vectorReg2[i].cap(j));
 
      }
-
     }
 
    qDebug()<<data.size();
@@ -339,9 +338,7 @@ void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)
    {for(int k=0;k<data.size();++k)
            qDebug()<<k<<"."<<data[k];
       // qDebug()<<data[5];
-
-
-       data.clear();//только если массив не пуст
+       //data.clear();//только если массив не пуст
    }
   data.clear();//на время продублирую.
     data.squeeze();
