@@ -1,8 +1,8 @@
 #ifndef MYMODEL_H
 #define MYMODEL_H
 #include <QAbstractTableModel>
-#include <testbox.h>
-
+//#include <testbox.h>
+#include <Element.h>
 class MyModel : public QAbstractTableModel
 {
     Q_OBJECT
@@ -12,7 +12,9 @@ class MyModel : public QAbstractTableModel
     };
 
 public:
-    TestBox box;
+    //TestBox box;
+   QVector< Element *> ptr;
+   int ptrsize;
     explicit MyModel(QObject *parent = nullptr);
 
     // Header:

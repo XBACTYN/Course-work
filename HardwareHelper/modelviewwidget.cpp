@@ -43,15 +43,15 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     QHBoxLayout *horLay=new QHBoxLayout;
 
     tabw=new QTabWidget(this);
-    tabw->addTab(new TabForm(),"CPU");
-    tabw->addTab(new TabForm(),"MB");
-    tabw->addTab(new TabForm(),"GCard");
-    tabw->addTab(new TabForm(),"RAM");
-    tabw->addTab(new TabForm(),"AcCooler");
-    tabw->addTab(new TabForm(),"HDD");
-    tabw->addTab(new TabForm(),"SSD");
-    tabw->addTab(new TabForm(),"Power");
-    tabw->addTab(new TabForm(),"Case");
+    //tabw->addTab(new TabForm(),"CPU");
+    //tabw->addTab(new TabForm(),"MB");
+    //tabw->addTab(new TabForm(),"GCard");
+    //tabw->addTab(new TabForm(),"RAM");
+    //tabw->addTab(new TabForm(),"AcCooler");
+    //tabw->addTab(new TabForm(),"HDD");
+    //tabw->addTab(new TabForm(),"SSD");
+    //tabw->addTab(new TabForm(),"Power");
+    //tabw->addTab(new TabForm(),"Case");
     connect(tabw,SIGNAL(tabBarClicked(int)),SLOT(tab_clicked(int)));
     horLay->addWidget((tabw));
     //mainLayout->addWidget(tabw);//в другой layoutf
@@ -139,23 +139,46 @@ void ModelViewWidget::load_data()
     }
 
 
-   int k=0;
+  // int k=0;
    loader->RefPrepare(1);//для материнки
    loader->RefPrepare(4);//для кулера
    loader->RefPrepare(8);
                 //QUrl urltest("https://www.e-katalog.ru/ek-item.php?resolved_name_=AEROCOOL-BOLT&view_=tbl");
- //for(int k=0;k<9;++k)
- //{
-  for(int p=0;p<loader->u2arrayI[k];++p) //switch(k) , конструкторы классов. 9 массивов в dataloader, ссылки Element * ptr= processor[2]
+ for(int k=0;k<1;++k)
+ {
+   switch (k)
+   case 0:
    {
-   loader->DownloadPage(loader->Html,loader->u2array[k][p]);
-   qDebug()<<loader->u2array[k][p];
-                    //qDebug()<<loader.Html;
-                 //loader.DownloadPage(loader.Html,urltest);
-                 // qDebug()<<"\n\n"<<urltest;
-   loader->Regex2lvl(k,loader->Html,loader->vectorReg2);
-  }
- //}
+        for(int p=0;p<loader->u2arrayI[k];++p) //switch(k) , конструкторы классов. 9 массивов в dataloader, ссылки Element * ptr= processor[2]
+            {
+                loader->DownloadPage(loader->Html,loader->u2array[k][p]);
+                //qDebug()<<loader->u2array[k][p];
+                loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
+                loader->arrProcessors.push_back(Processor(loader->tempdata));
+                //loader->tempdata.clear();.
+                //loader->tempdata.squeeze();
+               }
+        tabw->addTab(new TabForm(loader->arrProcessors),"CPU");
+        break;
+    }
+ }
+ for(int i=0;i<loader->arrProcessors.size();++i)
+ {
+     qDebug()<<"Элемент №"<<i;
+     qDebug()<<"Цена"<<loader->arrProcessors[i].getPrice();
+     qDebug()<<"Ссылка"<<loader->arrProcessors[i].getUrl();
+     qDebug()<<"Имя"<<loader->arrProcessors[i].getName();
+     qDebug()<<"Ядра"<<loader->arrProcessors[i].getCores();
+     qDebug()<<"Потоки"<<loader->arrProcessors[i].getThreads();
+     qDebug()<<"Такт частота"<<loader->arrProcessors[i].getFreq();
+     qDebug()<<"Частота в турбо"<<loader->arrProcessors[i].getTurbo();
+     qDebug()<<"Техпроцесс"<<loader->arrProcessors[i].getTechprocess();
+     qDebug()<<"Интегр графика"<<loader->arrProcessors[i].getIGraphic();
+     qDebug()<<"ТДП"<<loader->arrProcessors[i].getTDP();
+     qDebug()<<"Макс ОЗУ"<<loader->arrProcessors[i].getMaxMem();
+     qDebug()<<"Макс част DDR3"<<loader->arrProcessors[i].getMaxMemFreqDDR3();
+     qDebug()<<"Макс част DDR4"<<loader->arrProcessors[i].getMaxMemFreqDDR4()<<"\n\n";
+ }
 }
 void ModelViewWidget::on_clicked()
 {
@@ -198,8 +221,8 @@ void ModelViewWidget::get_info()
         if(form->listptr->selectionModel()->hasSelection())
             {
             const QModelIndex index = form->listptr->selectionModel()->currentIndex();
-            int field2=form->infomodel->box.vec[index.row()].price;
-            int field3=form->infomodel->box.vec[index.row()].b;
+            int field2=form->infomodel->ptr[index.row()]->price;
+            int field3=form->infomodel->ptr[index.row()]->arrsize;
             QMessageBox msg;
              msg.setText("Second field: "+QString::number(field2)+"\nThird field: "+QString::number(field3));
               msg.exec();

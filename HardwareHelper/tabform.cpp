@@ -1,7 +1,7 @@
 #include "tabform.h"
 #include "ui_tabform.h"
 
-TabForm::TabForm(QWidget *parent) :
+TabForm::TabForm(QVector<Processor> & arr,QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TabForm)
 {
@@ -9,7 +9,9 @@ TabForm::TabForm(QWidget *parent) :
 
     listptr=new QTableView;
     infomodel=new MyModel;
-    infomodel->box.Randomize();
+    for(int i=0;i<arr.size();++i)
+        infomodel->ptr.push_back(&arr[i]);
+    infomodel->ptrsize=arr.size();
     listptr->setModel( infomodel );
     QVBoxLayout* mainLay = new QVBoxLayout;
     setLayout( mainLay );

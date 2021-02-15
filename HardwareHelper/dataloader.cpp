@@ -37,7 +37,8 @@ DataLoader::DataLoader()
         u2arrayI[i]=0;
     for(int i=0;i<9;++i)
         pages[i]=3;
-    pages[0]=2;
+
+    pages[0]=1;  //поменяю с 2 на 1.
     pages[4]=2;
     pages[5]=1;
     pages[7]=2;
@@ -313,11 +314,14 @@ void DataLoader::Parse1lvl(int i, QString &Html, QVector<QRegExp> &vectorReg, QV
     u2array.push_back(tempVector);
 }
 
-void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)//cюда захуярить tempVector& data
+void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2,QVector<QString>&data)//cюда захуярить tempVector& data
 {
+    if(data.size()!=0)
+  {
+   data.clear();
+   }//на время продублирую.
+   data.squeeze();
     qDebug()<<"in Regex2lvl()";
-   // qDebug()<<vectorReg2[i];
-    QVector <QString> data;
     int lastPos = 0;
     while( ( lastPos = vectorReg2[i].indexIn( Html, lastPos ) ) != -1 )
     {
@@ -325,23 +329,23 @@ void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)//c
 
      for(int j=1;j<=fields[i];++j)
      {
-
-          // qDebug()<<j<<":"<<vectorReg2[i].cap(j);
            data.push_back(vectorReg2[i].cap(j));
-
      }
     }
 
-   qDebug()<<data.size();
 
-   if(data.size()!=0)
-   {for(int k=0;k<data.size();++k)
-           qDebug()<<k<<"."<<data[k];
-      // qDebug()<<data[5];
-       //data.clear();//только если массив не пуст
+   if(data.size()==0)
+   {
+       data.squeeze();
+       for(int k=1;k<=fields[i];++k)
+           data.push_back("");
    }
-  data.clear();//на время продублирую.
-    data.squeeze();
-    qDebug()<<"\n\n";
+   /*else
+   {
+       for(int k=0;k<data.size();++k)
+           qDebug()<<k<<"."<<data[k];
+   }
+   */
+     qDebug()<<"\n\n";
 }
 

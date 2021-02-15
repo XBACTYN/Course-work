@@ -162,7 +162,45 @@ Processor::Processor(QVector<QString>& data)
     setMaxMem(data[13].toInt());
     setMaxMemFreqDDR3(data[14].toInt());
     setMaxMemFreqDDR4(data[15].toInt());
+    arrsize=data.size();
 }
 
+QVector<QString>Processor::GetValues()
+{
+    QVector<QString> temp;
+    temp.push_back(QString::number(getPrice()));
+    temp.push_back((url.toString()));
+    temp.push_back(getName());
+    temp.push_back(getSocket());
+    temp.push_back(QString::number(getCores()));
+    temp.push_back(QString::number(getThreads()));
+    temp.push_back(QString::number(getFreq()));
+    temp.push_back(QString::number(getTurbo()));
+    temp.push_back(QString::number(getTechprocess()));
+    temp.push_back(getIGraphic());
+    temp.push_back(QString::number(getTDP()));
+    temp.push_back(QString::number(getMaxMem()));
+    temp.push_back(QString::number(getMaxMemFreqDDR3()));
+    temp.push_back(QString::number(getMaxMemFreqDDR4()));
+    return temp;
+}
 
-
+QVector<QString>Processor::GetNames()
+{
+    QVector<QString> temp;
+    temp.push_back("Цена");
+    temp.push_back("URL-ссылка на товар");
+    temp.push_back("Название");
+    temp.push_back("Сокет(Разъем)");
+    temp.push_back("Количество ядер");
+    temp.push_back("Количество потоков");
+    temp.push_back("Тактовая частота, ГГц");
+    temp.push_back("Частота TurboBoost, ГГц");
+    temp.push_back("Техпроцесс, нм");
+    temp.push_back("Интегрированное графическое ядро");
+    temp.push_back("Тепловыделение, Вт");
+    temp.push_back("Макс.объем RAM, Гб");
+    temp.push_back("Макс.частота RAM DDR3, МГц");
+    temp.push_back("Макс.частота RAM DDR4, МГц");
+    return temp;
+}

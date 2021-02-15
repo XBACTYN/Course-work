@@ -28,7 +28,8 @@ QVariant MyModel::headerData(int section, Qt::Orientation orientation, int role)
 int MyModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED( parent )
-      return box.vec.size();
+      //return box.vec.size();
+    return ptrsize;  //ihehfiahahfhafhaohaohfoahfoahf!
 
 }
 
@@ -42,7 +43,7 @@ int MyModel::columnCount(const QModelIndex &parent) const
 
 QVariant MyModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid()||box.vec.size() <= index.row())
+    if (!index.isValid()||ptrsize<= index.row()) //jsdjgaqpdjadjwqdja!!!!!!
         return QVariant();
 
      if(role==Qt::DisplayRole)
@@ -50,9 +51,9 @@ QVariant MyModel::data(const QModelIndex &index, int role) const
          switch(index.column())
          {
             case 0:
-             return box.vec[index.row()].name;
+             return ptr[index.row()]->name;
             case 1:
-             return box.vec[index.row()].price;
+             return ptr[index.row()]->price;
          }
      }
     return QVariant();

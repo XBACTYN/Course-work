@@ -32,6 +32,7 @@ public:
     int u2arrayI[9];// ячейка содержит количество ссылок на каждый тип комплектующих. например u2array[0]==81 это 81 url процессоров.
     int pages[9];
     //как вариант QVector<QVector
+    QVector<QString>tempdata;
     QVector<Processor> arrProcessors;
 
     //Element * elptr=arrProcessors;
@@ -52,8 +53,8 @@ public:
     void DownloadPage(QString & Html,QUrl &url);//test
     void Parse1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QVector<QUrl>>& u2array,int  pages);
     void Regex1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QUrl>&tempVector);
-    void Parse2lvl();
-    void Regex2lvl(int i,QString & Html,QVector<QRegExp>&vectorReg2);
+    //void Parse2lvl();
+    void Regex2lvl(int i,QString & Html,QVector<QRegExp>&vectorReg2,QVector<QString> &data);
 };
 
 

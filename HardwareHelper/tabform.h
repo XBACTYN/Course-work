@@ -8,6 +8,7 @@
 #include <QLabel>
 #include <QHeaderView>
 #include "mymodel.h"
+#include <dataloader.h>
 
 namespace Ui {
 class TabForm;
@@ -20,7 +21,7 @@ class TabForm : public QWidget
 public:
     QTableView * listptr;
     MyModel * infomodel;
-    explicit TabForm(QWidget *parent = nullptr);
+    explicit TabForm(QVector<Processor> & arr,QWidget *parent = nullptr);
     ~TabForm();
 
 private:

@@ -2,15 +2,17 @@
 #ifndef ELEMENT_H
 #define ELEMENT_H
 #include <QString>
+#include <QUrl>
 class Element{
-protected:
-    int price;
-    QString name;
+
 
 public:
-    QString GetName()const{return name;}
-    int GetPrice()const{return price;}
-
+    int price;
+    QUrl url; //замена на string
+    QString name;
+    int arrsize;
+    virtual QVector<QString>GetNames()=0;
+    virtual QVector<QString>GetValues()=0;
 
     Element(){}
    // ~Element(){}
