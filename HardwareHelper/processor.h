@@ -2,14 +2,10 @@
 #ifndef PROCESSOR_H
 #define PROCESSOR_H
 #include "Element.h"
-//#include <QUrl>
 class Processor:public Element
 {  
 private:
-   // int price;
-   // QUrl url;
-   // QString name;
-   // QString name;//состоит из двух строк
+
     QString socket;
     int cores;
     int threads;
@@ -19,9 +15,9 @@ private:
     QString iGraphic;
     int TDP;
     int maxMem;
-    double maxMemFreqDDR3; //МГЦ
+    double maxMemFreqDDR3;
     double maxMemFreqDDR4;
-                                //Тип линии PCI express. Помним про односторонюю совместимость.
+                                // PCI express. Помним про односторонюю совместимость.
 
 
 

@@ -1,5 +1,4 @@
 #include "modelviewwidget.h"
-
 ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //конструктор для виджета и окна
 {
     loader=new DataLoader;
@@ -147,20 +146,107 @@ void ModelViewWidget::load_data()
  for(int k=0;k<1;++k)
  {
    switch (k)
-   case 0:
+  {
+    case 0:
    {
         for(int p=0;p<loader->u2arrayI[k];++p) //switch(k) , конструкторы классов. 9 массивов в dataloader, ссылки Element * ptr= processor[2]
             {
                 loader->DownloadPage(loader->Html,loader->u2array[k][p]);
-                //qDebug()<<loader->u2array[k][p];
                 loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
                 loader->arrProcessors.push_back(Processor(loader->tempdata));
-                //loader->tempdata.clear();.
-                //loader->tempdata.squeeze();
                }
         tabw->addTab(new TabForm(loader->arrProcessors),"CPU");
         break;
-    }
+   }
+   case 1:
+   {
+       for(int p=0;p<loader->u2arrayI[k];++p)
+           {
+               loader->DownloadPage(loader->Html,loader->u2array[k][p]);
+               loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
+               loader->arrMotherboards.push_back(MotherBoard(loader->tempdata));
+              }
+       tabw->addTab(new TabForm(loader->arrMotherboards),"Mother");
+       break;
+   }
+   case 2:
+   {
+       for(int p=0;p<loader->u2arrayI[k];++p)
+           {
+               loader->DownloadPage(loader->Html,loader->u2array[k][p]);
+               loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
+               loader->arrGraphicsCards.push_back(GraphicsCard(loader->tempdata));
+              }
+       tabw->addTab(new TabForm(loader->arrGraphicsCards),"Graphics");
+       break;
+   }
+   case 3:
+   {
+       for(int p=0;p<loader->u2arrayI[k];++p)
+           {
+               loader->DownloadPage(loader->Html,loader->u2array[k][p]);
+               loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
+               loader->arrRAMs.push_back(RAM(loader->tempdata));
+              }
+       tabw->addTab(new TabForm(loader->arrRAMs),"RAM");
+       break;
+   }
+   case 4:
+   {
+       for(int p=0;p<loader->u2arrayI[k];++p)
+           {
+               loader->DownloadPage(loader->Html,loader->u2array[k][p]);
+               loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
+               loader->arrCoolers.push_back(Cooler(loader->tempdata));
+              }
+       tabw->addTab(new TabForm(loader->arrCoolers),"MB");
+       break;
+   }
+   case 5:
+   {
+       for(int p=0;p<loader->u2arrayI[k];++p)
+           {
+               loader->DownloadPage(loader->Html,loader->u2array[k][p]);
+               loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
+               loader->arrHDDs.push_back(HDD(loader->tempdata));
+              }
+       tabw->addTab(new TabForm(loader->arrHDDs),"MB");
+       break;
+   }
+   case 6:
+   {
+       for(int p=0;p<loader->u2arrayI[k];++p)
+           {
+               loader->DownloadPage(loader->Html,loader->u2array[k][p]);
+               loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
+               loader->arrSSDs.push_back(SSD(loader->tempdata));
+              }
+       tabw->addTab(new TabForm(loader->arrSSDs),"MB");
+       break;
+   }
+   case 7:
+   {
+       for(int p=0;p<loader->u2arrayI[k];++p)
+           {
+               loader->DownloadPage(loader->Html,loader->u2array[k][p]);
+               loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
+               loader->arrPowers.push_back(Power(loader->tempdata));
+              }
+       tabw->addTab(new TabForm(loader->arrPowers),"MB");
+       break;
+   }
+   case 8:
+   {
+       for(int p=0;p<loader->u2arrayI[k];++p)
+           {
+               loader->DownloadPage(loader->Html,loader->u2array[k][p]);
+               loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
+               loader->arrCases.push_back(Case(loader->tempdata));
+              }
+       tabw->addTab(new TabForm(loader->arrCases),"MB");
+       break;
+   }
+  }
  }
  for(int i=0;i<loader->arrProcessors.size();++i)
  {
@@ -213,19 +299,13 @@ void ModelViewWidget::tab_clicked(int index)
 
 void ModelViewWidget::get_info()
 {
-    qDebug()<<tabIndex;
     TabForm * form=NULL;
-    //QWidget * pWidget=tabw->widget(index);
     form=(TabForm*)tabw->widget(tabIndex);
-
         if(form->listptr->selectionModel()->hasSelection())
             {
             const QModelIndex index = form->listptr->selectionModel()->currentIndex();
-            int field2=form->infomodel->ptr[index.row()]->price;
-            int field3=form->infomodel->ptr[index.row()]->arrsize;
-            QMessageBox msg;
-             msg.setText("Second field: "+QString::number(field2)+"\nThird field: "+QString::number(field3));
-              msg.exec();
+            InfoForm *f=new InfoForm(form->infomodel->ptr[index.row()]->GetNames(),form->infomodel->ptr[index.row()]->GetValues());
+            f->show();
             }
 }
 

@@ -22,6 +22,14 @@ public:
     QTableView * listptr;
     MyModel * infomodel;
     explicit TabForm(QVector<Processor> & arr,QWidget *parent = nullptr);
+    explicit TabForm(QVector<MotherBoard> & arr,QWidget *parent = nullptr);
+    explicit TabForm(QVector<GraphicsCard> & arr,QWidget *parent = nullptr);
+    explicit TabForm(QVector<RAM> & arr,QWidget *parent = nullptr);
+    explicit TabForm(QVector<Cooler> & arr,QWidget *parent = nullptr);
+    explicit TabForm(QVector<HDD> & arr,QWidget *parent = nullptr);
+    explicit TabForm(QVector<SSD> & arr,QWidget *parent = nullptr);
+    explicit TabForm(QVector<Power> & arr,QWidget *parent = nullptr);
+    explicit TabForm(QVector<Case> & arr,QWidget *parent = nullptr);
     ~TabForm();
 
 private:

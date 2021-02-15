@@ -14,6 +14,7 @@ SOURCES += \
     dataloader.cpp \
     graphicscard.cpp \
     hdd.cpp \
+    infoform.cpp \
     main.cpp \
     modelviewwidget.cpp \
     motherboard.cpp \
@@ -33,6 +34,7 @@ HEADERS += \
     dataloader.h \
     graphicscard.h \
     hdd.h \
+    infoform.h \
     modelviewwidget.h \
     motherboard.h \
     mymodel.h \
@@ -45,6 +47,7 @@ HEADERS += \
     testbox.h
 
 FORMS += \
+    infoform.ui \
     tabform.ui
 
 # Default rules for deployment.

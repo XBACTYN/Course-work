@@ -240,4 +240,60 @@ MotherBoard::MotherBoard(QVector<QString>& data)
     setUSB2(data[19].toInt());
     setUSB3(data[20].toInt());
     setUSBC(data[21].toInt());
+
+}
+
+QVector<QString> MotherBoard::GetNames()
+{
+    QVector<QString> temp;
+    temp.push_back("Цена, руб");
+    temp.push_back("URL-ссылка на товар");
+    temp.push_back("Название");
+    temp.push_back("Сокет(разъем)");
+    temp.push_back("Форм-фактор");
+    temp.push_back("Макс. планок RAM DDR3");
+    temp.push_back("Макс. планок RAM DDR4");
+    temp.push_back("Форма RAM");
+    temp.push_back("Макс. планок RAM DDR3");
+    temp.push_back("Макс. тактовая частота RAM, МГц");
+    temp.push_back("Макс. объем памяти, Гб");
+    temp.push_back("Наличие разъема VGA");
+    temp.push_back("Наличие разъема DVI");
+    temp.push_back("Наличие разъема HDMI");
+    temp.push_back("Наличие разъема DisplayPort");
+    temp.push_back("Аудиочип");
+    temp.push_back("Портов SATA3");
+    temp.push_back("Разъем M.2");
+    temp.push_back("Версия PCI-E");
+    temp.push_back("Портов USB v2");
+    temp.push_back("Портов USB v3");
+    temp.push_back("Портов USB-C");
+    return temp;
+}
+
+QVector<QString> MotherBoard::GetValues()
+{
+    QVector<QString> temp;
+    temp.push_back(QString::number(getPrice()));
+    temp.push_back((url.toString()));
+    temp.push_back(getName());
+    temp.push_back(getSocket());
+    temp.push_back(getForm());
+    temp.push_back(QString::number(getDDR3count()));
+    temp.push_back(QString::number(getDDR4count()));
+    temp.push_back(getFormDDR());
+    temp.push_back(QString::number(getMaxFreq()));
+    temp.push_back(QString::number(getMaxMem()));
+    temp.push_back(getVGA());
+    temp.push_back(getDVI());
+    temp.push_back(getHDMI());
+    temp.push_back(getDispayPort());
+    temp.push_back(getAudio());
+    temp.push_back(QString::number(getSATA3()));
+    temp.push_back(QString::number(getM2()));
+    temp.push_back(QString::number(getPCIE()));
+    temp.push_back(QString::number(getUSB2()));
+    temp.push_back(QString::number(getUSB3()));
+    temp.push_back(QString::number(getUSBC()));
+    return temp;
 }

@@ -24,6 +24,7 @@
 #include "tabform.h"
 #include "mymodel.h"
 #include "dataloader.h"
+#include "infoform.h"
 class ModelViewWidget : public QWidget
 {
     Q_OBJECT

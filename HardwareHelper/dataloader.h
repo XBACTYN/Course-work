@@ -13,29 +13,40 @@
 #include <QVector>
 #include <QRegExp>
 #include "processor.h"
-
+#include "motherboard.h"
+#include "graphicscard.h"
+#include "ram.h"
+#include "cooler.h"
+#include "hdd.h"
+#include "ssd.h"
+#include "power.h"
+#include "case.h"
 class DataLoader : public QObject
 {
-    //QString url;
     QNetworkAccessManager* manager;
    // QUrl uarray[9];//массив с адресами первого уровня на разные компоненты
 
 public:
-    //QVector<QString> vectorHtml;//массив со страницами первого уровня в формате строк.
-   //int vectorHtmlc;
     QUrl uarray[9];
     QVector<QRegExp> vectorReg;//массив регулярок
     QVector<QRegExp> vectorReg2;
     int fields[9];
     QString Html;
-    QVector <QVector<QUrl>> u2array;//массив с адресами на дочерние страницы  //массив должен быть двумерным!!!!!!!!!!!!!!!!!!!!!!!!
+    QVector <QVector<QUrl>> u2array;//массив с адресами на дочерние страницы  //массив должен быть двумерным!!!!!!!!!!!!!!!!
     int u2arrayI[9];// ячейка содержит количество ссылок на каждый тип комплектующих. например u2array[0]==81 это 81 url процессоров.
     int pages[9];
-    //как вариант QVector<QVector
+
     QVector<QString>tempdata;
     QVector<Processor> arrProcessors;
+    QVector<MotherBoard> arrMotherboards;
+    QVector<GraphicsCard>arrGraphicsCards;
+    QVector<RAM>arrRAMs;
+    QVector<Cooler>arrCoolers;
+    QVector<HDD>arrHDDs;
+    QVector<SSD>arrSSDs;
+    QVector<Power>arrPowers;
+    QVector<Case>arrCases;
 
-    //Element * elptr=arrProcessors;
     void SetRegexProcessor();
     void RefPrepare(int i); //i-номер векторов комплектущих. 1-видеокарта, 4-кулер...
     void SetRegexMotherBoard();

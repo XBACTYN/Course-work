@@ -188,7 +188,7 @@ QVector<QString>Processor::GetValues()
 QVector<QString>Processor::GetNames()
 {
     QVector<QString> temp;
-    temp.push_back("Цена");
+    temp.push_back("Цена, руб");
     temp.push_back("URL-ссылка на товар");
     temp.push_back("Название");
     temp.push_back("Сокет(Разъем)");

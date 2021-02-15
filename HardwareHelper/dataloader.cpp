@@ -317,11 +317,11 @@ void DataLoader::Parse1lvl(int i, QString &Html, QVector<QRegExp> &vectorReg, QV
 void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2,QVector<QString>&data)//cюда захуярить tempVector& data
 {
     if(data.size()!=0)
-  {
+   {
    data.clear();
-   }//на время продублирую.
+   }
    data.squeeze();
-    qDebug()<<"in Regex2lvl()";
+    qDebug()<<"in Regex2lvl()\n\n";
     int lastPos = 0;
     while( ( lastPos = vectorReg2[i].indexIn( Html, lastPos ) ) != -1 )
     {
@@ -340,12 +340,5 @@ void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2,QVe
        for(int k=1;k<=fields[i];++k)
            data.push_back("");
    }
-   /*else
-   {
-       for(int k=0;k<data.size();++k)
-           qDebug()<<k<<"."<<data[k];
-   }
-   */
-     qDebug()<<"\n\n";
 }
 

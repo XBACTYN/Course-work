@@ -2,14 +2,9 @@
 #ifndef MOTHERBOARD_H
 #define MOTHERBOARD_H
 #include "Element.h"
-#include <QString>
-#include <QUrl>
-class MotherBoard
+class MotherBoard:public Element
 {
 private:
-    int price;
-    QUrl url;
-    QString name;
     QString socket;
     QString form;
     int DDR3count;
@@ -32,6 +27,8 @@ private:
 public:
     MotherBoard();
     MotherBoard(QVector<QString> & data);
+    QVector<QString>GetNames();
+    QVector<QString>GetValues();
     QUrl getUrl() const;
     void setUrl(const QUrl &value);
     QString getSocket() const;
