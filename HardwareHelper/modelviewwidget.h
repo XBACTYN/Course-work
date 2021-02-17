@@ -50,8 +50,11 @@ private:
     QVector<QHBoxLayout*> arrlay;
     QVector<QPushButton*> infbn;
     QVector<QPushButton*> arrbn;
-
+    QPushButton* bSort;
+    QRadioButton *rbCheap;
+    QRadioButton *rbExpens;
     DataLoader* loader;
+    bool bycheap;
 private slots:
     //void selectionChangedSlot(const QItemSelection & /*newSelection*/, const QItemSelection & /*oldSelection*/);
     void load_data();
@@ -59,6 +62,9 @@ private slots:
     void available_to_create(int);
     void tab_clicked(int);
     void get_info();
+    void radio1_toggled(bool);
+    void radio2_toggled(bool);
+    void sort_all();
 public:
     ModelViewWidget( QWidget* parent = 0 );
     ~ModelViewWidget();

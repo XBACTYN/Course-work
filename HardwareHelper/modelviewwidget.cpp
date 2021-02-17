@@ -47,16 +47,18 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     //mainLayout->addWidget(tabw);//в другой layoutf
 
     QVBoxLayout* panelLayout = new QVBoxLayout;
-    QPushButton* bSort = new QPushButton("Сортировать");
-    //connect
+    bSort = new QPushButton("Сортировать");
+    connect(bSort,SIGNAL(clicked()),SLOT(sort_all()));
+    bSort->setEnabled(false);
     panelLayout->addWidget(bSort);
-    QRadioButton *rbCheap=new QRadioButton;
+    bycheap=true;
+    rbCheap=new QRadioButton;
     rbCheap->setText("Сначала дешевые");
-    //connect
+    connect(rbCheap, SIGNAL(toggled(bool)), this, SLOT(radio1_toggled(bool)));
     panelLayout->addWidget(rbCheap);
-    QRadioButton *rbExpens=new QRadioButton;
+    rbExpens=new QRadioButton;
     rbExpens->setText("Сначала дорогие");
-    //connect
+    connect(rbExpens, SIGNAL(toggled(bool)), this, SLOT(radio2_toggled(bool)));
     panelLayout->addWidget(rbExpens);
     QPushButton* bAdd = new QPushButton("Добавить");
    // connect( bAdd, SIGNAL( clicked() ), SLOT( on_clicked() ) );
@@ -105,11 +107,9 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     saveLay->addWidget(savebn,10,Qt::AlignRight);
     groupLay->addLayout(saveLay);
     saveLay->setContentsMargins(0,0,0,80);
-    //groupLay->addWidget(save,10,Qt::AlignCenter|Qt::AlignTop);
     horLay->addLayout(groupLay);
 
     mainLayout->addLayout(horLay);
-
 
     resize( 1200, 800 );
 
@@ -121,19 +121,13 @@ ModelViewWidget::~ModelViewWidget()
     delete tabw;
 }
 
-/*
-void ModelViewWidget::selectionChangedSlot(const QItemSelection & , const QItemSelection & )
-{
-    const QModelIndex index = m_view->selectionModel()->currentIndex();
-   // QString shit=m_model->box.vec[index.row()].second;
-    //int number=m_model->box.vec[index.row()].b;
-}
-*/
+
+
 
 void ModelViewWidget::load_data()
 { buttonload->setEnabled(false);
     //loader->ClearElArrays();
-    for(int i=0;i<9;++i)// i<9!
+    for(int i=0;i<3;++i)// i<9!
     {
     loader->Parse1lvl(i,loader->Html,loader->vectorReg,loader->u2array,loader->pages[i]);
     }
@@ -143,13 +137,13 @@ void ModelViewWidget::load_data()
    loader->RefPrepare(4);//для кулера
    loader->RefPrepare(8);
 
- for(int k=0;k<9;++k) //начну с материнок //CASE не работает info
+ for(int k=2;k<3;++k) //=/!!!!!!!!!!!!!!!!
  {
    switch (k)
   {
     case 0:
    {
-        for(int p=0;p<loader->u2arrayI[k];++p) //switch(k) , конструкторы классов. 9 массивов в dataloader, ссылки Element * ptr= processor[2]
+        for(int p=0;p<loader->u2arrayI[k];++p)
             {
                 loader->DownloadPage(loader->Html,loader->u2array[k][p]);
                 loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
@@ -183,7 +177,7 @@ void ModelViewWidget::load_data()
        tabw->addTab(new TabForm(loader->arrGraphicsCards),"Graphics");
        break;
    }
-   case 3:  //ВЫБИВАЕТ ПУСТЫЕ
+   case 3:
    {
        for(int p=0;p<loader->u2arrayI[k];++p)
            {
@@ -195,7 +189,7 @@ void ModelViewWidget::load_data()
        tabw->addTab(new TabForm(loader->arrRAMs),"RAM");
        break;
    }
-   case 4: // ВЫБИВАЕТ ПОЛНОСТЬЮ ПУСТЫЕ
+   case 4:
    {
        for(int p=0;p<loader->u2arrayI[k];++p)
            {
@@ -257,6 +251,7 @@ void ModelViewWidget::load_data()
    }
   }
  }
+ bSort->setEnabled(true);
  //сюда функцию для активации всех кнопок.
 }
 void ModelViewWidget::on_clicked()
@@ -302,7 +297,34 @@ void ModelViewWidget::get_info()
             InfoForm *f=new InfoForm(form->infomodel->ptr[index.row()]->GetNames(),form->infomodel->ptr[index.row()]->GetValues());
             qDebug("dw");
             f->show();
-            }
+        }
+}
+
+void ModelViewWidget::radio1_toggled(bool value)
+{
+    if (!value) return;
+      bycheap=true;
+}
+
+void ModelViewWidget::radio2_toggled(bool value)
+{
+    if (!value) return;
+    bycheap=false;
+}
+
+
+void ModelViewWidget::sort_all()
+{
+    if(bycheap)
+    {
+        qDebug()<<"sort from cheapest to expensive";
+        loader->SortFromCheapest();
+    }
+    else
+    {
+        qDebug()<<"sort from expensiest to cheap";
+        loader->SortFromMostExpensive();
+    }
 }
 
 

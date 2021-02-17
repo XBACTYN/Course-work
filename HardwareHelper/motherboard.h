@@ -23,7 +23,6 @@ private:
     int USB2;
     int USB3;
     int USBC;
-
 public:
     MotherBoard();
     MotherBoard(QVector<QString> & data);
@@ -71,6 +70,7 @@ public:
     void setName(const QString &value);
     int getDDR3count() const;
     void setDDR3count(int value);
+
 };
 
 #endif // MOTHERBOARD_H

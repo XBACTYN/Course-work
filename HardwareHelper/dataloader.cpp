@@ -346,6 +346,11 @@ void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2,QVe
    }
 }
 
+bool DataLoader::LessThen(const int v1, const int v2)
+{
+    return v1<v2;
+}
+
 void DataLoader::ClearElArrays()
 {
     if(arrProcessors.size()!=0)
@@ -399,8 +404,30 @@ void DataLoader::ClearElArrays()
     u2array.squeeze();
 }
 
-void DataLoader::ClearURLArrays()
+void DataLoader::SortFromCheapest()
 {
-
+    std::sort(arrProcessors.begin(),arrProcessors.end(),[] (const auto& lhs, const auto& rhs){return lhs.price < rhs.price;});
+    std::sort(arrMotherboards.begin(),arrMotherboards.end(),[] (const auto& lhs, const auto& rhs){return lhs.price < rhs.price;});
+    std::sort(arrGraphicsCards.begin(),arrGraphicsCards.end(),[] (const auto& lhs, const auto& rhs){return lhs.price < rhs.price;});
+    std::sort(arrRAMs.begin(),arrRAMs.end(),[] (const auto& lhs, const auto& rhs){return lhs.price < rhs.price;});
+    std::sort(arrCoolers.begin(),arrCoolers.end(),[] (const auto& lhs, const auto& rhs){return lhs.price < rhs.price;});
+    std::sort(arrHDDs.begin(),arrHDDs.end(),[] (const auto& lhs, const auto& rhs){return lhs.price < rhs.price;});
+    std::sort(arrSSDs.begin(),arrSSDs.end(),[] (const auto& lhs, const auto& rhs){return lhs.price < rhs.price;});
+    std::sort(arrPowers.begin(),arrPowers.end(),[] (const auto& lhs, const auto& rhs){return lhs.price < rhs.price;});
+    std::sort(arrCases.begin(),arrCases.end(),[] (const auto& lhs, const auto& rhs){return lhs.price < rhs.price;});
 }
+
+void DataLoader::SortFromMostExpensive()
+{
+    std::sort(arrProcessors.begin(),arrProcessors.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
+    std::sort(arrMotherboards.begin(),arrMotherboards.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
+    std::sort(arrGraphicsCards.begin(),arrGraphicsCards.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
+    std::sort(arrRAMs.begin(),arrRAMs.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
+    std::sort(arrCoolers.begin(),arrCoolers.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
+    std::sort(arrHDDs.begin(),arrHDDs.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
+    std::sort(arrSSDs.begin(),arrSSDs.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
+    std::sort(arrPowers.begin(),arrPowers.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
+    std::sort(arrCases.begin(),arrCases.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
+}
+
 

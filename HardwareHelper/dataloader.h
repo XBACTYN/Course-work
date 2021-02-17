@@ -66,8 +66,17 @@ public:
     void Regex1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QUrl>&tempVector);
     //void Parse2lvl();
     void Regex2lvl(int i,QString & Html,QVector<QRegExp>&vectorReg2,QVector<QString> &data);
+    bool LessThen(const int v1,const int v2);
     void ClearElArrays();
-    void ClearURLArrays();
+
+    //template<class T>
+    //struct sort_elems
+    //{
+     //   bool operator() (T i, T j)
+     //   { return (i.price<j.price);}
+   // } sort_mother;
+    void SortFromCheapest();
+    void SortFromMostExpensive();
 };
 
 
