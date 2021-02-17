@@ -40,12 +40,13 @@ DataLoader::DataLoader()
 
     pages[0]=1;  //поменяю с 2 на 1.
     pages[1]=1;  //поменяю с 2 на 1
-    pages[2]=1;
-    pages[3]=1;
+    pages[2]=2;
+    //pages[3]=1;
 
     pages[4]=2;
     pages[5]=1;
     pages[7]=1;
+
 };
 void DataLoader::SetRegexProcessor()
 {
@@ -288,8 +289,6 @@ void DataLoader::DownloadPage(QString &Html,QUrl &url) //максимально 
 
 void DataLoader::Regex1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QUrl> &tempVector)//максимально 24 процессора на странице. потом /(n-1)/ к адресу страницы
 {
-   // qDebug()<<"in Regex1lvl()";
-   // qDebug()<<vectorReg[i];
        int lastPos = 0;
        while( ( lastPos = vectorReg[i].indexIn( Html, lastPos ) ) != -1 )
        {
@@ -344,11 +343,6 @@ void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2,QVe
        for(int k=1;k<=fields[i];++k)
            data.push_back("");
    }
-}
-
-bool DataLoader::LessThen(const int v1, const int v2)
-{
-    return v1<v2;
 }
 
 void DataLoader::ClearElArrays()
@@ -428,6 +422,153 @@ void DataLoader::SortFromMostExpensive()
     std::sort(arrSSDs.begin(),arrSSDs.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
     std::sort(arrPowers.begin(),arrPowers.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
     std::sort(arrCases.begin(),arrCases.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
+}
+
+/*template < class T>
+T DataLoader::BinaryPrice(QVector<T> & arr,int size, const int value)
+{
+    int left=0;
+    int right=size-1;
+    int middle;
+    while(true)
+    {
+        middle=(left+right)/2;
+        if(value>arr[middle].price)
+        {left=middle+1;
+            qDebug()<<"middle"<<middle<<"left"<<left;
+        }
+        else if(value<arr[middle].price)
+        {
+            right=middle-1;
+            qDebug()<<"middle"<<middle<<"right"<<right;
+        }
+        else return arr[middle];
+        if(left>right)
+            return arr[right]; //изменил с left на right
+    }
+};*/
+template<class T>
+int DataLoader::BinaryIndex(QVector<T>&arr,int size,const int value)
+{
+    int left=0;
+    int right=size-1;
+    int middle;
+    while(true)
+    {
+        middle=(left+right)/2;
+        qDebug()<<"middle"<<middle;
+        if(value>arr[middle].price)
+        {
+            left=middle+1;
+            qDebug()<<"left"<<left;
+            qDebug()<<"middle1"<<arr[middle].price<<"left1"<<arr[left].price;
+        }
+        else if(value<arr[middle].price)
+        {
+            right=middle-1;
+            qDebug()<<"right"<<right;
+            qDebug()<<"middle2"<<arr[middle].price<<"right2"<<arr[right].price;
+        }
+        else return middle;
+        if(left>right)
+        {qDebug()<<"left return"<<left;
+            return left; //изменил с left на right
+        }
+    }
+}
+void DataLoader::ChooseGraphicCard(int sum, int &surplus)
+{
+    //ищем верхнюю границу цены.
+   int maxIndex= BinaryIndex(arrGraphicsCards,arrGraphicsCards.size(),sum);
+   if(maxIndex!=0)
+       --maxIndex;
+   bool compatible=false;
+   while(maxIndex>=0&&!compatible)
+   {
+       config.graphicscard=arrGraphicsCards[maxIndex];
+       compatible=true;
+   }
+   demand.MinPower=config.graphicscard.getPower();
+   demand.Price=config.graphicscard.getPrice();
+   surplus=sum-config.graphicscard.getPrice();
+   qDebug()<<config.graphicscard.name<<config.graphicscard.price;
+}
+void DataLoader::ChooseProcessor(int sum, int &surplus,int type) // НУЖНА ПРОВЕРКА НА КОЛИЧЕСТВО ЯДЕР.
+{
+    int maxIndex=BinaryIndex(arrProcessors,arrProcessors.size(),sum);
+    if(maxIndex!=0)
+        --maxIndex;
+    bool compatible=false;
+    while(maxIndex>=0&&!compatible)
+    {
+        if(type==0&&arrProcessors[maxIndex].getCores()>=6)
+        {
+            config.processor=arrProcessors[maxIndex];
+            demand.Socket=config.processor.getSocket();
+            demand.FreqDDR4=config.processor.getMaxMemFreqDDR4();
+            demand.FreqDDR3=config.processor.getMaxMemFreqDDR3();
+            demand.TDP=config.processor.getTDP();
+            demand.Price+=config.processor.getPrice();
+            surplus+=sum-config.processor.getPrice();
+            compatible=true;
+        }
+        --maxIndex;
+    }
+    qDebug()<<config.processor.name<<config.processor.price;
+}
+void DataLoader::ChooseMotherBoard(int sum, int &surplus)
+{
+    int maxIndex=BinaryIndex(arrMotherboards,arrMotherboards.size(),sum);
+    if(maxIndex!=0)
+        --maxIndex;
+    qDebug()<<maxIndex;
+    bool compatible=false;
+    while(maxIndex>=0&&!compatible)
+    {
+        if(arrMotherboards[maxIndex].getSocket()==demand.Socket)//пока оставлю равенство.надо заменить на поиск по подстроке.
+            if((demand.FreqDDR4!=0&&arrMotherboards[maxIndex].getDDR4count()!=0)||(demand.FreqDDR3!=0&&arrMotherboards[maxIndex].getDDR3count()!=0))
+                {
+                    demand.MotherForm=arrMotherboards[maxIndex].getForm();
+                    if(arrMotherboards[maxIndex].getM2()!=0)
+                        demand.M2=arrMotherboards[maxIndex].getM2();
+                    if(arrMotherboards[maxIndex].getDDR4count()!=0)
+                        demand.DDRtype="DDR4";
+                    demand.MaxFreqRAM=arrMotherboards[maxIndex].getMaxFreq();
+                    demand.Price+=arrMotherboards[maxIndex].getMaxFreq();
+                    config.motherboard=arrMotherboards[maxIndex];
+                    surplus+=config.motherboard.getPrice();   //конфиг пораньше перенести можно было.
+                    compatible=true;
+                    //demand.USB3=arrMotherboards[maxIndex].getUSB3();
+                    qDebug()<<config.motherboard.getName()<<config.motherboard.getPrice();
+                }
+
+        --maxIndex;
+    }
+}
+void DataLoader::GenerateConfig(int type,int sum) //Ощущение что надо сделать класс совместимости. QString Socket, int TDP...
+{
+
+
+    int surplus=0;
+    SortFromCheapest();
+    switch(type)
+    {
+        case 0:
+        {  // используем игровые проценты.
+            for(int i=0;i<9;++i)
+               { maxSum[i]=(sum*gamerConfig[i])/100;
+               qDebug()<<maxSum[i];
+                }
+            ChooseGraphicCard(maxSum[2],surplus);
+            ChooseProcessor(maxSum[0],surplus,type);
+            ChooseMotherBoard(maxSum[1],surplus);
+            break;
+        }
+        case 1:
+        {
+            break;
+        }
+    }
 }
 
 

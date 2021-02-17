@@ -79,7 +79,8 @@ void RAM::setMemFreq(const QString &value)
 {
     memFreq = value;
 }
-
+RAM::RAM()
+{}
 
 RAM::RAM(QVector<QString> &data)
 {

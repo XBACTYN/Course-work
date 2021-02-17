@@ -27,6 +27,41 @@ class DataLoader : public QObject
    // QUrl uarray[9];//массив с адресами первого уровня на разные компоненты
 
 public:
+    struct Compatible
+    {
+        int Price;  //Общая цена
+        QString Socket; //Сокет для Проца,материнки
+        int FreqDDR4;//параметр для проца,материнки,ОЗУ
+        int FreqDDR3;//параметр для проца,материнки,ОЗУ
+        QString MotherForm;//параметр для материнки и корпуса
+        QString PowerForm;//параметр для БП и корпуса
+        QString DDRtype;//Параметр для проца,материнки,ОЗУ
+        int MaxFreqRAM;
+        //QString SATA;//Параметр для материнки,hdd,ssd,блока питания
+        int M2;//параметр для материнки,ssd
+        //int SATA;
+        int USB2;//параметр для материнки,корпуса
+        int USB3;//параметр для материнки,корпуса
+        int TDP;//параметр для процессора,кулера
+        int MinPower;//Общий параметр,основывается на видеокарте. так же hdd и ssd
+        //int PCIE
+        //int VGA,HDMI/......
+    };
+
+    struct Config{
+        Processor processor;
+        MotherBoard motherboard;
+        GraphicsCard graphicscard;
+        RAM ram;
+        Cooler cooler;
+        HDD hdd;
+        SSD ssd;
+        Power power;
+        Case box;
+
+    };
+    Compatible demand;
+    Config config;
     QUrl uarray[9];
     QVector<QRegExp> vectorReg;//массив регулярок
     QVector<QRegExp> vectorReg2;
@@ -46,7 +81,8 @@ public:
     QVector<SSD>arrSSDs;
     QVector<Power>arrPowers;
     QVector<Case>arrCases;
-
+    QVector<int>gamerConfig{29,8,42,5,3,0,5,4,4};
+    QVector<int>maxSum{0,0,0,0,0,0,0,0,0};
     void SetRegexProcessor();
     void RefPrepare(int i); //i-номер векторов комплектущих. 1-видеокарта, 4-кулер...
     void SetRegexMotherBoard();
@@ -59,24 +95,24 @@ public:
     void SetRegexSSD();
     void SetRegexPower();
     void SetRegexCase();
-    //НАПОМИНАНИЕ! Если не парсится сам элемент,вместо него выводить в консоль адрес.
     DataLoader();
     void DownloadPage(QString & Html,QUrl &url);//test
     void Parse1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QVector<QUrl>>& u2array,int  pages);
     void Regex1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QUrl>&tempVector);
-    //void Parse2lvl();
     void Regex2lvl(int i,QString & Html,QVector<QRegExp>&vectorReg2,QVector<QString> &data);
-    bool LessThen(const int v1,const int v2);
     void ClearElArrays();
-
-    //template<class T>
-    //struct sort_elems
-    //{
-     //   bool operator() (T i, T j)
-     //   { return (i.price<j.price);}
-   // } sort_mother;
+    template <class T>
+    T BinaryPrice(QVector<T> &arr,int size, const int value);
+    template<class T>
+    int BinaryIndex(QVector<T>&arr,int size,const int value);
     void SortFromCheapest();
     void SortFromMostExpensive();
+    void ChooseGraphicCard(int sum,int &surplus);
+    void ChooseProcessor(int sum,int &surplus,int type);
+    void ChooseMotherBoard(int sum,int &surplus);
+    void GenerateConfig(int type,int sum);
+
+
 };
 
 

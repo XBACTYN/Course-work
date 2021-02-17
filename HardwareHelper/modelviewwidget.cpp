@@ -25,6 +25,7 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     spinprice=new QSpinBox(this); //проверку только на цифры сделать
     spinprice->setMaximum(500000);
     buttonstart=new QPushButton("Сгенерировать");
+    connect(buttonstart,SIGNAL(clicked()),SLOT(generate()));
     settingsLayout->addWidget(buttonload);
     settingsLayout->addWidget(combocreate);
     settingsLayout->addWidget(combotype);
@@ -61,7 +62,7 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     connect(rbExpens, SIGNAL(toggled(bool)), this, SLOT(radio2_toggled(bool)));
     panelLayout->addWidget(rbExpens);
     QPushButton* bAdd = new QPushButton("Добавить");
-   // connect( bAdd, SIGNAL( clicked() ), SLOT( on_clicked() ) );
+
     panelLayout->addWidget( bAdd );
     QPushButton* bInfo = new QPushButton("Информация");
     connect( bInfo, SIGNAL( clicked() ), SLOT( get_info() ) );
@@ -137,7 +138,7 @@ void ModelViewWidget::load_data()
    loader->RefPrepare(4);//для кулера
    loader->RefPrepare(8);
 
- for(int k=2;k<3;++k) //=/!!!!!!!!!!!!!!!!
+ for(int k=0;k<3;++k) //=/!!!!!!!!!!!!!!!!
  {
    switch (k)
   {
@@ -254,9 +255,15 @@ void ModelViewWidget::load_data()
  bSort->setEnabled(true);
  //сюда функцию для активации всех кнопок.
 }
-void ModelViewWidget::on_clicked()
+void ModelViewWidget::generate()
 {
-
+    for(int i=0;i<3;++i)
+        arrline[i]->setText("");
+    loader->GenerateConfig(0,spinprice->value());
+    arrline[0]->setText(loader->config.processor.getName());
+    arrline[1]->setText(loader->config.motherboard.getName());
+    arrline[2]->setText(loader->config.graphicscard.getName());
+    //ifbn[0]
 }
 
 void ModelViewWidget::available_to_create(int idx)
@@ -303,7 +310,7 @@ void ModelViewWidget::get_info()
 void ModelViewWidget::radio1_toggled(bool value)
 {
     if (!value) return;
-      bycheap=true;
+    bycheap=true;
 }
 
 void ModelViewWidget::radio2_toggled(bool value)

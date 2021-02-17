@@ -219,7 +219,7 @@ MotherBoard::MotherBoard()
 
 MotherBoard::MotherBoard(QVector<QString>& data)
 {
-    setPrice((data[0].toInt()+data[1].toInt()/2));
+    setPrice((data[0].toInt()+data[1].toInt())/2);
     setUrl(QUrl(data[2]));
     setName(data[3]);
     setSocket(data[4]);

@@ -58,13 +58,13 @@ private:
 private slots:
     //void selectionChangedSlot(const QItemSelection & /*newSelection*/, const QItemSelection & /*oldSelection*/);
     void load_data();
-    void on_clicked();
     void available_to_create(int);
     void tab_clicked(int);
     void get_info();
     void radio1_toggled(bool);
     void radio2_toggled(bool);
     void sort_all();
+    void generate();
 public:
     ModelViewWidget( QWidget* parent = 0 );
     ~ModelViewWidget();
