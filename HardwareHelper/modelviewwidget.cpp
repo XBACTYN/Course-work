@@ -133,7 +133,7 @@ void ModelViewWidget::load_data()
    loader->RefPrepare(4);//для кулера
    loader->RefPrepare(8);
 
- for(int k=0;k<9;++k) //начну с материнок
+ for(int k=0;k<9;++k) //начну с материнок //CASE не работает info
  {
    switch (k)
   {

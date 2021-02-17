@@ -45,7 +45,7 @@ DataLoader::DataLoader()
 
     pages[4]=2;
     pages[5]=1;
-    pages[7]=2;
+    pages[7]=1;
 };
 void DataLoader::SetRegexProcessor()
 {
