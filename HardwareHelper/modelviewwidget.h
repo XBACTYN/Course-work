@@ -41,6 +41,7 @@ private:
     QPushButton * buttonstart;
 
     QVBoxLayout * groupLay;
+    QHBoxLayout * saveLay;
     QVector<QString> confNames{"Процессор","Материнская плата","Видеокарта",
                            "Оперативная память","Кулер на процессор","Жесткий диск",
                            "Твердотельный накопитель","Блок питания","Корпус"};

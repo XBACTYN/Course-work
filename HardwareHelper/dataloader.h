@@ -66,6 +66,8 @@ public:
     void Regex1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QUrl>&tempVector);
     //void Parse2lvl();
     void Regex2lvl(int i,QString & Html,QVector<QRegExp>&vectorReg2,QVector<QString> &data);
+    void ClearElArrays();
+    void ClearURLArrays();
 };
 
 

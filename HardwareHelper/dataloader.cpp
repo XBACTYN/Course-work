@@ -346,3 +346,61 @@ void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2,QVe
    }
 }
 
+void DataLoader::ClearElArrays()
+{
+    if(arrProcessors.size()!=0)
+    { arrProcessors.clear();
+      arrProcessors.squeeze();
+    }
+    if(arrMotherboards.size()!=0)
+    {arrMotherboards.clear();
+     arrMotherboards.squeeze();
+    }
+    if(arrGraphicsCards.size()!=0)
+    {arrGraphicsCards.clear();
+    arrGraphicsCards.squeeze();
+    }
+    if(arrRAMs.size()!=0)
+    {arrRAMs.clear();
+    arrRAMs.squeeze();
+    }
+    if(arrCoolers.size()!=0)
+    {arrCoolers.clear();
+    arrCoolers.squeeze();
+    }
+    if(arrHDDs.size()!=0)
+    {arrHDDs.clear();
+    arrHDDs.squeeze();
+    }
+    if(arrSSDs.size()!=0)
+    {arrSSDs.clear();
+    arrSSDs.squeeze();
+    }
+    if(arrPowers.size()!=0)
+    {
+    arrPowers.clear();
+    arrPowers.squeeze();
+    }
+    if(arrCases.size()!=0)
+    {
+    arrCases.clear();
+    arrCases.clear();
+    }
+    for(int i=0;i<9;++i)
+        u2arrayI[i]=0;
+
+    for(int i=0;u2array.size();i++)
+    {
+        u2array[i].clear();
+        u2array[i].squeeze();
+    }
+    if(u2array.size()!=0)
+        u2array.clear();
+    u2array.squeeze();
+}
+
+void DataLoader::ClearURLArrays()
+{
+
+}
+

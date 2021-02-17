@@ -78,7 +78,6 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
 
     for(int i=0;i<9;++i)
     {
-        //qDebug()<<i;
         arrlab.push_back(new QLabel("Пусто"));
         arrline.push_back(new QLineEdit);
         arrline[i]->setReadOnly(true);
@@ -95,8 +94,18 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
         groupLay->addWidget(new QLabel(confNames[i]),0,Qt::AlignCenter);
         groupLay->addLayout(arrlay[i]);
     }
-    QPushButton* save=new QPushButton("Сохранить в txt");
-    groupLay->addWidget(save,10,Qt::AlignCenter|Qt::AlignTop);
+    saveLay=new QHBoxLayout;
+    QLabel*pricelab=new QLabel("Общая цена:");
+    QLineEdit* priceline=new QLineEdit;
+    priceline->setReadOnly(true);
+    priceline->setMaxLength(5);
+    QPushButton* savebn=new QPushButton("Сохранить сборку в txt");
+    saveLay->addWidget(pricelab);
+    saveLay->addWidget(priceline);
+    saveLay->addWidget(savebn,10,Qt::AlignRight);
+    groupLay->addLayout(saveLay);
+    saveLay->setContentsMargins(0,0,0,80);
+    //groupLay->addWidget(save,10,Qt::AlignCenter|Qt::AlignTop);
     horLay->addLayout(groupLay);
 
     mainLayout->addLayout(horLay);
@@ -122,7 +131,8 @@ void ModelViewWidget::selectionChangedSlot(const QItemSelection & , const QItemS
 */
 
 void ModelViewWidget::load_data()
-{
+{ buttonload->setEnabled(false);
+    //loader->ClearElArrays();
     for(int i=0;i<9;++i)// i<9!
     {
     loader->Parse1lvl(i,loader->Html,loader->vectorReg,loader->u2array,loader->pages[i]);
@@ -247,6 +257,7 @@ void ModelViewWidget::load_data()
    }
   }
  }
+ //сюда функцию для активации всех кнопок.
 }
 void ModelViewWidget::on_clicked()
 {
