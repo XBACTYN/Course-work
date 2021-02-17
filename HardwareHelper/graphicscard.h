@@ -24,8 +24,8 @@ private:
 public:
     GraphicsCard();
     GraphicsCard(QVector<QString>&data);
-    virtual QVector<QString>GetNames()=0;
-    virtual QVector<QString>GetValues()=0;
+    QVector<QString>GetNames();
+    QVector<QString>GetValues();
     QUrl getUrl() const;
     void setUrl(const QUrl &value);
     double getPCIE() const;

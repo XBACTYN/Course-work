@@ -254,7 +254,6 @@ QVector<QString> MotherBoard::GetNames()
     temp.push_back("Макс. планок RAM DDR3");
     temp.push_back("Макс. планок RAM DDR4");
     temp.push_back("Форма RAM");
-    temp.push_back("Макс. планок RAM DDR3");
     temp.push_back("Макс. тактовая частота RAM, МГц");
     temp.push_back("Макс. объем памяти, Гб");
     temp.push_back("Наличие разъема VGA");

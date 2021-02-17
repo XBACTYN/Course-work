@@ -129,3 +129,26 @@ Case::Case(QVector<QString> &data)
     setUSB2(data[10].toInt());
     setUSB3(data[11].toInt());
 }
+
+QVector<QString>Case::GetNames()
+{
+    QVector<QString>temp;
+    return temp;
+}
+
+QVector<QString>Case::GetValues()
+{
+    QVector<QString>temp;
+    temp.push_back(QString::number(getPrice()));
+    temp.push_back((url.toString()));
+    temp.push_back(getName());
+    temp.push_back(getForm());
+    temp.push_back(getMotherForm());
+    temp.push_back(getPowerForm());
+    temp.push_back(QString::number(getSlotform3_5()));
+    temp.push_back(QString::number(getSlotform2_5()));
+    temp.push_back(QString::number(getMaxVents()));
+    temp.push_back(QString::number(getUSB2()));
+    temp.push_back(QString::number(getUSB3()));
+    return temp;
+}

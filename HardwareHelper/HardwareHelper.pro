@@ -23,9 +23,7 @@ SOURCES += \
     processor.cpp \
     ram.cpp \
     ssd.cpp \
-    tabform.cpp \
-    test.cpp \
-    testbox.cpp
+    tabform.cpp
 
 HEADERS += \
     Element.h \
@@ -42,9 +40,7 @@ HEADERS += \
     processor.h \
     ram.h \
     ssd.h \
-    tabform.h \
-    test.h \
-    testbox.h
+    tabform.h
 
 FORMS += \
     infoform.ui \

@@ -42,15 +42,6 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     QHBoxLayout *horLay=new QHBoxLayout;
 
     tabw=new QTabWidget(this);
-    //tabw->addTab(new TabForm(),"CPU");
-    //tabw->addTab(new TabForm(),"MB");
-    //tabw->addTab(new TabForm(),"GCard");
-    //tabw->addTab(new TabForm(),"RAM");
-    //tabw->addTab(new TabForm(),"AcCooler");
-    //tabw->addTab(new TabForm(),"HDD");
-    //tabw->addTab(new TabForm(),"SSD");
-    //tabw->addTab(new TabForm(),"Power");
-    //tabw->addTab(new TabForm(),"Case");
     connect(tabw,SIGNAL(tabBarClicked(int)),SLOT(tab_clicked(int)));
     horLay->addWidget((tabw));
     //mainLayout->addWidget(tabw);//в другой layoutf
@@ -132,18 +123,17 @@ void ModelViewWidget::selectionChangedSlot(const QItemSelection & , const QItemS
 
 void ModelViewWidget::load_data()
 {
-    for(int i=0;i<1;++i)// i<9!
+    for(int i=0;i<9;++i)// i<9!
     {
     loader->Parse1lvl(i,loader->Html,loader->vectorReg,loader->u2array,loader->pages[i]);
     }
 
 
-  // int k=0;
    loader->RefPrepare(1);//для материнки
    loader->RefPrepare(4);//для кулера
    loader->RefPrepare(8);
-                //QUrl urltest("https://www.e-katalog.ru/ek-item.php?resolved_name_=AEROCOOL-BOLT&view_=tbl");
- for(int k=0;k<1;++k)
+
+ for(int k=0;k<9;++k) //начну с материнок
  {
    switch (k)
   {
@@ -153,6 +143,7 @@ void ModelViewWidget::load_data()
             {
                 loader->DownloadPage(loader->Html,loader->u2array[k][p]);
                 loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
+                if(loader->tempdata[0]!="")
                 loader->arrProcessors.push_back(Processor(loader->tempdata));
                }
         tabw->addTab(new TabForm(loader->arrProcessors),"CPU");
@@ -164,7 +155,8 @@ void ModelViewWidget::load_data()
            {
                loader->DownloadPage(loader->Html,loader->u2array[k][p]);
                loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
-               loader->arrMotherboards.push_back(MotherBoard(loader->tempdata));
+               if(loader->tempdata[0]!="")
+                loader->arrMotherboards.push_back(MotherBoard(loader->tempdata));
               }
        tabw->addTab(new TabForm(loader->arrMotherboards),"Mother");
        break;
@@ -175,31 +167,34 @@ void ModelViewWidget::load_data()
            {
                loader->DownloadPage(loader->Html,loader->u2array[k][p]);
                loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
-               loader->arrGraphicsCards.push_back(GraphicsCard(loader->tempdata));
+               if(loader->tempdata[0]!="")
+                loader->arrGraphicsCards.push_back(GraphicsCard(loader->tempdata));
               }
        tabw->addTab(new TabForm(loader->arrGraphicsCards),"Graphics");
        break;
    }
-   case 3:
+   case 3:  //ВЫБИВАЕТ ПУСТЫЕ
    {
        for(int p=0;p<loader->u2arrayI[k];++p)
            {
                loader->DownloadPage(loader->Html,loader->u2array[k][p]);
                loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
-               loader->arrRAMs.push_back(RAM(loader->tempdata));
+               if(loader->tempdata[0]!="")
+                loader->arrRAMs.push_back(RAM(loader->tempdata));
               }
        tabw->addTab(new TabForm(loader->arrRAMs),"RAM");
        break;
    }
-   case 4:
+   case 4: // ВЫБИВАЕТ ПОЛНОСТЬЮ ПУСТЫЕ
    {
        for(int p=0;p<loader->u2arrayI[k];++p)
            {
                loader->DownloadPage(loader->Html,loader->u2array[k][p]);
                loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
-               loader->arrCoolers.push_back(Cooler(loader->tempdata));
+               if(loader->tempdata[0]!="")
+                loader->arrCoolers.push_back(Cooler(loader->tempdata));
               }
-       tabw->addTab(new TabForm(loader->arrCoolers),"MB");
+       tabw->addTab(new TabForm(loader->arrCoolers),"Cooler");
        break;
    }
    case 5:
@@ -208,9 +203,10 @@ void ModelViewWidget::load_data()
            {
                loader->DownloadPage(loader->Html,loader->u2array[k][p]);
                loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
-               loader->arrHDDs.push_back(HDD(loader->tempdata));
+               if(loader->tempdata[0]!="")
+                loader->arrHDDs.push_back(HDD(loader->tempdata));
               }
-       tabw->addTab(new TabForm(loader->arrHDDs),"MB");
+       tabw->addTab(new TabForm(loader->arrHDDs),"HDD");
        break;
    }
    case 6:
@@ -219,9 +215,10 @@ void ModelViewWidget::load_data()
            {
                loader->DownloadPage(loader->Html,loader->u2array[k][p]);
                loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
-               loader->arrSSDs.push_back(SSD(loader->tempdata));
+               if(loader->tempdata[0]!="")
+                loader->arrSSDs.push_back(SSD(loader->tempdata));
               }
-       tabw->addTab(new TabForm(loader->arrSSDs),"MB");
+       tabw->addTab(new TabForm(loader->arrSSDs),"SSD");
        break;
    }
    case 7:
@@ -230,9 +227,10 @@ void ModelViewWidget::load_data()
            {
                loader->DownloadPage(loader->Html,loader->u2array[k][p]);
                loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
-               loader->arrPowers.push_back(Power(loader->tempdata));
+               if(loader->tempdata[0]!="")
+                loader->arrPowers.push_back(Power(loader->tempdata));
               }
-       tabw->addTab(new TabForm(loader->arrPowers),"MB");
+       tabw->addTab(new TabForm(loader->arrPowers),"Power");
        break;
    }
    case 8:
@@ -241,29 +239,13 @@ void ModelViewWidget::load_data()
            {
                loader->DownloadPage(loader->Html,loader->u2array[k][p]);
                loader->Regex2lvl(k,loader->Html,loader->vectorReg2,loader->tempdata);
-               loader->arrCases.push_back(Case(loader->tempdata));
+               if(loader->tempdata[0]!="")
+                loader->arrCases.push_back(Case(loader->tempdata));
               }
-       tabw->addTab(new TabForm(loader->arrCases),"MB");
+       tabw->addTab(new TabForm(loader->arrCases),"Case");
        break;
    }
   }
- }
- for(int i=0;i<loader->arrProcessors.size();++i)
- {
-     qDebug()<<"Элемент №"<<i;
-     qDebug()<<"Цена"<<loader->arrProcessors[i].getPrice();
-     qDebug()<<"Ссылка"<<loader->arrProcessors[i].getUrl();
-     qDebug()<<"Имя"<<loader->arrProcessors[i].getName();
-     qDebug()<<"Ядра"<<loader->arrProcessors[i].getCores();
-     qDebug()<<"Потоки"<<loader->arrProcessors[i].getThreads();
-     qDebug()<<"Такт частота"<<loader->arrProcessors[i].getFreq();
-     qDebug()<<"Частота в турбо"<<loader->arrProcessors[i].getTurbo();
-     qDebug()<<"Техпроцесс"<<loader->arrProcessors[i].getTechprocess();
-     qDebug()<<"Интегр графика"<<loader->arrProcessors[i].getIGraphic();
-     qDebug()<<"ТДП"<<loader->arrProcessors[i].getTDP();
-     qDebug()<<"Макс ОЗУ"<<loader->arrProcessors[i].getMaxMem();
-     qDebug()<<"Макс част DDR3"<<loader->arrProcessors[i].getMaxMemFreqDDR3();
-     qDebug()<<"Макс част DDR4"<<loader->arrProcessors[i].getMaxMemFreqDDR4()<<"\n\n";
  }
 }
 void ModelViewWidget::on_clicked()
@@ -298,13 +280,16 @@ void ModelViewWidget::tab_clicked(int index)
 }
 
 void ModelViewWidget::get_info()
-{
+{   qDebug()<<"in get_info()";
     TabForm * form=NULL;
     form=(TabForm*)tabw->widget(tabIndex);
         if(form->listptr->selectionModel()->hasSelection())
             {
             const QModelIndex index = form->listptr->selectionModel()->currentIndex();
+            //qDebug()<<form->infomodel->ptr[index.row()]->GetNames();
+            //qDebug()<<form->infomodel->ptr[index.row()]->GetValues();
             InfoForm *f=new InfoForm(form->infomodel->ptr[index.row()]->GetNames(),form->infomodel->ptr[index.row()]->GetValues());
+            qDebug("dw");
             f->show();
             }
 }

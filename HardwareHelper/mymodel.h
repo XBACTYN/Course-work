@@ -1,7 +1,6 @@
 #ifndef MYMODEL_H
 #define MYMODEL_H
 #include <QAbstractTableModel>
-//#include <testbox.h>
 #include <Element.h>
 class MyModel : public QAbstractTableModel
 {
@@ -12,7 +11,6 @@ class MyModel : public QAbstractTableModel
     };
 
 public:
-    //TestBox box;
    QVector< Element *> ptr;
    int ptrsize;
     explicit MyModel(QObject *parent = nullptr);

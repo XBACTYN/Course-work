@@ -39,6 +39,10 @@ DataLoader::DataLoader()
         pages[i]=3;
 
     pages[0]=1;  //поменяю с 2 на 1.
+    pages[1]=1;  //поменяю с 2 на 1
+    pages[2]=1;
+    pages[3]=1;
+
     pages[4]=2;
     pages[5]=1;
     pages[7]=2;
@@ -125,7 +129,7 @@ void DataLoader::SetRegexGraphicsCard()
                                  ".*(?:HDMI</span></span></td><td width=...%. class=.op3.>(\\d).nbsp.шт</td>)?"
                                  ".*(?:DisplayPort</span></span></td><td width=...%. class=.op3.>(\\d).nbsp.шт</td>)?"
                                  ".*мониторов.*class=.op3.>(\\d)</td>"
-                                 ".*(?:class=.op3.>(\\d{2,3}).nbsp.Вт</td>)?"
+                                 ".*(?:от</span></span></td><td width=...%. class=.op3.>(\\d{2,3}).nbsp.Вт</td>)?"
                                  ".*Дата добавления"));
     fields[2]=17;
 }

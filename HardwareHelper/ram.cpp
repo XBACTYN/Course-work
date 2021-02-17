@@ -1,5 +1,5 @@
 #include "ram.h"
-
+#include <QDebug>
 int RAM::getPrice() const
 {
     return price;
@@ -91,4 +91,32 @@ RAM::RAM(QVector<QString> &data)
     setFormDDR(data[6]);
     setMemType(data[7]);
     setMemFreq(data[8]);
+}
+
+QVector<QString>RAM::GetNames()
+{
+    QVector<QString>temp;
+    temp.push_back("Цена, руб");
+    temp.push_back("URL-ссылка на товар");
+    temp.push_back("Название");
+    temp.push_back("Суммарная память комплекта, Гб");
+    temp.push_back("Планок памяти");
+    temp.push_back("Форм-фактор");
+    temp.push_back("Тип памяти");
+    temp.push_back("Тактовая частота, МГц");
+    return temp;
+}
+
+QVector<QString>RAM::GetValues()
+{
+    QVector<QString>temp;
+    temp.push_back(QString::number(getPrice()));
+    temp.push_back((url.toString()));
+    temp.push_back(getName());
+    temp.push_back(QString::number(getSumMem()));
+    temp.push_back(QString::number(getBars()));
+    temp.push_back(getFormDDR());
+    temp.push_back(getMemType());
+    temp.push_back(getMemFreq());
+    return temp;
 }

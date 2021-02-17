@@ -5,6 +5,7 @@
 #include <QLayout>
 #include <QTableWidget>
 #include <QHeaderView>
+#include <QDebug>
 namespace Ui {
 class InfoForm;
 }

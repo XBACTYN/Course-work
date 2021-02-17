@@ -129,3 +129,37 @@ SSD::SSD(QVector<QString> &data)
     setReadspeed(data[10].toInt());
     setTBW(data[11].toInt());
 }
+
+QVector<QString>SSD::GetNames()
+{
+     QVector<QString>temp;
+     temp.push_back("Цена, руб");
+     temp.push_back("URL-ссылка на товар");
+     temp.push_back("Название");
+     temp.push_back("Объем, Гб");
+     temp.push_back("Форм-фактор");
+     temp.push_back("Интерфейс M.2");
+     temp.push_back("Интерфейс");
+     temp.push_back("Размер буфера обмена, Мб");
+     temp.push_back("Скорость записи, Мб/c");
+     temp.push_back("Скорость чтения, Мб/c");
+     temp.push_back("Наработка на отказ(TBW), Тб");
+     return temp;
+}
+
+QVector<QString>SSD::GetValues()
+{
+    QVector<QString>temp;
+    temp.push_back(QString::number(getPrice()));
+    temp.push_back((url.toString()));
+    temp.push_back(getName());
+    temp.push_back(QString::number(getCapacity()));
+    temp.push_back(getForm());
+    temp.push_back(getM2interface());
+    temp.push_back(getInterface());
+    temp.push_back(QString::number(getBuff()));
+    temp.push_back(QString::number(getWritespeed()));
+    temp.push_back(QString::number(getReadspeed()));
+    temp.push_back(QString::number(getTBW()));
+    return temp;
+}

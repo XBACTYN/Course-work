@@ -118,3 +118,34 @@ Power::Power(QVector<QString> &data)
     setPCIE(data[9].toInt());
     setNoise(data[10].toInt());
 }
+
+QVector<QString>Power::GetNames()
+{
+    QVector<QString>temp;
+    temp.push_back("Цена, руб");
+    temp.push_back("URL-ссылка на товар");
+    temp.push_back("Название");
+    temp.push_back("Мощность, Вт");
+    temp.push_back("Форм-фактор");
+    temp.push_back("Диаметр вентилятора, мм");
+    temp.push_back("Максимально разъемов SATA");
+    temp.push_back("Максимально разъемов MOLEX");
+    temp.push_back("Максимально разъемов PCI-E");
+    temp.push_back("Уровень шума");
+    return temp;
+}
+QVector<QString>Power::GetValues()
+{
+    QVector<QString>temp;
+    temp.push_back(QString::number(getPrice()));
+    temp.push_back((url.toString()));
+    temp.push_back(getName());
+    temp.push_back(QString::number(getPower()));
+    temp.push_back(getForm());
+    temp.push_back(QString::number(getDiameter()));
+    temp.push_back(QString::number(getSATA()));
+    temp.push_back(QString::number(getMOLEX()));
+    temp.push_back(QString::number(getPCIE()));
+    temp.push_back(QString::number(getNoise()));
+    return temp;
+}

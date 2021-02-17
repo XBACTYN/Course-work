@@ -1,14 +1,9 @@
 #ifndef HDD_H
 #define HDD_H
-#include <QString>
-#include <QUrl>
-
-class HDD
+#include "Element.h"
+class HDD:public Element
 {
 private:
-    int price;
-    QUrl url;
-    QString name;
     int capacity;
     QString interface;
     int buff;
@@ -18,9 +13,11 @@ private:
 public:
     HDD();
     HDD(QVector<QString>& data);
+    QVector<QString>GetNames();
+    QVector<QString>GetValues();
     void RepairInterface(QString & str);
-    int getPrice() const;
-    void setPrice(int value);
+    int getPrice()const;
+    void setPrice(const int value);
     QUrl getUrl() const;
     void setUrl(const QUrl &value);
     QString getName() const;
