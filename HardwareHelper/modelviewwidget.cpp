@@ -38,9 +38,7 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     progbar=new QProgressBar(this);
     progbar->setMinimum(0);
     progbar->setMaximum(100);
-    QLabel * progress=new QLabel("0 %");
     barlayout->addWidget(progbar);
-    barlayout->addWidget(progress);
     mainLayout->addLayout(barlayout);
 
     QHBoxLayout *horLay=new QHBoxLayout;
@@ -271,7 +269,8 @@ void ModelViewWidget::load_data()
 void ModelViewWidget::generate()
 {
     for(int i=0;i<7;++i)
-        arrline[i]->setText("");
+        arrline[i]->clear();
+
     loader->GenerateConfig(0,spinprice->value());
     arrline[0]->setText(loader->config.processor.getName());
     arrline[1]->setText(loader->config.motherboard.getName());

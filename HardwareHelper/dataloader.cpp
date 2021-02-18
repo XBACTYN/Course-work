@@ -677,6 +677,22 @@ void DataLoader::ChooseCooler(int sum,int&surplus)
 }
 void DataLoader::GenerateConfig(int type,int sum) //Ощущение что надо сделать класс совместимости. QString Socket, int TDP...
 {
+    config.processor.ClearFields();
+
+    demand.Price=0;
+    demand.DDRtype="";
+    demand.FreqDDR3=0;
+    demand.FreqDDR4=0;
+    demand.M2=0;
+    demand.MaxFreqRAM=0;
+    demand.MinPower=0;
+    demand.MotherForm="";
+    demand.PowerForm="";
+    demand.SATA=0;
+    demand.Socket="";
+    demand.TDP=0;
+    demand.USB2=0;
+    demand.USB3=0;
     int surplus=0;
     SortFromCheapest();
     switch(type)

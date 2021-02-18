@@ -204,3 +204,21 @@ QVector<QString>Processor::GetNames()
     temp.push_back("Макс.частота RAM DDR4, МГц");
     return temp;
 }
+
+void Processor::ClearFields()
+{
+    setCores(0);
+    setFreq(0);
+    setIGraphic("");
+    setMaxMem(0);
+    setMaxMemFreqDDR3(0);
+    setMaxMemFreqDDR4(0);
+    setName("");
+    setPrice(0);
+    setSocket("");
+    setTDP(0);
+    setTechprocess(0);
+    setThreads(0);
+    setTurbo(0);
+    setUrl(QUrl(""));
+}

@@ -55,6 +55,7 @@ public:
     void setPrice(int value);
     QString getName() const;
     void setName(const QString &value);
+    void ClearFields();
 };
 
 #endif // PROCESSOR_H
