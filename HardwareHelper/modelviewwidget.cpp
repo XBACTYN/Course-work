@@ -26,6 +26,7 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     spinprice->setMaximum(500000);
     buttonstart=new QPushButton("Сгенерировать");
     connect(buttonstart,SIGNAL(clicked()),SLOT(generate()));
+    buttonstart->setEnabled(false);
     settingsLayout->addWidget(buttonload);
     settingsLayout->addWidget(combocreate);
     settingsLayout->addWidget(combotype);
@@ -34,7 +35,9 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     settingsLayout->addWidget(buttonstart);
     mainLayout->addLayout(settingsLayout);
     QHBoxLayout * barlayout=new QHBoxLayout;
-    QProgressBar *progbar=new QProgressBar(this);
+    progbar=new QProgressBar(this);
+    progbar->setMinimum(0);
+    progbar->setMaximum(100);
     QLabel * progress=new QLabel("0 %");
     barlayout->addWidget(progbar);
     barlayout->addWidget(progress);
@@ -98,8 +101,8 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
         groupLay->addLayout(arrlay[i]);
     }
     saveLay=new QHBoxLayout;
-    QLabel*pricelab=new QLabel("Общая цена:");
-    QLineEdit* priceline=new QLineEdit;
+    pricelab=new QLabel("Общая цена:");
+    priceline=new QLineEdit;
     priceline->setReadOnly(true);
     priceline->setMaxLength(5);
     QPushButton* savebn=new QPushButton("Сохранить сборку в txt");
@@ -128,7 +131,7 @@ ModelViewWidget::~ModelViewWidget()
 void ModelViewWidget::load_data()
 { buttonload->setEnabled(false);
     //loader->ClearElArrays();
-    for(int i=0;i<3;++i)// i<9!
+    for(int i=0;i<7;++i)// i<9!
     {
     loader->Parse1lvl(i,loader->Html,loader->vectorReg,loader->u2array,loader->pages[i]);
     }
@@ -138,7 +141,7 @@ void ModelViewWidget::load_data()
    loader->RefPrepare(4);//для кулера
    loader->RefPrepare(8);
 
- for(int k=0;k<3;++k) //=/!!!!!!!!!!!!!!!!
+ for(int k=0;k<7;++k) //=/!!!!!!!!!!!!!!!!
  {
    switch (k)
   {
@@ -152,6 +155,7 @@ void ModelViewWidget::load_data()
                 loader->arrProcessors.push_back(Processor(loader->tempdata));
                }
         tabw->addTab(new TabForm(loader->arrProcessors),"CPU");
+        progbar->setValue(10);
         break;
    }
    case 1:
@@ -164,6 +168,7 @@ void ModelViewWidget::load_data()
                 loader->arrMotherboards.push_back(MotherBoard(loader->tempdata));
               }
        tabw->addTab(new TabForm(loader->arrMotherboards),"Mother");
+       progbar->setValue(20);
        break;
    }
    case 2:
@@ -176,6 +181,7 @@ void ModelViewWidget::load_data()
                 loader->arrGraphicsCards.push_back(GraphicsCard(loader->tempdata));
               }
        tabw->addTab(new TabForm(loader->arrGraphicsCards),"Graphics");
+       progbar->setValue(40);
        break;
    }
    case 3:
@@ -188,6 +194,7 @@ void ModelViewWidget::load_data()
                 loader->arrRAMs.push_back(RAM(loader->tempdata));
               }
        tabw->addTab(new TabForm(loader->arrRAMs),"RAM");
+       progbar->setValue(50);
        break;
    }
    case 4:
@@ -200,6 +207,7 @@ void ModelViewWidget::load_data()
                 loader->arrCoolers.push_back(Cooler(loader->tempdata));
               }
        tabw->addTab(new TabForm(loader->arrCoolers),"Cooler");
+       progbar->setValue(60);
        break;
    }
    case 5:
@@ -212,6 +220,7 @@ void ModelViewWidget::load_data()
                 loader->arrHDDs.push_back(HDD(loader->tempdata));
               }
        tabw->addTab(new TabForm(loader->arrHDDs),"HDD");
+       progbar->setValue(70);
        break;
    }
    case 6:
@@ -224,6 +233,7 @@ void ModelViewWidget::load_data()
                 loader->arrSSDs.push_back(SSD(loader->tempdata));
               }
        tabw->addTab(new TabForm(loader->arrSSDs),"SSD");
+       progbar->setValue(80);
        break;
    }
    case 7:
@@ -236,6 +246,7 @@ void ModelViewWidget::load_data()
                 loader->arrPowers.push_back(Power(loader->tempdata));
               }
        tabw->addTab(new TabForm(loader->arrPowers),"Power");
+       progbar->setValue(90);
        break;
    }
    case 8:
@@ -248,21 +259,27 @@ void ModelViewWidget::load_data()
                 loader->arrCases.push_back(Case(loader->tempdata));
               }
        tabw->addTab(new TabForm(loader->arrCases),"Case");
+       progbar->setValue(100);
        break;
    }
   }
  }
  bSort->setEnabled(true);
+ buttonstart->setEnabled(true);
  //сюда функцию для активации всех кнопок.
 }
 void ModelViewWidget::generate()
 {
-    for(int i=0;i<3;++i)
+    for(int i=0;i<7;++i)
         arrline[i]->setText("");
     loader->GenerateConfig(0,spinprice->value());
     arrline[0]->setText(loader->config.processor.getName());
     arrline[1]->setText(loader->config.motherboard.getName());
     arrline[2]->setText(loader->config.graphicscard.getName());
+    arrline[3]->setText(loader->config.ram.getName());
+    arrline[4]->setText(loader->config.cooler.getName());
+    arrline[6]->setText(loader->config.ssd.getName());
+    priceline->setText(QString::number(loader->demand.Price));
     //ifbn[0]
 }
 
@@ -293,16 +310,13 @@ void ModelViewWidget::tab_clicked(int index)
 }
 
 void ModelViewWidget::get_info()
-{   qDebug()<<"in get_info()";
+{
     TabForm * form=NULL;
     form=(TabForm*)tabw->widget(tabIndex);
         if(form->listptr->selectionModel()->hasSelection())
             {
             const QModelIndex index = form->listptr->selectionModel()->currentIndex();
-            //qDebug()<<form->infomodel->ptr[index.row()]->GetNames();
-            //qDebug()<<form->infomodel->ptr[index.row()]->GetValues();
             InfoForm *f=new InfoForm(form->infomodel->ptr[index.row()]->GetNames(),form->infomodel->ptr[index.row()]->GetValues());
-            qDebug("dw");
             f->show();
         }
 }

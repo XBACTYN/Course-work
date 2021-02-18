@@ -50,9 +50,12 @@ private:
     QVector<QHBoxLayout*> arrlay;
     QVector<QPushButton*> infbn;
     QVector<QPushButton*> arrbn;
+    QProgressBar *progbar;
     QPushButton* bSort;
     QRadioButton *rbCheap;
     QRadioButton *rbExpens;
+    QLabel*pricelab;
+    QLineEdit* priceline;
     DataLoader* loader;
     bool bycheap;
 private slots:

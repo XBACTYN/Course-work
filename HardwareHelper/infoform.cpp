@@ -12,7 +12,6 @@ InfoForm::InfoForm(QVector<QString>names,QVector<QString>values,QWidget *parent)
     QWidget(parent),
     ui(new Ui::InfoForm)
 {
-    qDebug()<<"in InfoForm";
     mainlay=new QHBoxLayout;
     table=new QTableWidget();
     table->setColumnCount(2);

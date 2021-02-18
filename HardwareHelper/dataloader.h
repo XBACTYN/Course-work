@@ -39,7 +39,7 @@ public:
         int MaxFreqRAM;
         //QString SATA;//Параметр для материнки,hdd,ssd,блока питания
         int M2;//параметр для материнки,ssd
-        //int SATA;
+        int SATA;
         int USB2;//параметр для материнки,корпуса
         int USB3;//параметр для материнки,корпуса
         int TDP;//параметр для процессора,кулера
@@ -81,7 +81,7 @@ public:
     QVector<SSD>arrSSDs;
     QVector<Power>arrPowers;
     QVector<Case>arrCases;
-    QVector<int>gamerConfig{29,8,42,5,3,0,5,4,4};
+    QVector<int>gamerConfig{28,8,42,5,3,0,6,4,4};
     QVector<int>maxSum{0,0,0,0,0,0,0,0,0};
     void SetRegexProcessor();
     void RefPrepare(int i); //i-номер векторов комплектущих. 1-видеокарта, 4-кулер...
@@ -110,8 +110,11 @@ public:
     void ChooseGraphicCard(int sum,int &surplus);
     void ChooseProcessor(int sum,int &surplus,int type);
     void ChooseMotherBoard(int sum,int &surplus);
+    void ChooseRAM(int sum,int & surplus);
+    void ChooseSSD(int sum,int & surplus);
+    void ChooseCooler(int sum,int &surplus);
+    bool CheckCoolerSoket(QString findSocket,QString coolerSockets);
     void GenerateConfig(int type,int sum);
-
 
 };
 
