@@ -81,8 +81,9 @@ public:
     QVector<SSD>arrSSDs;
     QVector<Power>arrPowers;
     QVector<Case>arrCases;
-    QVector<int>gamerConfig{28,7,41,7,3,0,6,4,4};
+    QVector<int>gamerConfig{28,7,43,6,2,0,6,4,4};
     QVector<int>maxSum{0,0,0,0,0,0,0,0,0};
+    QVector<QVector<int>>availableIndexes;
     void SetRegexProcessor();
     void RefPrepare(int i); //i-номер векторов комплектущих. 1-видеокарта, 4-кулер...
     void SetRegexMotherBoard();
@@ -101,21 +102,21 @@ public:
     void Regex1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QUrl>&tempVector);
     void Regex2lvl(int i,QString & Html,QVector<QRegExp>&vectorReg2,QVector<QString> &data);
     void ClearElArrays();
-    template <class T>
-    T BinaryPrice(QVector<T> &arr,int size, const int value);
+
     template<class T>
     int BinaryIndex(QVector<T>&arr,int size,const int value);
+    void FindAllVariants(int sum,int configType);
     void SortFromCheapest();
     void SortFromMostExpensive();
     void ClearConfig();
-    void ChooseGraphicCard(int sum,int &surplus);
-    void ChooseProcessor(int sum,int &surplus);
-    void ChooseMotherBoard(int sum,int &surplus);
-    void ChooseRAM(int sum,int & surplus);
-    void ChooseSSD(int sum,int & surplus);
-    void ChooseCooler(int sum,int &surplus);
-    void ChoosePower(int sum,int & surplus);
-    void ChooseCase(int sum,int & surplus);
+    bool ChooseGraphicCard(int index,int sum,int &surplus);
+    bool ChooseProcessor(int index,int sum,int &surplus);
+    bool ChooseMotherBoard(int index,int sum,int &surplus);
+    bool ChooseRAM(int index,int sum,int & surplus);
+    bool ChooseSSD(int index,int sum,int & surplus);
+    bool ChooseCooler(int index,int sum,int &surplus);
+    bool ChoosePower(int index,int sum,int & surplus);
+    bool ChooseCase(int index,int sum,int & surplus);
     bool CheckCoolerSoket(QString findSocket,QString coolerSockets);
     void GenerateConfig(int type,int sum);
 

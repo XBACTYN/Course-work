@@ -99,6 +99,15 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
         groupLay->addWidget(new QLabel(confNames[i]),0,Qt::AlignCenter);
         groupLay->addLayout(arrlay[i]);
     }
+    connect(infbn[0],SIGNAL(clicked()),this,SLOT(iConfProcessor()));
+    connect(infbn[1],SIGNAL(clicked()),this,SLOT(iConfMotherBoard()));
+    connect(infbn[2],SIGNAL(clicked()),this,SLOT(iConfGraphicCard()));
+    connect(infbn[3],SIGNAL(clicked()),this,SLOT(iConfRAM()));
+    connect(infbn[4],SIGNAL(clicked()),this,SLOT(iConfCooler()));
+    //connect(infbn[5],SIGNAL(clicked()),this,SLOT(iConfHDD()));
+    connect(infbn[6],SIGNAL(clicked()),this,SLOT(iConfSSD()));
+    connect(infbn[7],SIGNAL(clicked()),this,SLOT(iConfPower()));
+    connect(infbn[8],SIGNAL(clicked()),this,SLOT(iConfCase()));
     saveLay=new QHBoxLayout;
     pricelab=new QLabel("Общая цена:");
     priceline=new QLineEdit;
@@ -351,5 +360,43 @@ void ModelViewWidget::sort_all()
     }
 }
 
-
-
+void ModelViewWidget::iConfProcessor()
+{
+    InfoForm * f=new InfoForm(loader->config.processor.GetNames(),loader->config.processor.GetValues());
+    f->show();
+}
+void ModelViewWidget::iConfMotherBoard()
+{
+    InfoForm * f=new InfoForm(loader->config.motherboard.GetNames(),loader->config.motherboard.GetValues());
+    f->show();
+}
+void ModelViewWidget::iConfGraphicCard()
+{
+    InfoForm * f=new InfoForm(loader->config.graphicscard.GetNames(),loader->config.graphicscard.GetValues());
+    f->show();
+}
+void ModelViewWidget::iConfRAM()
+{
+    InfoForm * f=new InfoForm(loader->config.ram.GetNames(),loader->config.ram.GetValues());
+    f->show();
+}
+void ModelViewWidget::iConfCooler()
+{
+    InfoForm * f=new InfoForm(loader->config.cooler.GetNames(),loader->config.cooler.GetValues());
+    f->show();
+}
+void ModelViewWidget::iConfSSD()
+{
+    InfoForm * f=new InfoForm(loader->config.ssd.GetNames(),loader->config.ssd.GetValues());
+    f->show();
+}
+void ModelViewWidget::iConfPower()
+{
+    InfoForm * f=new InfoForm(loader->config.power.GetNames(),loader->config.power.GetValues());
+    f->show();
+}
+void ModelViewWidget::iConfCase()
+{
+    InfoForm * f=new InfoForm(loader->config.box.GetNames(),loader->config.box.GetValues());
+    f->show();
+}

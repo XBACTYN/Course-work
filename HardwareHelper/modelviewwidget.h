@@ -69,6 +69,15 @@ private slots:
     void radio2_toggled(bool);
     void sort_all();
     void generate();
+    void iConfProcessor();
+    void iConfMotherBoard();
+    void iConfGraphicCard();
+    void iConfRAM();
+    void iConfCooler();
+    //void iConfHDD();
+    void iConfSSD();
+    void iConfPower();
+    void iConfCase();
 public:
     ModelViewWidget( QWidget* parent = 0 );
     ~ModelViewWidget();
