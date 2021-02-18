@@ -65,8 +65,9 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     QPushButton* bAdd = new QPushButton("Добавить");
 
     panelLayout->addWidget( bAdd );
-    QPushButton* bInfo = new QPushButton("Информация");
+    bInfo = new QPushButton("Информация");
     connect( bInfo, SIGNAL( clicked() ), SLOT( get_info() ) );
+    bInfo->setEnabled(false);
     panelLayout->addWidget( bInfo,0,Qt::AlignTop );
    /* QPushButton* bCompare = new QPushButton("Сравнить");
    //connect( bCompare, SIGNAL( clicked() ), SLOT( //on_clicked() ) );
@@ -82,7 +83,7 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
 
     for(int i=0;i<9;++i)
     {
-        arrlab.push_back(new QLabel("Пусто"));
+        arrlab.push_back(new QLabel(""));
         arrline.push_back(new QLineEdit);
         arrline[i]->setReadOnly(true);
         arrbn.push_back(new QPushButton);
@@ -129,7 +130,7 @@ ModelViewWidget::~ModelViewWidget()
 void ModelViewWidget::load_data()
 { buttonload->setEnabled(false);
     //loader->ClearElArrays();
-    for(int i=0;i<7;++i)// i<9!
+    for(int i=0;i<9;++i)// i<9!
     {
     loader->Parse1lvl(i,loader->Html,loader->vectorReg,loader->u2array,loader->pages[i]);
     }
@@ -139,12 +140,13 @@ void ModelViewWidget::load_data()
    loader->RefPrepare(4);//для кулера
    loader->RefPrepare(8);
 
- for(int k=0;k<7;++k) //=/!!!!!!!!!!!!!!!!
+ for(int k=0;k<9;++k) //=/!!!!!!!!!!!!!!!!
  {
    switch (k)
   {
     case 0:
    {
+
         for(int p=0;p<loader->u2arrayI[k];++p)
             {
                 loader->DownloadPage(loader->Html,loader->u2array[k][p]);
@@ -171,6 +173,7 @@ void ModelViewWidget::load_data()
    }
    case 2:
    {
+
        for(int p=0;p<loader->u2arrayI[k];++p)
            {
                loader->DownloadPage(loader->Html,loader->u2array[k][p]);
@@ -264,22 +267,23 @@ void ModelViewWidget::load_data()
  }
  bSort->setEnabled(true);
  buttonstart->setEnabled(true);
+ bInfo->setEnabled(true);
  //сюда функцию для активации всех кнопок.
 }
 void ModelViewWidget::generate()
 {
-    for(int i=0;i<7;++i)
-        arrline[i]->clear();
 
-    loader->GenerateConfig(0,spinprice->value());
+    loader->GenerateConfig(combotype->currentIndex(),spinprice->value());
     arrline[0]->setText(loader->config.processor.getName());
     arrline[1]->setText(loader->config.motherboard.getName());
     arrline[2]->setText(loader->config.graphicscard.getName());
     arrline[3]->setText(loader->config.ram.getName());
     arrline[4]->setText(loader->config.cooler.getName());
+    arrline[5]->setText(loader->config.hdd.getName());
     arrline[6]->setText(loader->config.ssd.getName());
+    arrline[7]->setText(loader->config.power.getName());
+    arrline[8]->setText(loader->config.box.getName());
     priceline->setText(QString::number(loader->demand.Price));
-    //ifbn[0]
 }
 
 void ModelViewWidget::available_to_create(int idx)

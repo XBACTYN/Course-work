@@ -37,6 +37,8 @@ public:
     void setPCIE(int value);
     int getNoise() const;
     void setNoise(int value);
+
+    void ClearFields();
 };
 
 #endif // POWER_H

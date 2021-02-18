@@ -45,7 +45,7 @@ QString Cooler::getSockets() const
     return Sockets;
 }
 
-void Cooler::setSockets(QString &value)
+void Cooler::setSockets( QString &value)
 {
     RepairSockets(value);
     Sockets = value;
@@ -165,4 +165,18 @@ QVector<QString>Cooler::GetValues()
     temp.push_back(QString::number(getTDP()));
     temp.push_back(QString::number(getNoise()));
     return temp;
+}
+
+void Cooler::ClearFields()
+{
+    setAirstream(0);
+    setMaxspeed(0);
+    setMinspeed(0);
+    setName("");
+    setNoise(0);
+    setPrice(0);
+   // setSockets()
+    setTDP(0);
+    setUrl(QUrl(""));
+    setVentcount(0);
 }

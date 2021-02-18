@@ -32,6 +32,8 @@ public:
     void setMemType(const QString &value);
     QString getMemFreq() const;
     void setMemFreq(const QString &value);
+
+    void ClearFields();
 };
 
 #endif // RAM_H

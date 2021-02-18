@@ -163,3 +163,18 @@ QVector<QString>Case::GetValues()
     temp.push_back(QString::number(getUSB3()));
     return temp;
 }
+
+void Case::ClearFields()
+{
+    setForm("");
+    setMaxVents(0);
+    setMotherForm("");
+    setName("");
+    setPowerForm("");
+    setPrice(0);
+    setSlotform2_5(0);
+    setSlotform3_5(0);
+    setUSB2(0);
+    setUSB3(0);
+    setUrl(QUrl(""));
+}

@@ -41,6 +41,8 @@ public:
     void setReadspeed(int value);
     int getTBW() const;
     void setTBW(int value);
+
+    void ClearFields();
 };
 
 #endif // SSD_H

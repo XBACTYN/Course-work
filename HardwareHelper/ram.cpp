@@ -121,3 +121,15 @@ QVector<QString>RAM::GetValues()
     temp.push_back(getMemFreq());
     return temp;
 }
+
+void RAM::ClearFields()
+{
+    setBars(0);
+    setFormDDR("");
+    setMemFreq("");
+    setMemType("");
+    setName("");
+    setPrice(0);
+    setSumMem(0);
+    setUrl(QUrl(""));
+}

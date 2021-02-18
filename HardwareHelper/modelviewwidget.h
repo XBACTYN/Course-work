@@ -51,6 +51,7 @@ private:
     QVector<QPushButton*> infbn;
     QVector<QPushButton*> arrbn;
     QProgressBar *progbar;
+    QPushButton* bInfo;
     QPushButton* bSort;
     QRadioButton *rbCheap;
     QRadioButton *rbExpens;

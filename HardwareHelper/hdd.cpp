@@ -158,3 +158,16 @@ QVector<QString>HDD::GetValues()
     temp.push_back(QString::number(getNoise()));
     return temp;
 }
+
+void HDD::ClearFields()
+{
+    setBuff(0);
+    setCapacity(0);
+    //setInterface();
+    setName("");
+    setNoise(0);
+    setPower(0);
+    setPrice(0);
+    setSpeed(0);
+    setUrl(QUrl(""));
+}

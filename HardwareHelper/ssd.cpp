@@ -163,3 +163,19 @@ QVector<QString>SSD::GetValues()
     temp.push_back(QString::number(getTBW()));
     return temp;
 }
+
+void SSD::ClearFields()
+{
+    setBuff(0);
+    setCapacity(0);
+    setForm(0);
+    setInterface("");
+    setM2interface("");
+    setName("");
+    setPrice(0);
+    setReadspeed(0);
+    setTBW(0);
+    setUrl(QUrl());
+    setWritespeed(0);
+
+}

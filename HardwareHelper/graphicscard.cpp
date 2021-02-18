@@ -228,3 +228,23 @@ QVector<QString>GraphicsCard::GetValues()
    temp.push_back(QString::number(getPower()));
    return temp;
 }
+
+void GraphicsCard::ClearFields()
+{
+    setBus(0);
+    setDVI(0);
+    setDisplayPort(0);
+    setFreqGPU(0);
+    setFreqMem(0);
+    setHDMI(0);
+    setMemory(0);
+    setMemoryType("");
+    setMonitors(0);
+    setName("");
+    setPCIE(0);
+    setPower(0);
+    setPrice(0);
+    setResolution("");
+    setUrl(QUrl(""));
+    setVGA(0);
+}

@@ -39,6 +39,8 @@ public:
     void setUSB2(int value);
     int getUSB3() const;
     void setUSB3(int value);
+
+    void ClearFields();
 };
 
 #endif // CASE_H

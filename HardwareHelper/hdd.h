@@ -34,6 +34,9 @@ public:
     void setPower(double value);
     int getNoise() const;
     void setNoise(int value);
+
+    void ClearFields();
+
 };
 
 #endif // HDD_H

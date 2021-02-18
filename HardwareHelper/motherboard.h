@@ -71,6 +71,8 @@ public:
     int getDDR3count() const;
     void setDDR3count(int value);
 
+    void ClearFields();
+
 };
 
 #endif // MOTHERBOARD_H

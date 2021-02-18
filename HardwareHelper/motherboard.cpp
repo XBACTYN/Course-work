@@ -296,3 +296,28 @@ QVector<QString> MotherBoard::GetValues()
     temp.push_back(QString::number(getUSBC()));
     return temp;
 }
+
+void MotherBoard::ClearFields()
+{
+    setAudio("");
+    setDDR3count(0);
+    setDDR4count(0);
+    setDVI("");
+    setDispayPort("");
+    setForm("");
+    setFormDDR("");
+    setHDMI("");
+    setM2(0);
+    setMaxFreq(0);
+    setMaxMem(0);
+    setName("");
+    setPCIE(0);
+    setPrice(0);
+    setSATA3(0);
+    setSocket("");
+    setUSB2(0);
+    setUSB3(0);
+    setUSBC(0);
+    setUrl(QUrl(""));
+    setVGA("");
+}

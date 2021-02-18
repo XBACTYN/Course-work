@@ -58,6 +58,8 @@ public:
     void setName(const QString &value);
     int getDisplayPort() const;
     void setDisplayPort(int value);
+
+    void ClearFields();
 };
 
 #endif // GRAPHICSCARD_H

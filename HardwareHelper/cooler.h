@@ -40,6 +40,8 @@ public:
     void setTDP(int value);
     int getNoise() const;
     void setNoise(int value);
+
+    void ClearFields();
 };
 
 #endif // COOLER_H

@@ -149,3 +149,18 @@ QVector<QString>Power::GetValues()
     temp.push_back(QString::number(getNoise()));
     return temp;
 }
+
+void Power::ClearFields()
+{
+    setDiameter(0);
+    setForm("");
+    setMOLEX(0);
+    setName("");
+    setNoise(0);
+    setPCIE(0);
+    setPower(0);
+    setPrice(0);
+    setSATA(0);
+    setUrl(QUrl(""));
+
+}
