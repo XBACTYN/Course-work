@@ -184,3 +184,67 @@ GraphicsCard::GraphicsCard(QVector<QString> &data)
     setMonitors(data[15].toInt());
     setPower(data[16].toInt());
 }
+
+QVector<QString>GraphicsCard::GetNames()
+{
+    QVector<QString>temp;
+    temp.push_back("Цена, руб");
+    temp.push_back("URL-ссылка на товар");
+    temp.push_back("Название");
+    temp.push_back("Версия PCI-E");
+    temp.push_back("Количество видеопамяти, Гб");
+    temp.push_back("Тип видеопамяти");
+    temp.push_back("Разрядность шины, бит");
+    temp.push_back("Частота графического ядра, МГц");
+    temp.push_back("Частота работы памяти, МГц");
+    temp.push_back("Макс. расширение, пикселей");
+    temp.push_back("Количество портов VGA");
+    temp.push_back("Количество портов DVI");
+    temp.push_back("Количество портов HDMI");
+    temp.push_back("Количество портов DisplayPort");
+    temp.push_back("Макс. количество мониторов");
+    temp.push_back("Мощность БП от, Вт");
+    return temp;
+}
+
+QVector<QString>GraphicsCard::GetValues()
+{
+   QVector<QString>temp;
+   temp.push_back(QString::number(getPrice()));
+   temp.push_back((url.toString()));
+   temp.push_back(getName());
+   temp.push_back(QString::number(getPCIE()));
+   temp.push_back(QString::number(getMemory()));
+   temp.push_back(getMemoryType());
+   temp.push_back(QString::number(getBus()));
+   temp.push_back(QString::number(getFreqGPU()));
+   temp.push_back(QString::number(getFreqMem()));
+   temp.push_back(getResolution());
+   temp.push_back(QString::number(getVGA()));
+   temp.push_back(QString::number(getDVI()));
+   temp.push_back(QString::number(getHDMI()));
+   temp.push_back(QString::number(getDisplayPort()));
+   temp.push_back(QString::number(getMonitors()));
+   temp.push_back(QString::number(getPower()));
+   return temp;
+}
+
+void GraphicsCard::ClearFields()
+{
+    setBus(0);
+    setDVI(0);
+    setDisplayPort(0);
+    setFreqGPU(0);
+    setFreqMem(0);
+    setHDMI(0);
+    setMemory(0);
+    setMemoryType("");
+    setMonitors(0);
+    setName("");
+    setPCIE(0);
+    setPower(0);
+    setPrice(0);
+    setResolution("");
+    setUrl(QUrl(""));
+    setVGA(0);
+}

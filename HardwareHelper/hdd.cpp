@@ -1,14 +1,6 @@
 #include "hdd.h"
 
-int HDD::getPrice() const
-{
-    return price;
-}
 
-void HDD::setPrice(int value)
-{
-    price = value;
-}
 
 QUrl HDD::getUrl() const
 {
@@ -120,8 +112,62 @@ void HDD::RepairInterface(QString &str)
     while( ( lastPos = reg.indexIn( nstr, lastPos ) ) != -1 )
     {
         lastPos += reg.matchedLength();
-            //qDebug()<<reg.cap(1);
             str+=reg.cap(1)+" ";
 
     }
+}
+
+int HDD::getPrice() const
+{
+    return price;
+}
+
+void HDD::setPrice(const int value)
+{
+    price=value;
+}
+
+
+
+QVector<QString>HDD::GetNames()
+{
+    QVector<QString>temp;
+    temp.push_back("Цена, руб");
+    temp.push_back("URL-ссылка на товар");
+    temp.push_back("Название");
+    temp.push_back("Объем, Гб");
+    temp.push_back("Интерфейс подключения");
+    temp.push_back("Объем буфера обмена");
+    temp.push_back("Частота вращения шпинделя, об/мин");
+    temp.push_back("Потребляемая мощность при работе, Вт");
+    temp.push_back("Уровень шума, дБ");
+    return temp;
+}
+
+QVector<QString>HDD::GetValues()
+{
+    QVector<QString>temp;
+    temp.push_back(QString::number(getPrice()));
+    temp.push_back((url.toString()));
+    temp.push_back(getName());
+    temp.push_back(QString::number(getCapacity()));
+    temp.push_back(getInterface());
+    temp.push_back(QString::number(getBuff()));
+    temp.push_back(QString::number(getSpeed()));
+    temp.push_back(QString::number(getPower()));
+    temp.push_back(QString::number(getNoise()));
+    return temp;
+}
+
+void HDD::ClearFields()
+{
+    setBuff(0);
+    setCapacity(0);
+    //setInterface();
+    setName("");
+    setNoise(0);
+    setPower(0);
+    setPrice(0);
+    setSpeed(0);
+    setUrl(QUrl(""));
 }

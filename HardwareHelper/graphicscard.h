@@ -3,12 +3,9 @@
 #include "Element.h"
 #include <QUrl>
 #include <QString>
-class GraphicsCard
+class GraphicsCard:public Element
 {
 private:
-    int price;
-    QUrl url;
-    QString name;
     double PCIE;
     int memory;
     QString memoryType;
@@ -27,6 +24,8 @@ private:
 public:
     GraphicsCard();
     GraphicsCard(QVector<QString>&data);
+    QVector<QString>GetNames();
+    QVector<QString>GetValues();
     QUrl getUrl() const;
     void setUrl(const QUrl &value);
     double getPCIE() const;
@@ -59,6 +58,8 @@ public:
     void setName(const QString &value);
     int getDisplayPort() const;
     void setDisplayPort(int value);
+
+    void ClearFields();
 };
 
 #endif // GRAPHICSCARD_H

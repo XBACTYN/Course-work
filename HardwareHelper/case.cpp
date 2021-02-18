@@ -129,3 +129,52 @@ Case::Case(QVector<QString> &data)
     setUSB2(data[10].toInt());
     setUSB3(data[11].toInt());
 }
+
+QVector<QString>Case::GetNames()
+{
+    QVector<QString>temp;
+    temp.push_back("Цена, руб");
+    temp.push_back("URL-ссылка на товар");
+    temp.push_back("Название");
+    temp.push_back("Форм-фактор");
+    temp.push_back("Форм-фактор мат.платы");
+    temp.push_back("Форм-фактор блока питания");
+    temp.push_back("Разъемов 3.5'");
+    temp.push_back("Разъемов 2.5'");
+    temp.push_back("Макс. кол-во вентиляторов");
+    temp.push_back("Количество портов USB2");
+    temp.push_back("Количество портов USB3");
+    return temp;
+}
+
+QVector<QString>Case::GetValues()
+{
+    QVector<QString>temp;
+    temp.push_back(QString::number(getPrice()));
+    temp.push_back((url.toString()));
+    temp.push_back(getName());
+    temp.push_back(getForm());
+    temp.push_back(getMotherForm());
+    temp.push_back(getPowerForm());
+    temp.push_back(QString::number(getSlotform3_5()));
+    temp.push_back(QString::number(getSlotform2_5()));
+    temp.push_back(QString::number(getMaxVents()));
+    temp.push_back(QString::number(getUSB2()));
+    temp.push_back(QString::number(getUSB3()));
+    return temp;
+}
+
+void Case::ClearFields()
+{
+    setForm("");
+    setMaxVents(0);
+    setMotherForm("");
+    setName("");
+    setPowerForm("");
+    setPrice(0);
+    setSlotform2_5(0);
+    setSlotform3_5(0);
+    setUSB2(0);
+    setUSB3(0);
+    setUrl(QUrl(""));
+}

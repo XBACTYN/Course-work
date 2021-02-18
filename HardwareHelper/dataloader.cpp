@@ -37,10 +37,14 @@ DataLoader::DataLoader()
         u2arrayI[i]=0;
     for(int i=0;i<9;++i)
         pages[i]=3;
-    pages[0]=2;
-    pages[4]=2;
+
+    pages[0]=1;  //поменяю с 2 на 1.
+    pages[1]=2;  //поменяю с 2 на 1
+    pages[3]=2;
+    pages[4]=1;
     pages[5]=1;
-    pages[7]=2;
+    pages[7]=1;
+
 };
 void DataLoader::SetRegexProcessor()
 {
@@ -124,7 +128,7 @@ void DataLoader::SetRegexGraphicsCard()
                                  ".*(?:HDMI</span></span></td><td width=...%. class=.op3.>(\\d).nbsp.шт</td>)?"
                                  ".*(?:DisplayPort</span></span></td><td width=...%. class=.op3.>(\\d).nbsp.шт</td>)?"
                                  ".*мониторов.*class=.op3.>(\\d)</td>"
-                                 ".*(?:class=.op3.>(\\d{2,3}).nbsp.Вт</td>)?"
+                                 ".*(?:от</span></span></td><td width=...%. class=.op3.>(\\d{2,3}).nbsp.Вт</td>)?"
                                  ".*Дата добавления"));
     fields[2]=17;
 }
@@ -283,8 +287,6 @@ void DataLoader::DownloadPage(QString &Html,QUrl &url) //максимально 
 
 void DataLoader::Regex1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QUrl> &tempVector)//максимально 24 процессора на странице. потом /(n-1)/ к адресу страницы
 {
-   // qDebug()<<"in Regex1lvl()";
-   // qDebug()<<vectorReg[i];
        int lastPos = 0;
        while( ( lastPos = vectorReg[i].indexIn( Html, lastPos ) ) != -1 )
        {
@@ -313,11 +315,14 @@ void DataLoader::Parse1lvl(int i, QString &Html, QVector<QRegExp> &vectorReg, QV
     u2array.push_back(tempVector);
 }
 
-void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)
+void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2,QVector<QString>&data)//cюда захуярить tempVector& data
 {
-    qDebug()<<"in Regex2lvl()";
-   // qDebug()<<vectorReg2[i];
-    QVector <QString> data;
+    if(data.size()!=0)
+   {
+   data.clear();
+   }
+   data.squeeze();
+    qDebug()<<"in Regex2lvl()\n\n";
     int lastPos = 0;
     while( ( lastPos = vectorReg2[i].indexIn( Html, lastPos ) ) != -1 )
     {
@@ -325,26 +330,447 @@ void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2)
 
      for(int j=1;j<=fields[i];++j)
      {
-
-          // qDebug()<<j<<":"<<vectorReg2[i].cap(j);
            data.push_back(vectorReg2[i].cap(j));
-
      }
-
     }
 
-   qDebug()<<data.size();
 
-   if(data.size()!=0)
-   {for(int k=0;k<data.size();++k)
-           qDebug()<<k<<"."<<data[k];
-      // qDebug()<<data[5];
-
-
-       data.clear();//только если массив не пуст
+   if(data.size()==0)
+   {
+       data.squeeze();
+       for(int k=1;k<=fields[i];++k)
+           data.push_back("");
    }
-  data.clear();//на время продублирую.
-    data.squeeze();
-    qDebug()<<"\n\n";
 }
+
+void DataLoader::ClearElArrays()
+{
+    if(arrProcessors.size()!=0)
+    { arrProcessors.clear();
+      arrProcessors.squeeze();
+    }
+    if(arrMotherboards.size()!=0)
+    {arrMotherboards.clear();
+     arrMotherboards.squeeze();
+    }
+    if(arrGraphicsCards.size()!=0)
+    {arrGraphicsCards.clear();
+    arrGraphicsCards.squeeze();
+    }
+    if(arrRAMs.size()!=0)
+    {arrRAMs.clear();
+    arrRAMs.squeeze();
+    }
+    if(arrCoolers.size()!=0)
+    {arrCoolers.clear();
+    arrCoolers.squeeze();
+    }
+    if(arrHDDs.size()!=0)
+    {arrHDDs.clear();
+    arrHDDs.squeeze();
+    }
+    if(arrSSDs.size()!=0)
+    {arrSSDs.clear();
+    arrSSDs.squeeze();
+    }
+    if(arrPowers.size()!=0)
+    {
+    arrPowers.clear();
+    arrPowers.squeeze();
+    }
+    if(arrCases.size()!=0)
+    {
+    arrCases.clear();
+    arrCases.clear();
+    }
+    for(int i=0;i<9;++i)
+        u2arrayI[i]=0;
+
+    for(int i=0;u2array.size();i++)
+    {
+        u2array[i].clear();
+        u2array[i].squeeze();
+    }
+    if(u2array.size()!=0)
+        u2array.clear();
+    u2array.squeeze();
+}
+
+void DataLoader::SortFromCheapest()
+{
+    std::sort(arrProcessors.begin(),arrProcessors.end(),[] (const auto& lhs, const auto& rhs){return lhs.price < rhs.price;});
+    std::sort(arrMotherboards.begin(),arrMotherboards.end(),[] (const auto& lhs, const auto& rhs){return lhs.price < rhs.price;});
+    std::sort(arrGraphicsCards.begin(),arrGraphicsCards.end(),[] (const auto& lhs, const auto& rhs){return lhs.price < rhs.price;});
+    std::sort(arrRAMs.begin(),arrRAMs.end(),[] (const auto& lhs, const auto& rhs){return lhs.price < rhs.price;});
+    std::sort(arrCoolers.begin(),arrCoolers.end(),[] (const auto& lhs, const auto& rhs){return lhs.price < rhs.price;});
+    std::sort(arrHDDs.begin(),arrHDDs.end(),[] (const auto& lhs, const auto& rhs){return lhs.price < rhs.price;});
+    std::sort(arrSSDs.begin(),arrSSDs.end(),[] (const auto& lhs, const auto& rhs){return lhs.price < rhs.price;});
+    std::sort(arrPowers.begin(),arrPowers.end(),[] (const auto& lhs, const auto& rhs){return lhs.price < rhs.price;});
+    std::sort(arrCases.begin(),arrCases.end(),[] (const auto& lhs, const auto& rhs){return lhs.price < rhs.price;});
+}
+
+void DataLoader::SortFromMostExpensive()
+{
+    std::sort(arrProcessors.begin(),arrProcessors.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
+    std::sort(arrMotherboards.begin(),arrMotherboards.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
+    std::sort(arrGraphicsCards.begin(),arrGraphicsCards.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
+    std::sort(arrRAMs.begin(),arrRAMs.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
+    std::sort(arrCoolers.begin(),arrCoolers.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
+    std::sort(arrHDDs.begin(),arrHDDs.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
+    std::sort(arrSSDs.begin(),arrSSDs.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
+    std::sort(arrPowers.begin(),arrPowers.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
+    std::sort(arrCases.begin(),arrCases.end(),[] (const auto& lhs, const auto& rhs){return lhs.price > rhs.price;});
+}
+
+void DataLoader::ClearConfig()
+{
+    qDebug()<<"clearConfig()";
+    config.processor.ClearFields();
+    config.motherboard.ClearFields();
+    config.graphicscard.ClearFields();
+    config.ram.ClearFields();
+    config.cooler.ClearFields();
+    config.ssd.ClearFields();
+    config.hdd.ClearFields();
+    config.power.ClearFields();
+    config.box.ClearFields();
+}
+template<class T>
+int DataLoader::BinaryIndex(QVector<T>&arr,int size,const int value)
+{
+    qDebug()<<"BinaryIndex()";
+    int left=0;
+    int right=size-1;
+    int middle;
+    while(true)
+    {
+        middle=(left+right)/2;
+        if(value>arr[middle].price)
+        {
+            left=middle+1;
+        }
+        else if(value<arr[middle].price)
+        {
+            right=middle-1;
+        }
+        else return middle;
+        if(left>right)
+        {
+            return left;
+        }
+    }
+}
+void DataLoader::ChooseGraphicCard(int sum, int &surplus)
+{
+   int maxIndex= BinaryIndex(arrGraphicsCards,arrGraphicsCards.size(),sum);
+   if(maxIndex!=0)
+       --maxIndex;
+   qDebug()<<"in ChooseGraphicCard()"<<maxIndex;
+   bool compatible=false;
+   while(maxIndex>=0&&!compatible)
+   {
+       config.graphicscard=arrGraphicsCards[maxIndex];
+       compatible=true;
+   }
+   demand.MinPower=config.graphicscard.getPower();
+   demand.Price=config.graphicscard.getPrice();
+   surplus=sum-config.graphicscard.getPrice();
+   qDebug()<<config.graphicscard.name;
+}
+void DataLoader::ChooseProcessor(int sum, int &surplus) // НУЖНА ПРОВЕРКА НА КОЛИЧЕСТВО ЯДЕР.
+{
+    int maxIndex=BinaryIndex(arrProcessors,arrProcessors.size(),sum);
+    if(maxIndex!=0)
+        --maxIndex;
+    qDebug()<<"in ChooseProcessor()"<<maxIndex;
+    bool compatible=false;
+    while(maxIndex>=0&&!compatible)
+    {
+        if(arrProcessors[maxIndex].getSocket()==demand.Socket)//пока оставлю равенство.надо заменить на поиск по подстроке.
+         {
+            if(arrProcessors[maxIndex].getCores()>=6)
+            {
+                if((demand.DDRtype=="DDR3"&&arrProcessors[maxIndex].getMaxMemFreqDDR3()!=0))
+                demand.FreqDDR3=arrProcessors[maxIndex].getMaxMemFreqDDR3();
+                if((demand.DDRtype=="DDR4"&&arrProcessors[maxIndex].getMaxMemFreqDDR4()!=0))
+                           demand.FreqDDR4=arrProcessors[maxIndex].getMaxMemFreqDDR4();
+            config.processor=arrProcessors[maxIndex];
+            demand.Socket=config.processor.getSocket();
+            demand.TDP=config.processor.getTDP();
+            demand.Price+=config.processor.getPrice();
+            surplus+=sum-config.processor.getPrice();
+            compatible=true;
+            }
+         }
+        --maxIndex;
+    }
+    qDebug()<<config.processor.name;
+}
+void DataLoader::ChooseMotherBoard(int sum, int &surplus)
+{
+    int maxIndex=BinaryIndex(arrMotherboards,arrMotherboards.size(),sum);
+    if(maxIndex!=0)
+        --maxIndex;
+    qDebug()<<"in ChooseMotherBoard()"<<maxIndex;
+    bool compatible=false;
+    while(maxIndex>=0&&!compatible)
+    {
+                    qDebug()<<maxIndex<<arrMotherboards[maxIndex].getDDR3count()<<"DDR3";
+                    qDebug()<<maxIndex<<arrMotherboards[maxIndex].getDDR3count()<<"DDR4";
+                    demand.MotherForm=arrMotherboards[maxIndex].getForm();
+                    demand.Socket=arrMotherboards[maxIndex].getSocket();
+                    if(arrMotherboards[maxIndex].getDDR3count()!=0)
+                        demand.DDRtype="DDR3";
+                    if(arrMotherboards[maxIndex].getDDR4count()!=0)
+                        demand.DDRtype="DDR4";
+                    if(arrMotherboards[maxIndex].getM2()!=0)
+                        demand.M2=arrMotherboards[maxIndex].getM2();
+                    demand.MaxFreqRAM=arrMotherboards[maxIndex].getMaxFreq();
+                    demand.Price+=arrMotherboards[maxIndex].getPrice();
+                    config.motherboard=arrMotherboards[maxIndex];
+                    demand.SATA=config.motherboard.getSATA3();
+                    surplus+=config.motherboard.getPrice();   //конфиг пораньше перенести можно было.
+                    compatible=true;
+
+        --maxIndex;
+    }
+    qDebug()<<config.motherboard.getName();
+}
+void DataLoader::ChooseRAM(int sum, int &surplus)
+{
+    int maxIndex=BinaryIndex(arrRAMs,arrRAMs.size(),sum);
+    if(maxIndex!=0)
+        --maxIndex;
+    qDebug()<<"in ChooseRAM()"<<maxIndex;
+    bool compatible=false;
+    while(maxIndex>=0&&!compatible)
+    {
+        if(demand.DDRtype==arrRAMs[maxIndex].getMemType())
+        {
+            if(demand.MaxFreqRAM>=arrRAMs[maxIndex].getMemFreq())
+            {
+                config.ram=arrRAMs[maxIndex];
+                surplus+=sum-config.ram.getPrice();
+                demand.Price+=config.ram.getPrice();
+                compatible=true;
+            }
+            else{
+                qDebug()<<"wrong freq ram"<<demand.MaxFreqRAM<<arrRAMs[maxIndex].getMemFreq();
+            }
+        }else{
+            qDebug()<<"wrong DDRtype"<<demand.DDRtype<<arrRAMs[maxIndex].getMemType();
+        }
+        --maxIndex;
+    }
+    qDebug()<<config.ram.getName();
+}
+void DataLoader::ChooseSSD(int sum, int &surplus)
+{
+    int maxIndex=BinaryIndex(arrSSDs,arrSSDs.size(),sum);
+    if(maxIndex!=0)
+        --maxIndex;
+    qDebug()<<"in ChooseSSD()"<<maxIndex;
+    bool compatible=false;
+    while(maxIndex>=0&&!compatible)
+    {
+        if(demand.M2!=0)
+        {
+            if(arrSSDs[maxIndex].getForm()=="M.2")
+            {
+                config.ssd=arrSSDs[maxIndex];
+                surplus+=sum-config.ssd.getPrice();
+                demand.Price+=config.ssd.getPrice();
+                compatible=true;
+            }
+        }
+        else{
+            config.ssd=arrSSDs[maxIndex];
+            surplus+=sum-config.ssd.getPrice();
+            demand.Price+=config.ssd.getPrice();
+            compatible=true;
+        }
+        --maxIndex;
+    }
+    qDebug()<<config.ssd.getName();
+}
+bool DataLoader::CheckCoolerSoket(QString find,QString list)
+{
+    bool compatible=false;
+    QRegExp amd("AMD.*(..\\d\\+?)");
+    QRegExp intel("Intel.*(\\d{3,4}.?v?\\d?)");
+    //QRegExp amdModel("AMD.+(.M\\d)");
+    QString socket1="";
+    QString socket2="";
+    QString isEmpty1="";
+    QString isEmpty2="";
+    //qDebug()<<"socket on processor"<<find;
+   // qDebug()<<"cooler sockets"<<list;
+    int lastPos = 0;
+
+        while( ( lastPos = amd.indexIn( find, lastPos ) ) != -1 )
+        {
+            lastPos += amd.matchedLength();
+            socket1=amd.cap( 1 );
+        }
+    lastPos=0;
+        while( ( lastPos = intel.indexIn( find, lastPos ) ) != -1 )
+        {
+            lastPos += intel.matchedLength();
+            socket2=intel.cap( 1 );
+        }
+    //qDebug()<<"socket1"<<socket1<<"socket2"<<socket2;
+    if(socket1!="")
+    {
+        QRegExp socket("("+socket1+")");
+        lastPos=0;
+        while((lastPos=socket.indexIn(list,lastPos))!=-1)
+        {
+            lastPos+=socket.matchedLength();
+            isEmpty2=socket.cap(1);
+            //qDebug()<<"isEmpty2:"<<isEmpty2<<"socket cap"<<socket.cap(1);
+        }
+
+
+    }
+    if(socket2!="")
+    {
+        QRegExp socket("("+socket2+")");
+        lastPos=0;
+        while((lastPos=socket.indexIn(list,lastPos))!=-1)
+        {
+            lastPos+=socket.matchedLength();
+            isEmpty2=socket.cap(1);
+            //qDebug()<<"isEmpty2:"<<isEmpty2<<"socket cap"<<socket.cap(1);
+        }
+    }
+   // qDebug()<<"1st empty"<<isEmpty1<<"2nd empty"<<isEmpty2;
+    if(isEmpty1!=""||isEmpty2!="")
+        compatible=true;
+    return compatible;
+}
+void DataLoader::ChooseCooler(int sum,int&surplus)
+{
+    int maxIndex=BinaryIndex(arrCoolers,arrCoolers.size(),sum);
+    if(maxIndex!=0)
+        --maxIndex;
+    qDebug()<<"in ChooseCooler()"<<maxIndex;
+    bool socket=false;
+    bool compatible=false;
+    while(maxIndex>=0&&!compatible)
+    {
+        socket=CheckCoolerSoket(demand.Socket,arrCoolers[maxIndex].getSockets());
+        if(socket)
+        {
+            if((arrCoolers[maxIndex].getTDP()!=0)&&(arrCoolers[maxIndex].getTDP()>=demand.TDP))
+            {
+                config.cooler=arrCoolers[maxIndex];
+                demand.Price+=config.cooler.getPrice();
+                surplus+=sum-config.cooler.getPrice();
+                compatible=true;
+            }
+
+        }
+        --maxIndex;
+    }
+    qDebug()<<config.cooler.getName();
+}
+void DataLoader::ChoosePower(int sum, int &surplus)
+{
+    int maxIndex=BinaryIndex(arrPowers,arrPowers.size(),sum);
+    if(maxIndex!=0)
+        --maxIndex;
+    qDebug()<<"in ChoosePower()"<<maxIndex;
+    bool compatible=false;
+    while(maxIndex>=0&&!compatible)
+    {
+        if(arrPowers[maxIndex].getPower()>=demand.MinPower)
+        {
+            config.power=arrPowers[maxIndex];
+            demand.PowerForm=config.power.getForm();
+            demand.Price+=config.power.getPrice();
+            surplus+=sum-config.power.getPrice();
+            compatible=true;
+        }
+        --maxIndex;
+    }
+    qDebug()<<config.power.getName();
+}
+void DataLoader::ChooseCase(int sum, int &surplus)
+{
+    int maxIndex=BinaryIndex(arrCases,arrCases.size(),sum);
+    if(maxIndex!=0)
+        --maxIndex;
+    qDebug()<<"in ChooseCase()"<<maxIndex;
+    bool compatible=false;
+    while(maxIndex>=0&&!compatible)
+    {
+        if(demand.MotherForm==arrCases[maxIndex].getMotherForm())
+        {
+            QString check="";
+            QRegExp reg("("+demand.PowerForm+")");
+            qDebug()<<"power form"<<demand.PowerForm;
+            qDebug()<<"case power form"<<arrCases[maxIndex].getPowerForm();
+            int lastPos=0;
+            while((lastPos=reg.indexIn(arrCases[maxIndex].getPowerForm(),lastPos))!=-1)
+            {
+                qDebug()<<"while regex";
+                lastPos+=reg.matchedLength();
+                check=reg.cap(1);
+            }
+            qDebug()<<"case power form"<<check;
+            if(check==demand.PowerForm)
+            {
+                config.box=arrCases[maxIndex];
+                demand.Price+=arrCases[maxIndex].getPrice();
+                surplus+=sum-config.box.getPrice();
+                compatible=true;
+            }
+        }
+        --maxIndex;
+    }
+}
+void DataLoader::GenerateConfig(int type,int sum) //Ощущение что надо сделать класс совместимости. QString Socket, int TDP...
+{
+    ClearConfig();
+    demand.Price=0;
+    demand.DDRtype="";
+    demand.FreqDDR3=0;
+    demand.FreqDDR4=0;
+    demand.M2=0;
+    demand.MaxFreqRAM=0;
+    demand.MinPower=0;
+    demand.MotherForm="";
+    demand.PowerForm="";
+    demand.SATA=0;
+    demand.Socket="";
+    demand.TDP=0;
+    demand.USB2=0;
+    demand.USB3=0;
+
+    int surplus=0;
+    SortFromCheapest();
+    switch(type)
+    {
+        case 0:
+        {
+            for(int i=0;i<9;++i)
+               { maxSum[i]=(sum*gamerConfig[i])/100;
+                }
+            ChooseGraphicCard(maxSum[2],surplus);
+            ChooseMotherBoard(maxSum[1],surplus);
+            ChooseProcessor(maxSum[0],surplus);
+            ChooseRAM(maxSum[3],surplus);
+            ChooseSSD(maxSum[6],surplus);
+            ChooseCooler(maxSum[4],surplus);
+            ChoosePower(maxSum[7],surplus);
+            ChooseCase(maxSum[8],surplus);
+            break;
+        }
+        case 1:
+        {
+            break;
+        }
+    }
+}
+
 

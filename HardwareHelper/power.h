@@ -1,14 +1,10 @@
 #ifndef POWER_H
 #define POWER_H
-#include <QString>
-#include <QUrl>
+#include "Element.h"
 
-class Power
+class Power:public Element
 {
 private:
-    int price;
-    QUrl url;
-    QString name;
     int power;
     QString form;
     int diameter;
@@ -19,6 +15,8 @@ private:
 public:
     Power();
     Power(QVector<QString>& data);
+    QVector<QString>GetNames();
+    QVector<QString>GetValues();
     int getPrice() const;
     void setPrice(int value);
     QUrl getUrl() const;
@@ -39,6 +37,8 @@ public:
     void setPCIE(int value);
     int getNoise() const;
     void setNoise(int value);
+
+    void ClearFields();
 };
 
 #endif // POWER_H

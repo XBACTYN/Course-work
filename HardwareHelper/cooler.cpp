@@ -45,7 +45,7 @@ QString Cooler::getSockets() const
     return Sockets;
 }
 
-void Cooler::setSockets(QString &value)
+void Cooler::setSockets( QString &value)
 {
     RepairSockets(value);
     Sockets = value;
@@ -126,16 +126,57 @@ void Cooler::RepairSockets(QString &str)
     QString nstr="<BR>";
     nstr+=str;
     nstr+="<BR>";
-   // qDebug()<<nstr;
     str.clear();
     int lastPos = 0;
     while( ( lastPos = reg.indexIn( nstr, lastPos ) ) != -1 )
     {
         lastPos += reg.matchedLength();
-            //qDebug()<<reg.cap(1);
             str+=reg.cap(1)+" ";
 
     }
-   //qDebug()<<str;
+}
 
+QVector<QString>Cooler::GetNames()
+{
+    QVector<QString>temp;
+    temp.push_back("Цена, руб");
+    temp.push_back("URL-ссылка на товар");
+    temp.push_back("Название");
+    temp.push_back("Количество вентиляторов");
+    temp.push_back("Поддерживаемые сокеты");
+    temp.push_back("Минимальные обороты, об/мин");
+    temp.push_back("Максимальные обороты, об/мин");
+    temp.push_back("Макс. воздушный поток, CF/M");
+    temp.push_back("Максимальный TDP");
+    temp.push_back("Уровень шума, дБ");
+    return temp;
+}
+QVector<QString>Cooler::GetValues()
+{
+    QVector<QString>temp;
+    temp.push_back(QString::number(getPrice()));
+    temp.push_back((url.toString()));
+    temp.push_back(getName());
+    temp.push_back(QString::number(getVentcount()));
+    temp.push_back(getSockets());
+    temp.push_back(QString::number(getMinspeed()));
+    temp.push_back(QString::number(getMaxspeed()));
+    temp.push_back(QString::number(getAirstream()));
+    temp.push_back(QString::number(getTDP()));
+    temp.push_back(QString::number(getNoise()));
+    return temp;
+}
+
+void Cooler::ClearFields()
+{
+    setAirstream(0);
+    setMaxspeed(0);
+    setMinspeed(0);
+    setName("");
+    setNoise(0);
+    setPrice(0);
+   // setSockets()
+    setTDP(0);
+    setUrl(QUrl(""));
+    setVentcount(0);
 }

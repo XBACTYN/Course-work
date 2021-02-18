@@ -1,14 +1,10 @@
 #ifndef SSD_H
 #define SSD_H
-#include <QString>
-#include <QUrl>
+#include "Element.h"
 
-class SSD
+class SSD:public Element
 {
 private:
-    int price;
-    QUrl url;
-    QString name;
     int capacity;
     QString form;
     QString M2interface;
@@ -21,6 +17,8 @@ private:
 public:
     SSD();
     SSD(QVector<QString>& data);
+    QVector<QString>GetNames();
+    QVector<QString>GetValues();
     int getPrice() const;
     void setPrice(int value);
     QUrl getUrl() const;
@@ -43,6 +41,8 @@ public:
     void setReadspeed(int value);
     int getTBW() const;
     void setTBW(int value);
+
+    void ClearFields();
 };
 
 #endif // SSD_H

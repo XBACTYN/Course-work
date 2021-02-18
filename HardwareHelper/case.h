@@ -1,14 +1,9 @@
 #ifndef CASE_H
 #define CASE_H
-#include <QString>
-#include <QUrl>
-
-class Case
+#include "Element.h"
+class Case:public Element
 {
 private:
-    int price;
-    QUrl url;
-    QString name;
     QString form;
     QString motherForm;
     QString powerForm;
@@ -20,6 +15,8 @@ private:
 public:
     Case();
     Case(QVector<QString>& data);
+    QVector<QString>GetNames();
+    QVector<QString>GetValues();
     int getPrice() const;
     void setPrice(int value);
     QUrl getUrl() const;
@@ -42,6 +39,8 @@ public:
     void setUSB2(int value);
     int getUSB3() const;
     void setUSB3(int value);
+
+    void ClearFields();
 };
 
 #endif // CASE_H

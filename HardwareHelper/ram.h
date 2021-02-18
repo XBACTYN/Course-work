@@ -1,14 +1,11 @@
 #ifndef RAM_H
 #define RAM_H
-#include <QString>
-#include <QUrl>
+#include <Element.h>
 
-class RAM
+
+class RAM:public Element
 {
 private:
-    int price;
-    QUrl url;
-    QString name;
     int sumMem;
     int bars;
     QString formDDR;
@@ -17,6 +14,8 @@ private:
 public:
     RAM();
     RAM(QVector<QString>& data);
+    QVector<QString>GetNames();
+    QVector<QString>GetValues();
     int getPrice() const;
     void setPrice(int value);
     QUrl getUrl() const;
@@ -33,6 +32,8 @@ public:
     void setMemType(const QString &value);
     QString getMemFreq() const;
     void setMemFreq(const QString &value);
+
+    void ClearFields();
 };
 
 #endif // RAM_H

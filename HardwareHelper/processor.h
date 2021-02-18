@@ -2,14 +2,10 @@
 #ifndef PROCESSOR_H
 #define PROCESSOR_H
 #include "Element.h"
-#include <QUrl>
-class Processor
+class Processor:public Element
 {  
 private:
-    int price;
-    QUrl url;
-    QString name;
-   // QString name;//состоит из двух строк
+
     QString socket;
     int cores;
     int threads;
@@ -19,17 +15,18 @@ private:
     QString iGraphic;
     int TDP;
     int maxMem;
-    double maxMemFreqDDR3; //МГЦ
+    double maxMemFreqDDR3;
     double maxMemFreqDDR4;
-                                //Тип линии PCI express. Помним про односторонюю совместимость.
-    //QString _link;        //Артикул в магазине! Скорее всего буду использовать как ключ для хеш таблицы.
-    //кажется забыл еще потребляемую энергию
+                                // PCI express. Помним про односторонюю совместимость.
 
-    //есть родительское поле QString _article
+
+
 public:
+
     Processor();
     Processor(QVector<QString>& data);
-
+    QVector<QString>GetNames();
+    QVector<QString>GetValues();
     QUrl getUrl() const;
     void setUrl(const QUrl &value);
     QString getSocket() const;
@@ -58,6 +55,8 @@ public:
     void setPrice(int value);
     QString getName() const;
     void setName(const QString &value);
+
+    void ClearFields();
 };
 
 #endif // PROCESSOR_H

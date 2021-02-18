@@ -1,15 +1,11 @@
 #ifndef COOLER_H
 #define COOLER_H
-#include <QString>
-#include <QUrl>
+#include <Element.h>
 #include <QRegExp>
 
-class Cooler
+class Cooler:public Element
 {
 private:
-    int price;
-    QUrl url;
-    QString name;
     int ventcount;
     QString Sockets;
     int minspeed;
@@ -21,6 +17,8 @@ private:
 public:
     Cooler();
     Cooler(QVector<QString> & data);
+    QVector<QString>GetNames();
+    QVector<QString>GetValues();
     void RepairSockets(QString & str);
     int getPrice() const;
     void setPrice(int value);
@@ -42,6 +40,8 @@ public:
     void setTDP(int value);
     int getNoise() const;
     void setNoise(int value);
+
+    void ClearFields();
 };
 
 #endif // COOLER_H

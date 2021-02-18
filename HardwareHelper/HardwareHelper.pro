@@ -14,13 +14,16 @@ SOURCES += \
     dataloader.cpp \
     graphicscard.cpp \
     hdd.cpp \
+    infoform.cpp \
     main.cpp \
-    mainwindow.cpp \
+    modelviewwidget.cpp \
     motherboard.cpp \
+    mymodel.cpp \
     power.cpp \
     processor.cpp \
     ram.cpp \
-    ssd.cpp
+    ssd.cpp \
+    tabform.cpp
 
 HEADERS += \
     Element.h \
@@ -29,15 +32,19 @@ HEADERS += \
     dataloader.h \
     graphicscard.h \
     hdd.h \
-    mainwindow.h \
+    infoform.h \
+    modelviewwidget.h \
     motherboard.h \
+    mymodel.h \
     power.h \
     processor.h \
     ram.h \
-    ssd.h
+    ssd.h \
+    tabform.h
 
 FORMS += \
-    mainwindow.ui
+    infoform.ui \
+    tabform.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
