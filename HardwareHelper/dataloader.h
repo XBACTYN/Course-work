@@ -83,6 +83,7 @@ public:
     QVector<Case>arrCases;
     QVector<int>gamerConfig{28,7,43,6,2,0,6,4,4};
     QVector<int>maxSum{0,0,0,0,0,0,0,0,0};
+    QVector<int>minSum{0,0,0,0,0,0,0,0,0};
     QVector<QVector<int>>availableIndexes;
     void SetRegexProcessor();
     void RefPrepare(int i); //i-номер векторов комплектущих. 1-видеокарта, 4-кулер...
@@ -105,7 +106,7 @@ public:
 
     template<class T>
     int BinaryIndex(QVector<T>&arr,int size,const int value);
-    void FindAllVariants(int sum,int configType);
+    void FindAllVariants(int minsum,int maxsum,int configType);
     void SortFromCheapest();
     void SortFromMostExpensive();
     void ClearConfig();
@@ -118,7 +119,7 @@ public:
     bool ChoosePower(int index,int sum,int & surplus);
     bool ChooseCase(int index,int sum,int & surplus);
     bool CheckCoolerSoket(QString findSocket,QString coolerSockets);
-    void GenerateConfig(int type,int sum);
+    void GenerateConfig(int minsum,int maxsum,int type);
 
 };
 

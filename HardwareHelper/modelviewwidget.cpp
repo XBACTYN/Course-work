@@ -21,17 +21,21 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     combotype->addItem("Игровой ПК");
     combotype->addItem("ОФисный ПК");
     combotype->addItem("Среднебюджетный ПК");
-    lbprice=new QLabel("Сумма (max 500 000):");
-    spinprice=new QSpinBox(this); //проверку только на цифры сделать
-    spinprice->setMaximum(500000);
+    lbprice1=new QLabel("Минимум:");
+    spinprice1=new QSpinBox(this);
+    lbprice2=new QLabel("Максимум:");
+    spinprice2=new QSpinBox(this); //проверку только на цифры сделать
+    spinprice2->setMaximum(500000);
     buttonstart=new QPushButton("Сгенерировать");
     connect(buttonstart,SIGNAL(clicked()),SLOT(generate()));
     buttonstart->setEnabled(false);
     settingsLayout->addWidget(buttonload);
     settingsLayout->addWidget(combocreate);
     settingsLayout->addWidget(combotype);
-    settingsLayout->addWidget(lbprice,0,Qt::AlignRight);
-    settingsLayout->addWidget(spinprice);
+    settingsLayout->addWidget(lbprice1,0,Qt::AlignRight);
+    settingsLayout->addWidget(spinprice1);
+    settingsLayout->addWidget(lbprice2,0,Qt::AlignRight);
+    settingsLayout->addWidget(spinprice2);
     settingsLayout->addWidget(buttonstart);
     mainLayout->addLayout(settingsLayout);
     QHBoxLayout * barlayout=new QHBoxLayout;
@@ -282,7 +286,7 @@ void ModelViewWidget::load_data()
 void ModelViewWidget::generate()
 {
 
-    loader->GenerateConfig(combotype->currentIndex(),spinprice->value());
+    loader->GenerateConfig(spinprice1->value(),spinprice2->value(),combotype->currentIndex());
     arrline[0]->setText(loader->config.processor.getName());
     arrline[1]->setText(loader->config.motherboard.getName());
     arrline[2]->setText(loader->config.graphicscard.getName());
@@ -300,14 +304,16 @@ void ModelViewWidget::available_to_create(int idx)
     if(idx==1)
     {
         combotype->setEnabled(false);
-        spinprice->setEnabled(false);
+        spinprice1->setEnabled(false);
+        spinprice2->setEnabled(false);
         buttonstart->setEnabled(false);
     }
     else
     {
         //удалить конфигурацию()
         combotype->setEnabled(true);
-        spinprice->setEnabled(true);
+        spinprice1->setEnabled(true);
+        spinprice2->setEnabled(true);
         buttonstart->setEnabled(true);
 
     }

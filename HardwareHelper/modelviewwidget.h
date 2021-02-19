@@ -36,8 +36,10 @@ private:
     QPushButton * buttonload;
     QComboBox * combocreate;
     QComboBox * combotype;
-    QLabel * lbprice;
-    QSpinBox * spinprice;
+    QLabel * lbprice1;
+    QLabel * lbprice2;
+    QSpinBox * spinprice1;
+    QSpinBox * spinprice2;
     QPushButton * buttonstart;
 
     QVBoxLayout * groupLay;

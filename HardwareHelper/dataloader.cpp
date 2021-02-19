@@ -675,23 +675,28 @@ bool DataLoader::ChooseCase(int index,int sum, int &surplus)
     return compatible;
 
 }
-void DataLoader::FindAllVariants(int sum, int configType)
+void DataLoader::FindAllVariants(int minsum,int maxsum, int configType)
 {
     QVector<int>temp;
     int maxIndex;
+    int minIndex;
     switch(configType)
     {
         case 0:
         {
             for(int i=0;i<9;++i)
-               {maxSum[i]=(sum*gamerConfig[i])/100;
+               {maxSum[i]=(maxsum*gamerConfig[i])/100;
+                minSum[i]=(minsum*gamerConfig[i])/100;
                 qDebug()<<"max sum i:"<<i<<maxSum[i];
             }
 
               maxIndex=BinaryIndex(arrProcessors,arrProcessors.size(),maxSum[0]);
+              minIndex=BinaryIndex(arrProcessors,arrProcessors.size(),minSum[0]);
+              if(minIndex!=0)
+                  --minIndex;
               if(maxIndex!=0)
                   --maxIndex;
-              for(int i=0;i<=maxIndex;++i)
+              for(int i=minIndex;i<=maxIndex;++i)
                   temp.push_back(i);
               availableIndexes.push_back(temp);
               if(temp.size()!=0)
@@ -701,9 +706,12 @@ void DataLoader::FindAllVariants(int sum, int configType)
               }
 
               maxIndex=BinaryIndex(arrMotherboards,arrMotherboards.size(),maxSum[1]);
+              minIndex=BinaryIndex(arrMotherboards,arrMotherboards.size(),maxSum[1]);
+              if(minIndex!=0)
+                  --minIndex;
                 if(maxIndex!=0)
                     --maxIndex;
-                for(int i=0;i<=maxIndex;++i)
+                for(int i=minIndex;i<=maxIndex;++i)
                     temp.push_back(i);
                 availableIndexes.push_back(temp);
                 if(temp.size()!=0)
@@ -713,9 +721,12 @@ void DataLoader::FindAllVariants(int sum, int configType)
                 }
 
                maxIndex=BinaryIndex(arrGraphicsCards,arrGraphicsCards.size(),maxSum[2]);
+               minIndex=BinaryIndex(arrGraphicsCards,arrGraphicsCards.size(),minSum[2]);
                   if(maxIndex!=0)
                       --maxIndex;
-                  for(int i=0;i<=maxIndex;++i)
+                  if(minIndex!=0)
+                      --minIndex;
+                  for(int i=minIndex;i<=maxIndex;++i)
                       temp.push_back(i);
                   availableIndexes.push_back(temp);
                   if(temp.size()!=0)
@@ -725,9 +736,12 @@ void DataLoader::FindAllVariants(int sum, int configType)
                   }
 
                 maxIndex=BinaryIndex(arrRAMs,arrRAMs.size(),maxSum[3]);
+                minIndex=BinaryIndex(arrRAMs,arrRAMs.size(),minSum[3]);
                     if(maxIndex!=0)
                         --maxIndex;
-                    for(int i=0;i<=maxIndex;++i)
+                    if(minIndex!=0)
+                        --minIndex;
+                    for(int i=minIndex;i<=maxIndex;++i)
                         temp.push_back(i);
                     availableIndexes.push_back(temp);
                     if(temp.size()!=0)
@@ -736,9 +750,12 @@ void DataLoader::FindAllVariants(int sum, int configType)
                         temp.squeeze();
                     }
                  maxIndex=BinaryIndex(arrCoolers,arrCoolers.size(),maxSum[4]);
+                 minIndex=BinaryIndex(arrCoolers,arrCoolers.size(),minSum[4]);
                         if(maxIndex!=0)
                             --maxIndex;
-                        for(int i=0;i<=maxIndex;++i)
+                        if(minIndex!=0)
+                            --minIndex;
+                        for(int i=minIndex;i<=maxIndex;++i)
                             temp.push_back(i);
                         availableIndexes.push_back(temp);
                         if(temp.size()!=0)
@@ -747,9 +764,12 @@ void DataLoader::FindAllVariants(int sum, int configType)
                             temp.squeeze();
                         }
                   maxIndex=BinaryIndex(arrHDDs,arrHDDs.size(),maxSum[5]);
+                  minIndex=BinaryIndex(arrHDDs,arrHDDs.size(),minSum[5]);
                             if(maxIndex!=0)
                                 --maxIndex;
-                            for(int i=0;i<=maxIndex;++i)
+                            if(minIndex!=0)
+                                --minIndex;
+                            for(int i=minIndex;i<=maxIndex;++i)
                                 temp.push_back(i);
                             availableIndexes.push_back(temp);
                             if(temp.size()!=0)
@@ -758,9 +778,12 @@ void DataLoader::FindAllVariants(int sum, int configType)
                                 temp.squeeze();
                             }
                    maxIndex=BinaryIndex(arrSSDs,arrSSDs.size(),maxSum[6]);
+                   minIndex=BinaryIndex(arrSSDs,arrSSDs.size(),minSum[6]);
                                 if(maxIndex!=0)
                                     --maxIndex;
-                                for(int i=0;i<=maxIndex;++i)
+                                if(minIndex!=0)
+                                    --minIndex;
+                                for(int i=minIndex;i<=maxIndex;++i)
                                     temp.push_back(i);
                                 availableIndexes.push_back(temp);
                                 if(temp.size()!=0)
@@ -769,9 +792,12 @@ void DataLoader::FindAllVariants(int sum, int configType)
                                     temp.squeeze();
                                 }
                     maxIndex=BinaryIndex(arrPowers,arrPowers.size(),maxSum[7]);
+                    minIndex=BinaryIndex(arrPowers,arrPowers.size(),minSum[7]);
                                     if(maxIndex!=0)
                                         --maxIndex;
-                                    for(int i=0;i<=maxIndex;++i)
+                                    if(minIndex!=0)
+                                        --minIndex;
+                                    for(int i=minIndex;i<=maxIndex;++i)
                                         temp.push_back(i);
                                     availableIndexes.push_back(temp);
                                     if(temp.size()!=0)
@@ -780,9 +806,12 @@ void DataLoader::FindAllVariants(int sum, int configType)
                                         temp.squeeze();
                                     }
                      maxIndex=BinaryIndex(arrCases,arrCases.size(),maxSum[8]);
+                     minIndex=BinaryIndex(arrCases,arrCases.size(),minSum[8]);
                                         if(maxIndex!=0)
                                             --maxIndex;
-                                        for(int i=0;i<=maxIndex;++i)
+                                        if(maxIndex!=0)
+                                            --minIndex;
+                                        for(int i=minIndex;i<=maxIndex;++i)
                                             temp.push_back(i);
                                         availableIndexes.push_back(temp);
                                         if(temp.size()!=0)
@@ -797,7 +826,7 @@ void DataLoader::FindAllVariants(int sum, int configType)
         }
     }
 }
-void DataLoader::GenerateConfig(int type,int sum) //Ощущение что надо сделать класс совместимости. QString Socket, int TDP...
+void DataLoader::GenerateConfig(int minsum,int maxsum,int type) //Ощущение что надо сделать класс совместимости. QString Socket, int TDP...
 {
     if(availableIndexes.size()!=0)
         availableIndexes.clear();
@@ -821,11 +850,16 @@ void DataLoader::GenerateConfig(int type,int sum) //Ощущение что на
     int surplus=0;
     int checkIndex=0;
     SortFromCheapest();
-    FindAllVariants(sum,type);
+    FindAllVariants(minsum,maxsum,type);
     bool compatible=false;
     while(!compatible&&maxSum[1]>arrMotherboards[0].getPrice()&&availableIndexes[1].size()!=0)
     {
-        checkIndex=rand()%(availableIndexes[1].size()-1);
+        if(availableIndexes[1].size()==1)
+        {
+            checkIndex=0;
+        }
+        else
+            checkIndex=rand()%(availableIndexes[1].size()-1);
         compatible=ChooseMotherBoard(availableIndexes[1][checkIndex],maxSum[1],surplus);
         if(!compatible)
             availableIndexes[1].remove(checkIndex);
@@ -834,6 +868,11 @@ void DataLoader::GenerateConfig(int type,int sum) //Ощущение что на
     compatible=false;
     while(!compatible&&maxSum[0]>arrProcessors[0].getPrice()&&availableIndexes[0].size()!=0)
     {
+        if(availableIndexes[0].size()==1)
+        {
+            checkIndex=0;
+        }
+        else
         checkIndex=rand()%(availableIndexes[0].size()-1);
         compatible=ChooseProcessor(availableIndexes[0][checkIndex],maxSum[0],surplus);
         if(!compatible)
@@ -843,6 +882,11 @@ void DataLoader::GenerateConfig(int type,int sum) //Ощущение что на
     compatible=false;
     while(!compatible&&maxSum[2]>arrGraphicsCards[0].getPrice()&&availableIndexes[2].size()!=0)
     {
+        if(availableIndexes[2].size()==1)
+        {
+            checkIndex=0;
+        }
+        else
         checkIndex=rand()%(availableIndexes[2].size()-1);
         compatible=ChooseGraphicCard(availableIndexes[2][checkIndex],maxSum[2],surplus);
         if(!compatible)
@@ -852,6 +896,11 @@ void DataLoader::GenerateConfig(int type,int sum) //Ощущение что на
     compatible=false;
     while(!compatible&&maxSum[3]>arrRAMs[0].getPrice()&&availableIndexes[3].size()!=0)
     {
+        if(availableIndexes[3].size()==1)
+        {
+            checkIndex=0;
+        }
+        else
         checkIndex=rand()%(availableIndexes[3].size()-1);
         compatible=ChooseRAM(availableIndexes[3][checkIndex],maxSum[3],surplus);
         if(!compatible)
@@ -861,16 +910,25 @@ void DataLoader::GenerateConfig(int type,int sum) //Ощущение что на
     compatible=false;
     while(!compatible&&maxSum[4]>arrCoolers[0].getPrice()&&availableIndexes[4].size()!=0)
     {
+        if(availableIndexes[4].size()==1)
+        {
+            checkIndex=0;
+        }
+        else
         checkIndex=rand()%(availableIndexes[4].size()-1);
         compatible=ChooseCooler(availableIndexes[4][checkIndex],maxSum[4],surplus);
         if(!compatible)
             availableIndexes[4].remove(checkIndex);
 
     }
-    //ПРОПУСК HDD
     compatible=false;
     while(!compatible&&maxSum[6]>arrSSDs[0].getPrice()&&availableIndexes[6].size()!=0)
     {
+        if(availableIndexes[6].size()==1)
+        {
+            checkIndex=0;
+        }
+        else
         checkIndex=rand()%(availableIndexes[6].size()-1);
         compatible=ChooseSSD(availableIndexes[6][checkIndex],maxSum[6],surplus);
         if(!compatible)
@@ -880,6 +938,11 @@ void DataLoader::GenerateConfig(int type,int sum) //Ощущение что на
     compatible=false;
     while(!compatible&&maxSum[7]>arrPowers[0].getPrice()&&availableIndexes[7].size()!=0)
     {
+        if(availableIndexes[7].size()==1)
+        {
+            checkIndex=0;
+        }
+        else
         checkIndex=rand()%(availableIndexes[7].size()-1);
         compatible=ChoosePower(availableIndexes[7][checkIndex],maxSum[7],surplus);
         if(!compatible)
@@ -889,6 +952,11 @@ void DataLoader::GenerateConfig(int type,int sum) //Ощущение что на
     compatible=false;
     while(!compatible&&maxSum[8]>arrCases[0].getPrice()&&availableIndexes[8].size()!=0)
     {
+        if(availableIndexes[8].size()==1)
+        {
+            checkIndex=0;
+        }
+        else
         checkIndex=rand()%(availableIndexes[8].size()-1);
         compatible=ChooseCase(availableIndexes[8][checkIndex],maxSum[8],surplus);
         if(!compatible)
