@@ -17,12 +17,7 @@ private:
     int maxMem;
     double maxMemFreqDDR3;
     double maxMemFreqDDR4;
-                                // PCI express. Помним про односторонюю совместимость.
-
-
-
 public:
-
     Processor();
     Processor(QVector<QString>& data);
     QVector<QString>GetNames();
@@ -55,7 +50,6 @@ public:
     void setPrice(int value);
     QString getName() const;
     void setName(const QString &value);
-
     void ClearFields();
 };
 

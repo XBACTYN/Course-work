@@ -36,8 +36,10 @@ private:
     QPushButton * buttonload;
     QComboBox * combocreate;
     QComboBox * combotype;
-    QLabel * lbprice;
-    QSpinBox * spinprice;
+    QLabel * lbprice1;
+    QLabel * lbprice2;
+    QSpinBox * spinprice1;
+    QSpinBox * spinprice2;
     QPushButton * buttonstart;
 
     QVBoxLayout * groupLay;
@@ -60,7 +62,6 @@ private:
     DataLoader* loader;
     bool bycheap;
 private slots:
-    //void selectionChangedSlot(const QItemSelection & /*newSelection*/, const QItemSelection & /*oldSelection*/);
     void load_data();
     void available_to_create(int);
     void tab_clicked(int);
@@ -69,6 +70,15 @@ private slots:
     void radio2_toggled(bool);
     void sort_all();
     void generate();
+    void iConfProcessor();
+    void iConfMotherBoard();
+    void iConfGraphicCard();
+    void iConfRAM();
+    void iConfCooler();
+    //void iConfHDD();
+    void iConfSSD();
+    void iConfPower();
+    void iConfCase();
 public:
     ModelViewWidget( QWidget* parent = 0 );
     ~ModelViewWidget();

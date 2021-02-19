@@ -21,17 +21,22 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     combotype->addItem("Игровой ПК");
     combotype->addItem("ОФисный ПК");
     combotype->addItem("Среднебюджетный ПК");
-    lbprice=new QLabel("Сумма (max 500 000):");
-    spinprice=new QSpinBox(this); //проверку только на цифры сделать
-    spinprice->setMaximum(500000);
+    lbprice1=new QLabel("Минимум:");
+    spinprice1=new QSpinBox(this);
+    spinprice1->setMaximum(500000);
+    lbprice2=new QLabel("Максимум:");
+    spinprice2=new QSpinBox(this); //проверку только на цифры сделать
+    spinprice2->setMaximum(500000);
     buttonstart=new QPushButton("Сгенерировать");
     connect(buttonstart,SIGNAL(clicked()),SLOT(generate()));
     buttonstart->setEnabled(false);
     settingsLayout->addWidget(buttonload);
     settingsLayout->addWidget(combocreate);
     settingsLayout->addWidget(combotype);
-    settingsLayout->addWidget(lbprice,0,Qt::AlignRight);
-    settingsLayout->addWidget(spinprice);
+    settingsLayout->addWidget(lbprice1,0,Qt::AlignRight);
+    settingsLayout->addWidget(spinprice1);
+    settingsLayout->addWidget(lbprice2,0,Qt::AlignRight);
+    settingsLayout->addWidget(spinprice2);
     settingsLayout->addWidget(buttonstart);
     mainLayout->addLayout(settingsLayout);
     QHBoxLayout * barlayout=new QHBoxLayout;
@@ -99,6 +104,15 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
         groupLay->addWidget(new QLabel(confNames[i]),0,Qt::AlignCenter);
         groupLay->addLayout(arrlay[i]);
     }
+    connect(infbn[0],SIGNAL(clicked()),this,SLOT(iConfProcessor()));
+    connect(infbn[1],SIGNAL(clicked()),this,SLOT(iConfMotherBoard()));
+    connect(infbn[2],SIGNAL(clicked()),this,SLOT(iConfGraphicCard()));
+    connect(infbn[3],SIGNAL(clicked()),this,SLOT(iConfRAM()));
+    connect(infbn[4],SIGNAL(clicked()),this,SLOT(iConfCooler()));
+    //connect(infbn[5],SIGNAL(clicked()),this,SLOT(iConfHDD()));
+    connect(infbn[6],SIGNAL(clicked()),this,SLOT(iConfSSD()));
+    connect(infbn[7],SIGNAL(clicked()),this,SLOT(iConfPower()));
+    connect(infbn[8],SIGNAL(clicked()),this,SLOT(iConfCase()));
     saveLay=new QHBoxLayout;
     pricelab=new QLabel("Общая цена:");
     priceline=new QLineEdit;
@@ -273,7 +287,7 @@ void ModelViewWidget::load_data()
 void ModelViewWidget::generate()
 {
 
-    loader->GenerateConfig(combotype->currentIndex(),spinprice->value());
+    loader->GenerateConfig(spinprice1->value(),spinprice2->value(),combotype->currentIndex());
     arrline[0]->setText(loader->config.processor.getName());
     arrline[1]->setText(loader->config.motherboard.getName());
     arrline[2]->setText(loader->config.graphicscard.getName());
@@ -291,14 +305,16 @@ void ModelViewWidget::available_to_create(int idx)
     if(idx==1)
     {
         combotype->setEnabled(false);
-        spinprice->setEnabled(false);
+        spinprice1->setEnabled(false);
+        spinprice2->setEnabled(false);
         buttonstart->setEnabled(false);
     }
     else
     {
         //удалить конфигурацию()
         combotype->setEnabled(true);
-        spinprice->setEnabled(true);
+        spinprice1->setEnabled(true);
+        spinprice2->setEnabled(true);
         buttonstart->setEnabled(true);
 
     }
@@ -351,5 +367,43 @@ void ModelViewWidget::sort_all()
     }
 }
 
-
-
+void ModelViewWidget::iConfProcessor()
+{
+    InfoForm * f=new InfoForm(loader->config.processor.GetNames(),loader->config.processor.GetValues());
+    f->show();
+}
+void ModelViewWidget::iConfMotherBoard()
+{
+    InfoForm * f=new InfoForm(loader->config.motherboard.GetNames(),loader->config.motherboard.GetValues());
+    f->show();
+}
+void ModelViewWidget::iConfGraphicCard()
+{
+    InfoForm * f=new InfoForm(loader->config.graphicscard.GetNames(),loader->config.graphicscard.GetValues());
+    f->show();
+}
+void ModelViewWidget::iConfRAM()
+{
+    InfoForm * f=new InfoForm(loader->config.ram.GetNames(),loader->config.ram.GetValues());
+    f->show();
+}
+void ModelViewWidget::iConfCooler()
+{
+    InfoForm * f=new InfoForm(loader->config.cooler.GetNames(),loader->config.cooler.GetValues());
+    f->show();
+}
+void ModelViewWidget::iConfSSD()
+{
+    InfoForm * f=new InfoForm(loader->config.ssd.GetNames(),loader->config.ssd.GetValues());
+    f->show();
+}
+void ModelViewWidget::iConfPower()
+{
+    InfoForm * f=new InfoForm(loader->config.power.GetNames(),loader->config.power.GetValues());
+    f->show();
+}
+void ModelViewWidget::iConfCase()
+{
+    InfoForm * f=new InfoForm(loader->config.box.GetNames(),loader->config.box.GetValues());
+    f->show();
+}
