@@ -24,7 +24,7 @@
 class DataLoader : public QObject
 {
     QNetworkAccessManager* manager;
-   // QUrl uarray[9];//массив с адресами первого уровня на разные компоненты
+
 
 public:
     struct Compatible

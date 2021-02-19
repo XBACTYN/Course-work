@@ -287,7 +287,7 @@ void DataLoader::DownloadPage(QString &Html,QUrl &url) //максимально 
 
 }
 
-void DataLoader::Regex1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QUrl> &tempVector)//максимально 24 процессора на странице. потом /(n-1)/ к адресу страницы
+void DataLoader::Regex1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QUrl> &tempVector)
 {
        int lastPos = 0;
        while( ( lastPos = vectorReg[i].indexIn( Html, lastPos ) ) != -1 )
@@ -317,7 +317,7 @@ void DataLoader::Parse1lvl(int i, QString &Html, QVector<QRegExp> &vectorReg, QV
     u2array.push_back(tempVector);
 }
 
-void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2,QVector<QString>&data)//cюда захуярить tempVector& data
+void DataLoader::Regex2lvl(int i,QString & Html,QVector<QRegExp> &vectorReg2,QVector<QString>&data)
 {
     if(data.size()!=0)
    {
@@ -826,7 +826,7 @@ void DataLoader::FindAllVariants(int minsum,int maxsum, int configType)
         }
     }
 }
-void DataLoader::GenerateConfig(int minsum,int maxsum,int type) //Ощущение что надо сделать класс совместимости. QString Socket, int TDP...
+void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
 {
     if(availableIndexes.size()!=0)
         availableIndexes.clear();

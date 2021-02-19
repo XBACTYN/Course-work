@@ -62,7 +62,6 @@ private:
     DataLoader* loader;
     bool bycheap;
 private slots:
-    //void selectionChangedSlot(const QItemSelection & /*newSelection*/, const QItemSelection & /*oldSelection*/);
     void load_data();
     void available_to_create(int);
     void tab_clicked(int);

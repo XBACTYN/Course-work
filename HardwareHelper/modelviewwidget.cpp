@@ -23,6 +23,7 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     combotype->addItem("Среднебюджетный ПК");
     lbprice1=new QLabel("Минимум:");
     spinprice1=new QSpinBox(this);
+    spinprice1->setMaximum(500000);
     lbprice2=new QLabel("Максимум:");
     spinprice2=new QSpinBox(this); //проверку только на цифры сделать
     spinprice2->setMaximum(500000);
