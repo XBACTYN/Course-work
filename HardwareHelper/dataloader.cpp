@@ -38,7 +38,7 @@ DataLoader::DataLoader()
     for(int i=0;i<9;++i)
         pages[i]=3;
 
-    pages[0]=2;  //поменяю с 2 на 1.
+    pages[0]=2;
     pages[3]=2;
     pages[4]=1;
     pages[5]=1;
@@ -465,12 +465,14 @@ bool DataLoader::ChooseGraphicCard(int index,int sum, int &surplus)
 {
    qDebug()<<"ChooseGraphicCard()";
    bool compatible=false;
+   if(arrGraphicsCards[index].getPrice()>0.5*sum)
+   {
    config.graphicscard=arrGraphicsCards[index];
    demand.MinPower=config.graphicscard.getPower();
    demand.Price+=config.graphicscard.getPrice();
    surplus+=sum-config.graphicscard.getPrice();
    compatible=true;
-
+    }
    return compatible;
 }
 bool DataLoader::ChooseProcessor(int index,int sum, int &surplus)
@@ -540,23 +542,12 @@ bool DataLoader::ChooseRAM(int index,int sum, int &surplus)
 bool DataLoader::ChooseSSD(int index,int sum, int &surplus)
 {
     qDebug()<<"ChooseSSD()";
-    bool compatible=false;
-        if(demand.M2!=0)
-        {
-            if(arrSSDs[index].getForm()=="M.2")
-            {
+    bool compatible=false;          
                 config.ssd=arrSSDs[index];
                 surplus+=sum-config.ssd.getPrice();
                 demand.Price+=config.ssd.getPrice();
                 compatible=true;
-            }
-        }
-        else{
-            config.ssd=arrSSDs[index];
-            surplus+=sum-config.ssd.getPrice();
-            demand.Price+=config.ssd.getPrice();
-            compatible=true;
-        }
+
     return compatible;
 }
 bool DataLoader::CheckCoolerSoket(QString find,QString list)
@@ -705,20 +696,23 @@ void DataLoader::GetMaxMinIndexes(QVector<T> & arr,int min,int max,int i,int typ
         if(maxIndex!=0)
             --maxIndex;
         for(int j=minIndex;j<=maxIndex;++j)
-        {   qDebug()<<i<<"push back"<<j;
+        {
             temp.push_back(j);
         }
-        /*if(availableIndexes.size()!=0)
-            if(availableIndexes[i].size()==1)
-            {
+        if(availableIndexes.size()==9)
+           {    if(availableIndexes[i].size()==1)
+                {
                 qDebug()<<"last elem in availIndex";
                 for(int j=0;j<temp.size();++j)
                     availableIndexes[i].push_back(temp[j]);
                 availableIndexes[i].remove(0);
+                }
+                else availableIndexes.push_back(temp);
             }
-
-        else*/
+        else
+            {
             availableIndexes.push_back(temp);
+            }
 
 }
 void DataLoader::FindAllVariants(int min,int max, int configType)
@@ -810,6 +804,7 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
     {
         if(availableIndexes[2].size()==1)
         {
+            qDebug()<<"выбрана нулевая видюха";
             checkIndex=0;
         }
         else
@@ -855,7 +850,7 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
             checkIndex=0;
         }
         else
-        checkIndex=rand()%(availableIndexes[6].size()-1);
+            checkIndex=rand()%(availableIndexes[6].size());//                     УБРАЛ size-1
         compatible=ChooseSSD(availableIndexes[6][checkIndex],maxSum[6],surplus);
         if(!compatible)
             availableIndexes[6].remove(checkIndex);
@@ -886,7 +881,18 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
         checkIndex=rand()%(availableIndexes[8].size()-1);
         compatible=ChooseCase(availableIndexes[8][checkIndex],maxSum[8],surplus);
         if(!compatible)
+        {
+            if(surplus!=0&&minSum[0]!=0&&availableIndexes[8].size()==1)
+            {
+                qDebug()<<"correct case min max";
+                maxSum[8]+=surplus;
+                surplus=0;
+                minSum[8]=0;
+                GetMaxMinIndexes(arrCases,minSum[8],maxSum[8],8,type);
+            }
+            else
             availableIndexes[8].remove(checkIndex);
+        }
 
     }
 
