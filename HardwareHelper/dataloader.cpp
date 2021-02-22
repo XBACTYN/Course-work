@@ -708,15 +708,17 @@ void DataLoader::GetMaxMinIndexes(QVector<T> & arr,int min,int max,int i,int typ
         {   qDebug()<<i<<"push back"<<j;
             temp.push_back(j);
         }
-        /*if(availableIndexes[i].size()==1)
-        {
-            qDebug()<<"last elem in availIndex";
-            for(int j=0;j<temp.size();++j)
-                availableIndexes[i].push_back(temp[j]);
-            availableIndexes[i].remove(0);
-        }
+        /*if(availableIndexes.size()!=0)
+            if(availableIndexes[i].size()==1)
+            {
+                qDebug()<<"last elem in availIndex";
+                for(int j=0;j<temp.size();++j)
+                    availableIndexes[i].push_back(temp[j]);
+                availableIndexes[i].remove(0);
+            }
+
         else*/
-        availableIndexes.push_back(temp);
+            availableIndexes.push_back(temp);
 
 }
 void DataLoader::FindAllVariants(int min,int max, int configType)
@@ -779,7 +781,7 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
             if(!compatible)
             {  /* if(availableIndexes[1].size()==1&&minSum[1]!=0)
                 {
-                    GetMaxMinIndexes(arrMotherboards,(int)(minSum[1]/2),maxSum[1],1,type);
+                    GetMaxMinIndexes(arrMotherboards,0,maxSum[1],1,type);
                 }
                 else
                 */
