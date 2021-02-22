@@ -143,6 +143,9 @@ ModelViewWidget::~ModelViewWidget()
 
 void ModelViewWidget::load_data()
 { buttonload->setEnabled(false);
+    QMessageBox msg;
+    msg.setText("Загрузка данных занимает ≈ 12 минут");
+    msg.exec();
     //loader->ClearElArrays();
     for(int i=0;i<9;++i)// i<9!
     {
@@ -160,7 +163,6 @@ void ModelViewWidget::load_data()
   {
     case 0:
    {
-
         for(int p=0;p<loader->u2arrayI[k];++p)
             {
                 loader->DownloadPage(loader->Html,loader->u2array[k][p]);
