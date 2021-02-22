@@ -21,6 +21,8 @@
 #include <QRadioButton>
 #include <QLineEdit>
 #include <QVector>
+#include <QFile>
+#include <QTextStream>
 #include "tabform.h"
 #include "mymodel.h"
 #include "dataloader.h"
@@ -34,7 +36,6 @@ private:
     int tabIndex;
 
     QPushButton * buttonload;
-    QComboBox * combocreate;
     QComboBox * combotype;
     QLabel * lbprice1;
     QLabel * lbprice2;
@@ -63,7 +64,6 @@ private:
     bool bycheap;
 private slots:
     void load_data();
-    void available_to_create(int);
     void tab_clicked(int);
     void get_info();
     void radio1_toggled(bool);
@@ -79,6 +79,7 @@ private slots:
     void iConfSSD();
     void iConfPower();
     void iConfCase();
+    void savetxt();
 public:
     ModelViewWidget( QWidget* parent = 0 );
     ~ModelViewWidget();

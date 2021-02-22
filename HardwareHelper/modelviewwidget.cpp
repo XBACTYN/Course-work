@@ -11,10 +11,6 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     buttonload=new QPushButton("Загрузка данных");
     connect(buttonload,SIGNAL(clicked()),SLOT (load_data()));
 
-    combocreate=new QComboBox(this);
-    combocreate->addItem("Авто режим");
-    combocreate->addItem("Ручной режим");
-    connect(combocreate, SIGNAL(activated(int)), SLOT(available_to_create(int)));
 
     //combocreate->setEnabled(false);
     combotype=new QComboBox(this);
@@ -31,7 +27,6 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     connect(buttonstart,SIGNAL(clicked()),SLOT(generate()));
     buttonstart->setEnabled(false);
     settingsLayout->addWidget(buttonload);
-    settingsLayout->addWidget(combocreate);
     settingsLayout->addWidget(combotype);
     settingsLayout->addWidget(lbprice1,0,Qt::AlignRight);
     settingsLayout->addWidget(spinprice1);
@@ -72,7 +67,7 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     panelLayout->addWidget( bAdd );
     bInfo = new QPushButton("Информация");
     connect( bInfo, SIGNAL( clicked() ), SLOT( get_info() ) );
-    bInfo->setEnabled(false);
+    //bInfo->setEnabled(false);
     panelLayout->addWidget( bInfo,0,Qt::AlignTop );
    /* QPushButton* bCompare = new QPushButton("Сравнить");
    //connect( bCompare, SIGNAL( clicked() ), SLOT( //on_clicked() ) );
@@ -116,9 +111,9 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     saveLay=new QHBoxLayout;
     pricelab=new QLabel("Общая цена:");
     priceline=new QLineEdit;
-    priceline->setReadOnly(true);
-    priceline->setMaxLength(5);
+    priceline->setReadOnly(true); 
     QPushButton* savebn=new QPushButton("Сохранить сборку в txt");
+    connect(savebn,SIGNAL(clicked()),this,SLOT(savetxt()));
     saveLay->addWidget(pricelab);
     saveLay->addWidget(priceline);
     saveLay->addWidget(savebn,10,Qt::AlignRight);
@@ -127,6 +122,8 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     horLay->addLayout(groupLay);
 
     mainLayout->addLayout(horLay);
+
+
 
     resize( 1200, 800 );
 
@@ -283,7 +280,7 @@ void ModelViewWidget::load_data()
  }
  bSort->setEnabled(true);
  buttonstart->setEnabled(true);
- bInfo->setEnabled(true);
+ //bInfo->setEnabled(true);
  //сюда функцию для активации всех кнопок.
 }
 void ModelViewWidget::generate()
@@ -302,26 +299,7 @@ void ModelViewWidget::generate()
     priceline->setText(QString::number(loader->demand.Price));
 }
 
-void ModelViewWidget::available_to_create(int idx)
-{
-    if(idx==1)
-    {
-        combotype->setEnabled(false);
-        spinprice1->setEnabled(false);
-        spinprice2->setEnabled(false);
-        buttonstart->setEnabled(false);
-    }
-    else
-    {
-        //удалить конфигурацию()
-        combotype->setEnabled(true);
-        spinprice1->setEnabled(true);
-        spinprice2->setEnabled(true);
-        buttonstart->setEnabled(true);
 
-    }
-
-}
 
 void ModelViewWidget::tab_clicked(int index)
 {
@@ -338,8 +316,11 @@ void ModelViewWidget::get_info()
             {
             const QModelIndex index = form->listptr->selectionModel()->currentIndex();
             InfoForm *f=new InfoForm(form->infomodel->ptr[index.row()]->GetNames(),form->infomodel->ptr[index.row()]->GetValues());
+            f->setAttribute(Qt::WA_DeleteOnClose, true);
             f->show();
+
         }
+
 }
 
 void ModelViewWidget::radio1_toggled(bool value)
@@ -353,7 +334,26 @@ void ModelViewWidget::radio2_toggled(bool value)
     if (!value) return;
     bycheap=false;
 }
-
+void ModelViewWidget::savetxt()
+{
+    qDebug()<<"Попытка сохранить";
+    QFile file("configFile.txt");
+    QTextStream stream(&file);
+   if(file.open(QIODevice::WriteOnly|QIODevice::Text))
+   {
+       stream<<QString::fromUtf8("Процессор\n")<<loader->config.processor.getName()<<"\n"<<loader->config.processor.getUrl().toString();
+       stream<<QString::fromUtf8("\n\nМатеринская плата\n")<<loader->config.motherboard.getName()<<"\n"<<loader->config.motherboard.getUrl().toString();
+       stream<<QString::fromUtf8("\n\nВидеокарта\n")<<loader->config.graphicscard.getName()<<"\n"<<loader->config.graphicscard.getUrl().toString();
+       stream<<QString::fromUtf8("\n\nОперативная память\n")<<loader->config.ram.getName()<<"\n"<<loader->config.ram.getUrl().toString();
+       stream<<QString::fromUtf8("\n\nКулер\n")<<loader->config.cooler.getName()<<"\n"<<loader->config.cooler.getUrl().toString();
+       stream<<QString::fromUtf8("\n\nЖесткий диск\n")<<loader->config.hdd.getName()<<"\n"<<loader->config.hdd.getUrl().toString();
+       stream<<QString::fromUtf8("\n\nТвердотельный накопитель\n")<<loader->config.ssd.getName()<<"\n"<<loader->config.ssd.getUrl().toString();
+       stream<<QString::fromUtf8("\n\nБлок питания\n")<<loader->config.power.getName()<<"\n"<<loader->config.power.getUrl().toString();
+       stream<<QString::fromUtf8("\n\nКорпус\n")<<loader->config.box.getName()<<"\n"<<loader->config.box.getUrl().toString();
+       file.close();
+   }
+   else qWarning("Could not open file");
+}
 
 void ModelViewWidget::sort_all()
 {

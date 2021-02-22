@@ -34,6 +34,7 @@ InfoForm::InfoForm(QVector<QString>names,QVector<QString>values,QWidget *parent)
 InfoForm::~InfoForm()
 {
     delete mainlay;
+    delete table;
     delete ui;
 }
 
