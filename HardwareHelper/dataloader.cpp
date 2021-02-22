@@ -38,8 +38,7 @@ DataLoader::DataLoader()
     for(int i=0;i<9;++i)
         pages[i]=3;
 
-    pages[0]=1;  //поменяю с 2 на 1.
-    pages[1]=2;  //поменяю с 2 на 1
+    pages[0]=2;  //поменяю с 2 на 1.
     pages[3]=2;
     pages[4]=1;
     pages[5]=1;
@@ -675,156 +674,66 @@ bool DataLoader::ChooseCase(int index,int sum, int &surplus)
     return compatible;
 
 }
-void DataLoader::FindAllVariants(int minsum,int maxsum, int configType)
+template<class T>
+void DataLoader::GetMaxMinIndexes(QVector<T> & arr,int min,int max,int i,int type)
 {
     QVector<int>temp;
-    int maxIndex;
     int minIndex;
-    switch(configType)
+    int maxIndex;
+    switch(type)
     {
-        case 0:
+    case 0:
+    {
+        maxSum[i]=(max*gamerConfig[i])/100;
+        minSum[i]=(min*gamerConfig[i])/100;
+    }
+    case 1:
+    {
+       // maxSum[i]=(max*officeConfig[i])/100;
+       // minSum[i]=(min*officeConfig[i])/100;
+    }
+    case 2:
+    {
+        // maxSum[i]=(max*balanceConfig[i])/100;
+        // minSum[i]=(min*balanceConfig[i])/100;
+    }
+    }
+        maxIndex=BinaryIndex(arr,arr.size(),maxSum[i]);
+        minIndex=BinaryIndex(arr,arr.size(),minSum[i]);
+        if(minIndex!=0)
+            --minIndex;
+        if(maxIndex!=0)
+            --maxIndex;
+        for(int j=minIndex;j<=maxIndex;++j)
+        {   qDebug()<<i<<"push back"<<j;
+            temp.push_back(j);
+        }
+        /*if(availableIndexes[i].size()==1)
         {
-            for(int i=0;i<9;++i)
-               {maxSum[i]=(maxsum*gamerConfig[i])/100;
-                minSum[i]=(minsum*gamerConfig[i])/100;
-                qDebug()<<"max sum i:"<<i<<maxSum[i];
-            }
+            qDebug()<<"last elem in availIndex";
+            for(int j=0;j<temp.size();++j)
+                availableIndexes[i].push_back(temp[j]);
+            availableIndexes[i].remove(0);
+        }
+        else*/
+        availableIndexes.push_back(temp);
 
-              maxIndex=BinaryIndex(arrProcessors,arrProcessors.size(),maxSum[0]);
-              minIndex=BinaryIndex(arrProcessors,arrProcessors.size(),minSum[0]);
-              if(minIndex!=0)
-                  --minIndex;
-              if(maxIndex!=0)
-                  --maxIndex;
-              for(int i=minIndex;i<=maxIndex;++i)
-                  temp.push_back(i);
-              availableIndexes.push_back(temp);
-              if(temp.size()!=0)
-              {
-                  temp.clear();
-                  temp.squeeze();
-              }
+}
+void DataLoader::FindAllVariants(int min,int max, int configType)
+{
+    GetMaxMinIndexes(arrProcessors,min,max,0,configType);
+    GetMaxMinIndexes(arrMotherboards,min,max,1,configType);
+    GetMaxMinIndexes(arrGraphicsCards,min,max,2,configType);
+    GetMaxMinIndexes(arrRAMs,min,max,3,configType);
+    GetMaxMinIndexes(arrCoolers,min,max,4,configType);
+    GetMaxMinIndexes(arrHDDs,min,max,5,configType);
+    GetMaxMinIndexes(arrSSDs,min,max,6,configType);
+    GetMaxMinIndexes(arrPowers,min,max,7,configType);
+    GetMaxMinIndexes(arrCases,min,max,8,configType);
 
-              maxIndex=BinaryIndex(arrMotherboards,arrMotherboards.size(),maxSum[1]);
-              minIndex=BinaryIndex(arrMotherboards,arrMotherboards.size(),maxSum[1]);
-              if(minIndex!=0)
-                  --minIndex;
-                if(maxIndex!=0)
-                    --maxIndex;
-                for(int i=minIndex;i<=maxIndex;++i)
-                    temp.push_back(i);
-                availableIndexes.push_back(temp);
-                if(temp.size()!=0)
-                {
-                    temp.clear();
-                    temp.squeeze();
-                }
-
-               maxIndex=BinaryIndex(arrGraphicsCards,arrGraphicsCards.size(),maxSum[2]);
-               minIndex=BinaryIndex(arrGraphicsCards,arrGraphicsCards.size(),minSum[2]);
-                  if(maxIndex!=0)
-                      --maxIndex;
-                  if(minIndex!=0)
-                      --minIndex;
-                  for(int i=minIndex;i<=maxIndex;++i)
-                      temp.push_back(i);
-                  availableIndexes.push_back(temp);
-                  if(temp.size()!=0)
-                  {
-                      temp.clear();
-                      temp.squeeze();
-                  }
-
-                maxIndex=BinaryIndex(arrRAMs,arrRAMs.size(),maxSum[3]);
-                minIndex=BinaryIndex(arrRAMs,arrRAMs.size(),minSum[3]);
-                    if(maxIndex!=0)
-                        --maxIndex;
-                    if(minIndex!=0)
-                        --minIndex;
-                    for(int i=minIndex;i<=maxIndex;++i)
-                        temp.push_back(i);
-                    availableIndexes.push_back(temp);
-                    if(temp.size()!=0)
-                    {
-                        temp.clear();
-                        temp.squeeze();
-                    }
-                 maxIndex=BinaryIndex(arrCoolers,arrCoolers.size(),maxSum[4]);
-                 minIndex=BinaryIndex(arrCoolers,arrCoolers.size(),minSum[4]);
-                        if(maxIndex!=0)
-                            --maxIndex;
-                        if(minIndex!=0)
-                            --minIndex;
-                        for(int i=minIndex;i<=maxIndex;++i)
-                            temp.push_back(i);
-                        availableIndexes.push_back(temp);
-                        if(temp.size()!=0)
-                        {
-                            temp.clear();
-                            temp.squeeze();
-                        }
-                  maxIndex=BinaryIndex(arrHDDs,arrHDDs.size(),maxSum[5]);
-                  minIndex=BinaryIndex(arrHDDs,arrHDDs.size(),minSum[5]);
-                            if(maxIndex!=0)
-                                --maxIndex;
-                            if(minIndex!=0)
-                                --minIndex;
-                            for(int i=minIndex;i<=maxIndex;++i)
-                                temp.push_back(i);
-                            availableIndexes.push_back(temp);
-                            if(temp.size()!=0)
-                            {
-                                temp.clear();
-                                temp.squeeze();
-                            }
-                   maxIndex=BinaryIndex(arrSSDs,arrSSDs.size(),maxSum[6]);
-                   minIndex=BinaryIndex(arrSSDs,arrSSDs.size(),minSum[6]);
-                                if(maxIndex!=0)
-                                    --maxIndex;
-                                if(minIndex!=0)
-                                    --minIndex;
-                                for(int i=minIndex;i<=maxIndex;++i)
-                                    temp.push_back(i);
-                                availableIndexes.push_back(temp);
-                                if(temp.size()!=0)
-                                {
-                                    temp.clear();
-                                    temp.squeeze();
-                                }
-                    maxIndex=BinaryIndex(arrPowers,arrPowers.size(),maxSum[7]);
-                    minIndex=BinaryIndex(arrPowers,arrPowers.size(),minSum[7]);
-                                    if(maxIndex!=0)
-                                        --maxIndex;
-                                    if(minIndex!=0)
-                                        --minIndex;
-                                    for(int i=minIndex;i<=maxIndex;++i)
-                                        temp.push_back(i);
-                                    availableIndexes.push_back(temp);
-                                    if(temp.size()!=0)
-                                    {
-                                        temp.clear();
-                                        temp.squeeze();
-                                    }
-                     maxIndex=BinaryIndex(arrCases,arrCases.size(),maxSum[8]);
-                     minIndex=BinaryIndex(arrCases,arrCases.size(),minSum[8]);
-                                        if(maxIndex!=0)
-                                            --maxIndex;
-                                        if(maxIndex!=0)
-                                            --minIndex;
-                                        for(int i=minIndex;i<=maxIndex;++i)
-                                            temp.push_back(i);
-                                        availableIndexes.push_back(temp);
-                                        if(temp.size()!=0)
-                                        {
-                                            temp.clear();
-                                            temp.squeeze();
-                                        }
                    for(int i=0;i<9;++i)
                        qDebug()<<availableIndexes[i];
 
-
-        }
-    }
 }
 void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
 {
@@ -852,17 +761,32 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
     SortFromCheapest();
     FindAllVariants(minsum,maxsum,type);
     bool compatible=false;
-    while(!compatible&&maxSum[1]>arrMotherboards[0].getPrice()&&availableIndexes[1].size()!=0)
+    while(!compatible)
     {
-        if(availableIndexes[1].size()==1)
+        if(arrMotherboards[0].getPrice()>maxSum[1])
         {
-            checkIndex=0;
+            compatible=ChooseMotherBoard(0,maxSum[1],surplus);
         }
         else
-            checkIndex=rand()%(availableIndexes[1].size()-1);
-        compatible=ChooseMotherBoard(availableIndexes[1][checkIndex],maxSum[1],surplus);
-        if(!compatible)
-            availableIndexes[1].remove(checkIndex);
+        {
+            if(availableIndexes[1].size()==1/*&&minSum[1]==0*/)
+            {
+            checkIndex=0;
+            }
+            else
+                checkIndex=rand()%(availableIndexes[1].size()-1);
+            compatible=ChooseMotherBoard(availableIndexes[1][checkIndex],maxSum[1],surplus);
+            if(!compatible)
+            {  /* if(availableIndexes[1].size()==1&&minSum[1]!=0)
+                {
+                    GetMaxMinIndexes(arrMotherboards,(int)(minSum[1]/2),maxSum[1],1,type);
+                }
+                else
+                */
+                availableIndexes[1].remove(checkIndex);
+            }
+
+        }
 
     }
     compatible=false;

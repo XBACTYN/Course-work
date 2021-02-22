@@ -81,7 +81,7 @@ public:
     QVector<SSD>arrSSDs;
     QVector<Power>arrPowers;
     QVector<Case>arrCases;
-    QVector<int>gamerConfig{28,7,43,6,2,0,6,4,4};
+    QVector<int>gamerConfig{26,9,41,8,2,0,6,4,4};
     QVector<int>maxSum{0,0,0,0,0,0,0,0,0};
     QVector<int>minSum{0,0,0,0,0,0,0,0,0};
     QVector<QVector<int>>availableIndexes;
@@ -107,6 +107,8 @@ public:
     template<class T>
     int BinaryIndex(QVector<T>&arr,int size,const int value);
     void FindAllVariants(int minsum,int maxsum,int configType);
+    template<class T>
+    void GetMaxMinIndexes(QVector<T>&arr,int minsum,int sum,int i,int type);
     void SortFromCheapest();
     void SortFromMostExpensive();
     void ClearConfig();
