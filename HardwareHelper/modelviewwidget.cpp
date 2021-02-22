@@ -123,6 +123,8 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
 
     mainLayout->addLayout(horLay);
 
+
+
     resize( 1200, 800 );
 
 }
@@ -335,21 +337,22 @@ void ModelViewWidget::radio2_toggled(bool value)
 void ModelViewWidget::savetxt()
 {
     qDebug()<<"Попытка сохранить";
-    QFile file("C::\\configFile.txt");
+    QFile file("configFile.txt");
     QTextStream stream(&file);
-   if(file.open(QIODevice::WriteOnly))
+   if(file.open(QIODevice::WriteOnly|QIODevice::Text))
    {
-       stream<<"Процессор"<<loader->config.processor.getName()<<loader->config.processor.getUrl().toString();
-       stream<<"\nМатеринская плата"<<loader->config.motherboard.getName()<<loader->config.motherboard.getUrl().toString();
-       stream<<"\nВидеокарта"<<loader->config.graphicscard.getName()<<loader->config.graphicscard.getUrl().toString();
-       stream<<"\nОперативная память"<<loader->config.ram.getName()<<loader->config.ram.getUrl().toString();
-       stream<<"\nКулер"<<loader->config.cooler.getName()<<loader->config.cooler.getUrl().toString();
-       stream<<"\nЖесткий диск"<<loader->config.hdd.getName()<<loader->config.hdd.getUrl().toString();
-       stream<<"\nТвердотельный накопитель"<<loader->config.ssd.getName()<<loader->config.ssd.getUrl().toString();
-       stream<<"\nБлок питания"<<loader->config.power.getName()<<loader->config.power.getUrl().toString();
-       stream<<"\nКорпус"<<loader->config.box.getName()<<loader->config.box.getUrl().toString();
+       stream<<QString::fromUtf8("Процессор\n")<<loader->config.processor.getName()<<"\n"<<loader->config.processor.getUrl().toString();
+       stream<<QString::fromUtf8("\n\nМатеринская плата\n")<<loader->config.motherboard.getName()<<"\n"<<loader->config.motherboard.getUrl().toString();
+       stream<<QString::fromUtf8("\n\nВидеокарта\n")<<loader->config.graphicscard.getName()<<"\n"<<loader->config.graphicscard.getUrl().toString();
+       stream<<QString::fromUtf8("\n\nОперативная память\n")<<loader->config.ram.getName()<<"\n"<<loader->config.ram.getUrl().toString();
+       stream<<QString::fromUtf8("\n\nКулер\n")<<loader->config.cooler.getName()<<"\n"<<loader->config.cooler.getUrl().toString();
+       stream<<QString::fromUtf8("\n\nЖесткий диск\n")<<loader->config.hdd.getName()<<"\n"<<loader->config.hdd.getUrl().toString();
+       stream<<QString::fromUtf8("\n\nТвердотельный накопитель\n")<<loader->config.ssd.getName()<<"\n"<<loader->config.ssd.getUrl().toString();
+       stream<<QString::fromUtf8("\n\nБлок питания\n")<<loader->config.power.getName()<<"\n"<<loader->config.power.getUrl().toString();
+       stream<<QString::fromUtf8("\n\nКорпус\n")<<loader->config.box.getName()<<"\n"<<loader->config.box.getUrl().toString();
        file.close();
    }
+   else qWarning("Could not open file");
 }
 
 void ModelViewWidget::sort_all()
