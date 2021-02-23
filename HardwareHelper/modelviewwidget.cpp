@@ -15,12 +15,11 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     //combocreate->setEnabled(false);
     combotype=new QComboBox(this);
     combotype->addItem("Игровой ПК");
-    combotype->addItem("ОФисный ПК");
-    combotype->addItem("Среднебюджетный ПК");
-    lbprice1=new QLabel("Минимум:");
+    combotype->addItem("Офисный ПК");
+    lbprice1=new QLabel("Минимум≈:");
     spinprice1=new QSpinBox(this);
     spinprice1->setMaximum(500000);
-    lbprice2=new QLabel("Максимум:");
+    lbprice2=new QLabel("Максимум≈:");
     spinprice2=new QSpinBox(this); //проверку только на цифры сделать
     spinprice2->setMaximum(500000);
     buttonstart=new QPushButton("Сгенерировать");
@@ -46,8 +45,6 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     tabw=new QTabWidget(this);
     connect(tabw,SIGNAL(tabBarClicked(int)),SLOT(tab_clicked(int)));
     horLay->addWidget((tabw));
-    //mainLayout->addWidget(tabw);//в другой layoutf
-
     QVBoxLayout* panelLayout = new QVBoxLayout;
     bSort = new QPushButton("Сортировать");
     connect(bSort,SIGNAL(clicked()),SLOT(sort_all()));
@@ -63,16 +60,12 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     connect(rbExpens, SIGNAL(toggled(bool)), this, SLOT(radio2_toggled(bool)));
     panelLayout->addWidget(rbExpens);
     QPushButton* bAdd = new QPushButton("Добавить");
-
+    connect(bAdd,SIGNAL(clicked()),SLOT(add()));
     panelLayout->addWidget( bAdd );
     bInfo = new QPushButton("Информация");
     connect( bInfo, SIGNAL( clicked() ), SLOT( get_info() ) );
-    //bInfo->setEnabled(false);
     panelLayout->addWidget( bInfo,0,Qt::AlignTop );
-   /* QPushButton* bCompare = new QPushButton("Сравнить");
-   //connect( bCompare, SIGNAL( clicked() ), SLOT( //on_clicked() ) );
-    panelLayout->addWidget( bCompare,0,Qt::AlignTop );
-    */
+
     horLay->addLayout(panelLayout);
 
     groupLay=new QVBoxLayout;
@@ -104,10 +97,19 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     connect(infbn[2],SIGNAL(clicked()),this,SLOT(iConfGraphicCard()));
     connect(infbn[3],SIGNAL(clicked()),this,SLOT(iConfRAM()));
     connect(infbn[4],SIGNAL(clicked()),this,SLOT(iConfCooler()));
-    //connect(infbn[5],SIGNAL(clicked()),this,SLOT(iConfHDD()));
+    connect(infbn[5],SIGNAL(clicked()),this,SLOT(iConfHDD()));
     connect(infbn[6],SIGNAL(clicked()),this,SLOT(iConfSSD()));
     connect(infbn[7],SIGNAL(clicked()),this,SLOT(iConfPower()));
     connect(infbn[8],SIGNAL(clicked()),this,SLOT(iConfCase()));
+    connect(arrbn[0],SIGNAL(clicked()),this,SLOT(dConfProcessor()));
+    connect(arrbn[1],SIGNAL(clicked()),this,SLOT(dConfMotherBoard()));
+    connect(arrbn[2],SIGNAL(clicked()),this,SLOT(dConfGraphicCard()));
+    connect(arrbn[3],SIGNAL(clicked()),this,SLOT(dConfRAM()));
+    connect(arrbn[4],SIGNAL(clicked()),this,SLOT(dConfCooler()));
+    connect(arrbn[5],SIGNAL(clicked()),this,SLOT(dConfHDD()));
+    connect(arrbn[6],SIGNAL(clicked()),this,SLOT(dConfSSD()));
+    connect(arrbn[7],SIGNAL(clicked()),this,SLOT(dConfPower()));
+    connect(arrbn[8],SIGNAL(clicked()),this,SLOT(dConfCase()));
     saveLay=new QHBoxLayout;
     pricelab=new QLabel("Общая цена:");
     priceline=new QLineEdit;
@@ -129,19 +131,13 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
 
 }
 
-ModelViewWidget::~ModelViewWidget()
-{
-    qDebug()<<"DESTRUCTOR MODELVIEW";
-    delete tabw;
-}
-
-
-
 
 void ModelViewWidget::load_data()
 { buttonload->setEnabled(false);
     QMessageBox msg;
-    msg.setText("Загрузка данных занимает ≈ 12 минут");
+    msg.setText("Загрузка данных с e-katalog.ru занимает ≈ 25 минут\nЕсли по прошествии 8 минут прогресс не виден визуально,\n"
+                "IP адрес заблокирован на время из-за множественных запросов.\n"
+                "В таком случае используйте VPN.");
     msg.exec();
     //loader->ClearElArrays();
     for(int i=0;i<9;++i)// i<9!
@@ -285,7 +281,8 @@ void ModelViewWidget::load_data()
 }
 void ModelViewWidget::generate()
 {
-
+   if(spinprice1->value()<=spinprice2->value())
+    {
     loader->GenerateConfig(spinprice1->value(),spinprice2->value(),combotype->currentIndex());
     arrline[0]->setText(loader->config.processor.getName());
     arrline[1]->setText(loader->config.motherboard.getName());
@@ -297,6 +294,7 @@ void ModelViewWidget::generate()
     arrline[7]->setText(loader->config.power.getName());
     arrline[8]->setText(loader->config.box.getName());
     priceline->setText(QString::number(loader->demand.Price));
+   }
 }
 
 
@@ -306,6 +304,11 @@ void ModelViewWidget::tab_clicked(int index)
     qDebug()<<"tab_clicked";
     tabIndex=index;
 
+}
+
+void ModelViewWidget::add()
+{
+    qDebug()<<combotype->currentIndex();
 }
 
 void ModelViewWidget::get_info()
@@ -372,40 +375,133 @@ void ModelViewWidget::sort_all()
 void ModelViewWidget::iConfProcessor()
 {
     InfoForm * f=new InfoForm(loader->config.processor.GetNames(),loader->config.processor.GetValues());
+    f->setAttribute(Qt::WA_DeleteOnClose, true);
     f->show();
 }
 void ModelViewWidget::iConfMotherBoard()
 {
     InfoForm * f=new InfoForm(loader->config.motherboard.GetNames(),loader->config.motherboard.GetValues());
+    f->setAttribute(Qt::WA_DeleteOnClose, true);
     f->show();
 }
 void ModelViewWidget::iConfGraphicCard()
 {
     InfoForm * f=new InfoForm(loader->config.graphicscard.GetNames(),loader->config.graphicscard.GetValues());
+    f->setAttribute(Qt::WA_DeleteOnClose, true);
     f->show();
 }
 void ModelViewWidget::iConfRAM()
 {
     InfoForm * f=new InfoForm(loader->config.ram.GetNames(),loader->config.ram.GetValues());
+    f->setAttribute(Qt::WA_DeleteOnClose, true);
     f->show();
 }
 void ModelViewWidget::iConfCooler()
 {
     InfoForm * f=new InfoForm(loader->config.cooler.GetNames(),loader->config.cooler.GetValues());
+    f->setAttribute(Qt::WA_DeleteOnClose, true);
+    f->show();
+}
+void ModelViewWidget::iConfHDD()
+{
+    InfoForm * f=new InfoForm(loader->config.hdd.GetNames(),loader->config.hdd.GetValues());
+    f->setAttribute(Qt::WA_DeleteOnClose, true);
     f->show();
 }
 void ModelViewWidget::iConfSSD()
 {
     InfoForm * f=new InfoForm(loader->config.ssd.GetNames(),loader->config.ssd.GetValues());
+    f->setAttribute(Qt::WA_DeleteOnClose, true);
     f->show();
 }
 void ModelViewWidget::iConfPower()
 {
     InfoForm * f=new InfoForm(loader->config.power.GetNames(),loader->config.power.GetValues());
+    f->setAttribute(Qt::WA_DeleteOnClose, true);
     f->show();
 }
 void ModelViewWidget::iConfCase()
 {
     InfoForm * f=new InfoForm(loader->config.box.GetNames(),loader->config.box.GetValues());
+    f->setAttribute(Qt::WA_DeleteOnClose, true);
     f->show();
+}
+void ModelViewWidget::dConfProcessor()
+{
+    loader->demand.Price-=loader->config.processor.getPrice();
+    loader->demand.FreqDDR3=0;
+    loader->demand.FreqDDR4=0;
+    loader->demand.TDP=0;
+    loader->config.processor.ClearFields();
+    arrline[0]->setText(loader->config.processor.getName());
+    priceline->setText(QString::number(loader->demand.Price));
+}
+void ModelViewWidget::dConfMotherBoard()
+{
+    loader->demand.Price-=loader->config.motherboard.getPrice();
+    loader->demand.Socket="";
+    loader->demand.DDRtype="";
+    loader->demand.M2=0;
+    loader->demand.MotherForm="";
+    loader->demand.MaxFreqRAM=0;
+    loader->config.motherboard.ClearFields();
+    arrline[1]->setText(loader->config.motherboard.getName());
+    priceline->setText(QString::number(loader->demand.Price));
+
+}
+void ModelViewWidget::dConfGraphicCard()
+{
+    loader->demand.Price-=loader->config.graphicscard.getPrice();
+    loader->demand.MinPower=0;
+    loader->config.graphicscard.ClearFields();
+    arrline[2]->setText(loader->config.graphicscard.getName());
+    priceline->setText(QString::number(loader->demand.Price));
+}
+void ModelViewWidget::dConfRAM()
+{
+    loader->demand.Price-=loader->config.ram.getPrice();
+    loader->config.ram.ClearFields();
+    arrline[3]->setText(loader->config.ram.getName());
+    priceline->setText(QString::number(loader->demand.Price));
+}
+void ModelViewWidget::dConfCooler()
+{
+     loader->demand.Price-=loader->config.cooler.getPrice();
+     loader->config.cooler.ClearFields();
+     arrline[4]->setText(loader->config.cooler.getName());
+     priceline->setText(QString::number(loader->demand.Price));
+}
+void ModelViewWidget::dConfHDD()
+{
+     loader->demand.Price-=loader->config.hdd.getPrice();
+     loader->config.hdd.ClearFields();
+     arrline[5]->setText(loader->config.hdd.getName());
+     priceline->setText(QString::number(loader->demand.Price));
+}
+void ModelViewWidget::dConfSSD()
+{
+    loader->demand.Price-=loader->config.ssd.getPrice();
+    loader->config.ssd.ClearFields();
+    arrline[6]->setText(loader->config.ssd.getName());
+    priceline->setText(QString::number(loader->demand.Price));
+}
+void ModelViewWidget::dConfPower()
+{
+    loader->demand.Price-=loader->config.power.getPrice();
+    loader->demand.PowerForm="";
+    loader->config.power.ClearFields();
+    arrline[7]->setText(loader->config.power.getName());
+    priceline->setText(QString::number(loader->demand.Price));
+}
+void ModelViewWidget::dConfCase()
+{
+    loader->demand.Price-=loader->config.box.getPrice();
+    loader->config.box.ClearFields();
+    arrline[8]->setText(loader->config.box.getName());
+    priceline->setText(QString::number(loader->demand.Price));
+}
+ModelViewWidget::~ModelViewWidget()
+{
+    qDebug()<<"DESTRUCTOR MODELVIEW";
+    delete tabw;
 }

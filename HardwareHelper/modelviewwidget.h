@@ -75,11 +75,21 @@ private slots:
     void iConfGraphicCard();
     void iConfRAM();
     void iConfCooler();
-    //void iConfHDD();
+    void iConfHDD();
     void iConfSSD();
     void iConfPower();
     void iConfCase();
     void savetxt();
+    void add();
+    void dConfProcessor();
+    void dConfMotherBoard();
+    void dConfGraphicCard();
+    void dConfRAM();
+    void dConfCooler();
+    void dConfHDD();
+    void dConfSSD();
+    void dConfPower();
+    void dConfCase();
 public:
     ModelViewWidget( QWidget* parent = 0 );
     ~ModelViewWidget();
