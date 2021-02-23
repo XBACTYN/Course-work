@@ -125,8 +125,6 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
 
     mainLayout->addLayout(horLay);
 
-
-
     resize( 1200, 800 );
 
 }
