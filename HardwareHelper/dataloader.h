@@ -37,12 +37,10 @@ public:
         QString PowerForm;//параметр для БП и корпуса
         QString DDRtype;//Параметр для проца,материнки,ОЗУ
         int MaxFreqRAM;
-        //QString SATA;//Параметр для материнки,hdd,ssd,блока питания
         int M2;//параметр для материнки,ssd
         int TDP;//параметр для процессора,кулера
         int MinPower;//Общий параметр,основывается на видеокарте. так же hdd и ssd
-        //int PCIE
-        //int VGA,HDMI/......
+
     };
 
     struct Config{

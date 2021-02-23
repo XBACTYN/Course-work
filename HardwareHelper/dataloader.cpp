@@ -727,13 +727,9 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
     demand.Socket="";
     demand.TDP=0;
 
-
     int surplus=0;
     int checkIndex=0;
     FindAllVariants(minsum,maxsum,type);
-
-
-    qDebug()<<"TYPE of CONFIG"<<type;
 
     //МАТЕРИНКА
     bool compatible=false;
@@ -765,7 +761,6 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
     {
         if(availableIndexes[2].size()==1)
         {
-            qDebug()<<"выбрана нулевая видюха";
             checkIndex=0;
         }
         else
@@ -789,7 +784,6 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
         if(!compatible)
            { if(surplus!=0&&minSum[0]!=0&&availableIndexes[0].size()==1)
                 {
-                qDebug()<<"correct processor min max";
                 maxSum[0]+=surplus;
                 surplus=0;
                 minSum[0]=0;
@@ -861,14 +855,10 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
         {
             if(surplus!=0&&minSum[6]!=0&&availableIndexes[6].size()==1)
             {
-                qDebug()<<"correct ssd min max";
-                qDebug()<<"surplus"<<surplus;
                 maxSum[6]+=surplus;
-                qDebug()<<"max sum ssd"<<maxSum[6];
                 surplus=0;
                 minSum[6]=0;
                 GetMinMaxIndexes(arrSSDs,minSum[6],maxSum[6],6);
-                qDebug()<<availableIndexes[6];
             }
             else
                 availableIndexes[6].remove(checkIndex);
@@ -890,14 +880,10 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
         {
             if(surplus!=0&&minSum[7]!=0&&availableIndexes[7].size()==1)
             {
-                qDebug()<<"correct power min max";
-                qDebug()<<"surplus"<<surplus;
                 maxSum[7]+=surplus;
-                qDebug()<<"max sum power"<<maxSum[7];
                 surplus=0;
                 minSum[7]=0;
                 GetMinMaxIndexes(arrPowers,minSum[7],maxSum[7],7);
-                qDebug()<<availableIndexes[7];
             }
             else
                 availableIndexes[7].remove(checkIndex);
@@ -920,14 +906,10 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
         {
             if(surplus!=0&&minSum[8]!=0&&availableIndexes[8].size()==1)
             {
-                qDebug()<<"correct case min max";
-                qDebug()<<"surplus"<<surplus;
                 maxSum[8]+=surplus;
-                qDebug()<<"max sum case"<<maxSum[8];
                 surplus=0;
                 minSum[8]=0;
                 GetMinMaxIndexes(arrCases,minSum[8],maxSum[8],8);
-                qDebug()<<availableIndexes[8];
             }
             else
                 availableIndexes[8].remove(checkIndex);
