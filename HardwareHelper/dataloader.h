@@ -39,9 +39,6 @@ public:
         int MaxFreqRAM;
         //QString SATA;//Параметр для материнки,hdd,ssd,блока питания
         int M2;//параметр для материнки,ssd
-        int SATA;
-        int USB2;//параметр для материнки,корпуса
-        int USB3;//параметр для материнки,корпуса
         int TDP;//параметр для процессора,кулера
         int MinPower;//Общий параметр,основывается на видеокарте. так же hdd и ssd
         //int PCIE
@@ -82,6 +79,7 @@ public:
     QVector<Power>arrPowers;
     QVector<Case>arrCases;
     QVector<int>gamerConfig{26,9,41,8,2,0,6,4,4};
+    QVector<int>officeConfig{42,15,0,12,5,14,0,6,6};
     QVector<int>maxSum{0,0,0,0,0,0,0,0,0};
     QVector<int>minSum{0,0,0,0,0,0,0,0,0};
     QVector<QVector<int>>availableIndexes;
@@ -102,20 +100,20 @@ public:
     void Parse1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QVector<QUrl>>& u2array,int  pages);
     void Regex1lvl(int i,QString & Html,QVector<QRegExp>&vectorReg,QVector<QUrl>&tempVector);
     void Regex2lvl(int i,QString & Html,QVector<QRegExp>&vectorReg2,QVector<QString> &data);
-    void ClearElArrays();
 
     template<class T>
     int BinaryIndex(QVector<T>&arr,int size,const int value);
     void FindAllVariants(int minsum,int maxsum,int configType);
     template<class T>
-    void GetMaxMinIndexes(QVector<T>&arr,int minsum,int sum,int i,int type);
+    void GetMinMaxIndexes(QVector<T>&arr,int minsum,int sum,int i);
     void SortFromCheapest();
     void SortFromMostExpensive();
     void ClearConfig();
     bool ChooseGraphicCard(int index,int sum,int &surplus);
-    bool ChooseProcessor(int index,int sum,int &surplus);
+    bool ChooseProcessor(int index,int sum,int &surplus,int type);
     bool ChooseMotherBoard(int index,int sum,int &surplus);
     bool ChooseRAM(int index,int sum,int & surplus);
+    bool ChooseHDD(int index,int sum,int & surplus);
     bool ChooseSSD(int index,int sum,int & surplus);
     bool ChooseCooler(int index,int sum,int &surplus);
     bool ChoosePower(int index,int sum,int & surplus);
