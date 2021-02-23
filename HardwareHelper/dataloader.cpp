@@ -39,6 +39,7 @@ DataLoader::DataLoader()
         pages[i]=3;
 
     pages[0]=2;
+    pages[1]=1;
     pages[3]=2;
     pages[4]=1;
     pages[5]=1;
@@ -465,14 +466,14 @@ bool DataLoader::ChooseGraphicCard(int index,int sum, int &surplus)
 {
    qDebug()<<"ChooseGraphicCard()";
    bool compatible=false;
-   if(arrGraphicsCards[index].getPrice()>0.5*sum)
-   {
+   //if(arrGraphicsCards[index].getPrice()>0.5*sum)
+   //{
    config.graphicscard=arrGraphicsCards[index];
    demand.MinPower=config.graphicscard.getPower();
    demand.Price+=config.graphicscard.getPrice();
    surplus+=sum-config.graphicscard.getPrice();
    compatible=true;
-    }
+   // }
    return compatible;
 }
 bool DataLoader::ChooseProcessor(int index,int sum, int &surplus)
@@ -481,19 +482,18 @@ bool DataLoader::ChooseProcessor(int index,int sum, int &surplus)
     bool compatible=false;
     if(arrProcessors[index].getSocket()==demand.Socket)
         {
-          if(arrProcessors[index].getCores()>=6)
-            {
+
                 if((demand.DDRtype=="DDR3"&&arrProcessors[index].getMaxMemFreqDDR3()!=0))
                 demand.FreqDDR3=arrProcessors[index].getMaxMemFreqDDR3();
                 if((demand.DDRtype=="DDR4"&&arrProcessors[index].getMaxMemFreqDDR4()!=0))
                            demand.FreqDDR4=arrProcessors[index].getMaxMemFreqDDR4();
             config.processor=arrProcessors[index];
-            demand.Socket=config.processor.getSocket();
+            //demand.Socket=config.processor.getSocket();
             demand.TDP=config.processor.getTDP();
             demand.Price+=config.processor.getPrice();
             surplus+=sum-config.processor.getPrice();
             compatible=true;
-            }
+
          }
 
     return compatible;
@@ -668,33 +668,22 @@ bool DataLoader::ChooseCase(int index,int sum, int &surplus)
 template<class T>
 void DataLoader::GetMaxMinIndexes(QVector<T> & arr,int min,int max,int i,int type)
 {
+    SortFromCheapest();
     QVector<int>temp;
     int minIndex;
     int maxIndex;
-    switch(type)
-    {
-    case 0:
-    {
-        maxSum[i]=(max*gamerConfig[i])/100;
-        minSum[i]=(min*gamerConfig[i])/100;
-    }
-    case 1:
-    {
-       // maxSum[i]=(max*officeConfig[i])/100;
-       // minSum[i]=(min*officeConfig[i])/100;
-    }
-    case 2:
-    {
-        // maxSum[i]=(max*balanceConfig[i])/100;
-        // minSum[i]=(min*balanceConfig[i])/100;
-    }
-    }
+    maxSum[i]=max;
+    minSum[i]=min;
+
+
         maxIndex=BinaryIndex(arr,arr.size(),maxSum[i]);
         minIndex=BinaryIndex(arr,arr.size(),minSum[i]);
         if(minIndex!=0)
             --minIndex;
+        qDebug()<<minIndex;
         if(maxIndex!=0)
             --maxIndex;
+        qDebug()<<maxIndex;
         for(int j=minIndex;j<=maxIndex;++j)
         {
             temp.push_back(j);
@@ -704,7 +693,9 @@ void DataLoader::GetMaxMinIndexes(QVector<T> & arr,int min,int max,int i,int typ
                 {
                 qDebug()<<"last elem in availIndex";
                 for(int j=0;j<temp.size();++j)
-                    availableIndexes[i].push_back(temp[j]);
+                   { availableIndexes[i].push_back(temp[j]);
+                    qDebug()<<"temp j"<<temp[j];
+                }
                 availableIndexes[i].remove(0);
                 }
                 else availableIndexes.push_back(temp);
@@ -717,15 +708,20 @@ void DataLoader::GetMaxMinIndexes(QVector<T> & arr,int min,int max,int i,int typ
 }
 void DataLoader::FindAllVariants(int min,int max, int configType)
 {
-    GetMaxMinIndexes(arrProcessors,min,max,0,configType);
-    GetMaxMinIndexes(arrMotherboards,min,max,1,configType);
-    GetMaxMinIndexes(arrGraphicsCards,min,max,2,configType);
-    GetMaxMinIndexes(arrRAMs,min,max,3,configType);
-    GetMaxMinIndexes(arrCoolers,min,max,4,configType);
-    GetMaxMinIndexes(arrHDDs,min,max,5,configType);
-    GetMaxMinIndexes(arrSSDs,min,max,6,configType);
-    GetMaxMinIndexes(arrPowers,min,max,7,configType);
-    GetMaxMinIndexes(arrCases,min,max,8,configType);
+    for(int i=0;i<9;++i)
+    {
+        maxSum[i]=(max*gamerConfig[i])/100;
+        minSum[i]=(min*gamerConfig[i])/100;
+    }
+    GetMaxMinIndexes(arrProcessors,minSum[0],maxSum[0],0,configType);
+    GetMaxMinIndexes(arrMotherboards,minSum[1],maxSum[1],1,configType);
+    GetMaxMinIndexes(arrGraphicsCards,minSum[2],maxSum[2],2,configType);
+    GetMaxMinIndexes(arrRAMs,minSum[3],maxSum[3],3,configType);
+    GetMaxMinIndexes(arrCoolers,minSum[4],maxSum[4],4,configType);
+    GetMaxMinIndexes(arrHDDs,minSum[5],maxSum[5],5,configType);
+    GetMaxMinIndexes(arrSSDs,minSum[6],maxSum[6],6,configType);
+    GetMaxMinIndexes(arrPowers,minSum[7],maxSum[7],7,configType);
+    GetMaxMinIndexes(arrCases,minSum[8],maxSum[8],8,configType);
 
                    for(int i=0;i<9;++i)
                        qDebug()<<availableIndexes[i];
@@ -756,6 +752,8 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
     int checkIndex=0;
     SortFromCheapest();
     FindAllVariants(minsum,maxsum,type);
+
+    //МАТЕРИНКА
     bool compatible=false;
     while(!compatible)
     {
@@ -765,40 +763,21 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
         }
         else
         {
-            if(availableIndexes[1].size()==1/*&&minSum[1]==0*/)
+            if(availableIndexes[1].size()==1)
             {
             checkIndex=0;
             }
             else
-                checkIndex=rand()%(availableIndexes[1].size()-1);
+                checkIndex=rand()%(availableIndexes[1].size());
             compatible=ChooseMotherBoard(availableIndexes[1][checkIndex],maxSum[1],surplus);
-            if(!compatible)
-            {  /* if(availableIndexes[1].size()==1&&minSum[1]!=0)
-                {
-                    GetMaxMinIndexes(arrMotherboards,0,maxSum[1],1,type);
-                }
-                else
-                */
+            if(!compatible) 
                 availableIndexes[1].remove(checkIndex);
-            }
+
 
         }
 
     }
-    compatible=false;
-    while(!compatible&&maxSum[0]>arrProcessors[0].getPrice()&&availableIndexes[0].size()!=0)
-    {
-        if(availableIndexes[0].size()==1)
-        {
-            checkIndex=0;
-        }
-        else
-        checkIndex=rand()%(availableIndexes[0].size()-1);
-        compatible=ChooseProcessor(availableIndexes[0][checkIndex],maxSum[0],surplus);
-        if(!compatible)
-            availableIndexes[0].remove(checkIndex);
-
-    }
+    //ВИДЕОКАРТА
     compatible=false;
     while(!compatible&&maxSum[2]>arrGraphicsCards[0].getPrice()&&availableIndexes[2].size()!=0)
     {
@@ -808,12 +787,40 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
             checkIndex=0;
         }
         else
-        checkIndex=rand()%(availableIndexes[2].size()-1);
+        checkIndex=rand()%(availableIndexes[2].size());
         compatible=ChooseGraphicCard(availableIndexes[2][checkIndex],maxSum[2],surplus);
         if(!compatible)
             availableIndexes[2].remove(checkIndex);
 
     }
+    //ПРОЦЕССОР
+    compatible=false;
+    while(!compatible&&maxSum[0]>arrProcessors[0].getPrice()&&availableIndexes[0].size()!=0)
+    {
+        if(availableIndexes[0].size()==1)
+        {
+            checkIndex=0;
+        }
+        else
+        checkIndex=rand()%(availableIndexes[0].size());
+        compatible=ChooseProcessor(availableIndexes[0][checkIndex],maxSum[0],surplus);
+        if(!compatible)
+           { if(surplus!=0&&minSum[0]!=0&&availableIndexes[0].size()==1)
+                {
+                qDebug()<<"correct processor min max";
+                maxSum[0]+=surplus;
+                surplus=0;
+                minSum[0]=0;
+                GetMaxMinIndexes(arrProcessors,minSum[0],maxSum[0],0,type);
+                }
+            else
+                {
+                availableIndexes[0].remove(checkIndex);
+                }
+        }
+
+    }
+    //ОПЕРАТИВКА
     compatible=false;
     while(!compatible&&maxSum[3]>arrRAMs[0].getPrice()&&availableIndexes[3].size()!=0)
     {
@@ -822,12 +829,13 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
             checkIndex=0;
         }
         else
-        checkIndex=rand()%(availableIndexes[3].size()-1);
+        checkIndex=rand()%(availableIndexes[3].size());
         compatible=ChooseRAM(availableIndexes[3][checkIndex],maxSum[3],surplus);
         if(!compatible)
             availableIndexes[3].remove(checkIndex);
 
     }
+    //Кулер
     compatible=false;
     while(!compatible&&maxSum[4]>arrCoolers[0].getPrice()&&availableIndexes[4].size()!=0)
     {
@@ -836,12 +844,14 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
             checkIndex=0;
         }
         else
-        checkIndex=rand()%(availableIndexes[4].size()-1);
+        checkIndex=rand()%(availableIndexes[4].size());
         compatible=ChooseCooler(availableIndexes[4][checkIndex],maxSum[4],surplus);
         if(!compatible)
             availableIndexes[4].remove(checkIndex);
 
     }
+    //ПРОПУЩЕН HDD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //ССД
     compatible=false;
     while(!compatible&&maxSum[6]>arrSSDs[0].getPrice()&&availableIndexes[6].size()!=0)
     {
@@ -850,48 +860,82 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
             checkIndex=0;
         }
         else
-            checkIndex=rand()%(availableIndexes[6].size());//                     УБРАЛ size-1
+            checkIndex=rand()%(availableIndexes[6].size());//
         compatible=ChooseSSD(availableIndexes[6][checkIndex],maxSum[6],surplus);
         if(!compatible)
-            availableIndexes[6].remove(checkIndex);
+        {
+            if(surplus!=0&&minSum[6]!=0&&availableIndexes[6].size()==1)
+            {
+                qDebug()<<"correct ssd min max";
+                qDebug()<<"surplus"<<surplus;
+                maxSum[6]+=surplus;
+                qDebug()<<"max sum ssd"<<maxSum[6];
+                surplus=0;
+                minSum[6]=0;
+                GetMaxMinIndexes(arrSSDs,minSum[6],maxSum[6],6,type);
+                qDebug()<<availableIndexes[6];
+            }
+            else
+                availableIndexes[6].remove(checkIndex);
+        }
 
     }
+    //БЛОК ПИТАНИЯ
     compatible=false;
-    while(!compatible&&maxSum[7]>arrPowers[0].getPrice()&&availableIndexes[7].size()!=0)
+    while(!compatible&&availableIndexes[7].size()!=0)
     {
         if(availableIndexes[7].size()==1)
         {
             checkIndex=0;
         }
         else
-        checkIndex=rand()%(availableIndexes[7].size()-1);
+        checkIndex=rand()%(availableIndexes[7].size());
         compatible=ChoosePower(availableIndexes[7][checkIndex],maxSum[7],surplus);
         if(!compatible)
-            availableIndexes[7].remove(checkIndex);
+        {
+            if(surplus!=0&&minSum[7]!=0&&availableIndexes[7].size()==1)
+            {
+                qDebug()<<"correct power min max";
+                qDebug()<<"surplus"<<surplus;
+                maxSum[7]+=surplus;
+                qDebug()<<"max sum power"<<maxSum[7];
+                surplus=0;
+                minSum[7]=0;
+                GetMaxMinIndexes(arrPowers,minSum[7],maxSum[7],7,type);
+                qDebug()<<availableIndexes[7];
+            }
+            else
+                availableIndexes[7].remove(checkIndex);
+        }
 
     }
+
+    //КОРПУС
     compatible=false;
-    while(!compatible&&maxSum[8]>arrCases[0].getPrice()&&availableIndexes[8].size()!=0)
+    while(!compatible&&availableIndexes[8].size()!=0)
     {
         if(availableIndexes[8].size()==1)
         {
             checkIndex=0;
         }
         else
-        checkIndex=rand()%(availableIndexes[8].size()-1);
+        checkIndex=rand()%(availableIndexes[8].size());
         compatible=ChooseCase(availableIndexes[8][checkIndex],maxSum[8],surplus);
         if(!compatible)
         {
-            if(surplus!=0&&minSum[0]!=0&&availableIndexes[8].size()==1)
+            if(surplus!=0&&minSum[8]!=0&&availableIndexes[8].size()==1)
             {
                 qDebug()<<"correct case min max";
+                qDebug()<<"surplus"<<surplus;
                 maxSum[8]+=surplus;
+                qDebug()<<"max sum case"<<maxSum[8];
                 surplus=0;
                 minSum[8]=0;
                 GetMaxMinIndexes(arrCases,minSum[8],maxSum[8],8,type);
+                qDebug()<<availableIndexes[8];
             }
             else
-            availableIndexes[8].remove(checkIndex);
+                availableIndexes[8].remove(checkIndex);
         }
 
     }

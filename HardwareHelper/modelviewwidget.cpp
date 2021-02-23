@@ -141,7 +141,9 @@ ModelViewWidget::~ModelViewWidget()
 void ModelViewWidget::load_data()
 { buttonload->setEnabled(false);
     QMessageBox msg;
-    msg.setText("Загрузка данных занимает ≈ 12 минут");
+    msg.setText("Загрузка данных с e-katalog.ru занимает ≈ 25 минут\nЕсли по прошествии 8 минут прогресс не виден визуально,\n"
+                "IP адрес заблокирован на время из-за множественных запросов.\n"
+                "В таком случае используйте VPN.");
     msg.exec();
     //loader->ClearElArrays();
     for(int i=0;i<9;++i)// i<9!
