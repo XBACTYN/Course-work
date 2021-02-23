@@ -1,11 +1,18 @@
 #pragma once
 #ifndef ELEMENT_H
 #define ELEMENT_H
-#include <QTextStream>
+#include <QString>
+#include <QUrl>
 class Element{
+
+
 public:
-    QString _modArticle;
-   // QTextStream out(stdout);//
+    int price;
+    QUrl url; //замена на string
+    QString name;
+    int arrsize;
+    virtual QVector<QString>GetNames()=0;
+    virtual QVector<QString>GetValues()=0;
 
     Element(){}
    // ~Element(){}
