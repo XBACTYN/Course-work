@@ -281,7 +281,7 @@ void ModelViewWidget::load_data()
 }
 void ModelViewWidget::generate()
 {
-   if(spinprice1->value()<=spinprice2->value())
+   if(spinprice1->value()<spinprice2->value())
     {
     loader->GenerateConfig(spinprice1->value(),spinprice2->value(),combotype->currentIndex());
     arrline[0]->setText(loader->config.processor.getName());
@@ -305,7 +305,10 @@ void ModelViewWidget::tab_clicked(int index)
     tabIndex=index;
 
 }
+void ModelViewWidget::AddElement(QVector<QString>& data,int type)
+{
 
+}
 void ModelViewWidget::add()
 {
     qDebug()<<"tabIndex: "<<tabIndex;
@@ -319,8 +322,11 @@ void ModelViewWidget::add()
             qDebug()<<"Selected elem "<<form->infomodel->ptr[index.row()]->name;
             QVector<QString> temp(form->infomodel->ptr[index.row()]->GetValues());
             temp.insert(1,temp[0]);
+            if(tabIndex==0)
+                temp.insert(4,"");
             qDebug()<<temp;
             compatible=loader->CheckCompatibility(temp,tabIndex,feedback);
+            qDebug()<<"compatible checked";
             if(!compatible)
             {
                 QMessageBox msg("Информация",
@@ -333,10 +339,25 @@ void ModelViewWidget::add()
                 if(ret==QMessageBox::Yes)
                 {
                     qDebug()<<"add elem";
+                    switch(tabIndex)
+                    {
+                    case 0:
+                    {
+                        dConfProcessor();
+                        loader->config.processor=Processor(temp);
+                        loader->demand.Price+=loader->config.processor.getPrice();
+                        arrline[0]->setText(loader->config.processor.getName());
+                        priceline->setText(QString::number(loader->demand.Price));
+                        break;
+                    }
+
+                    }
                 }
             }
             else{
                 qDebug()<<"add el";
+                switch(tabIndex)
+
             }
             }
 }
@@ -458,6 +479,7 @@ void ModelViewWidget::iConfCase()
 }
 void ModelViewWidget::dConfProcessor()
 {
+    qDebug()<<"in dConfProcessor";
     loader->demand.Price-=loader->config.processor.getPrice();
     loader->demand.FreqDDR3=0;
     loader->demand.FreqDDR4=0;

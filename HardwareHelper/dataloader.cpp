@@ -44,7 +44,7 @@ DataLoader::DataLoader()
     pages[4]=1;
     pages[5]=1;
     pages[7]=1;
-
+    ClearConfig();
     srand(time(0));
 
 };
@@ -650,48 +650,67 @@ bool DataLoader::CheckCompatibility(QVector<QString> &newEl,int typeEl,QString& 
 
             Processor el(newEl);
             qDebug()<<"check processor";
+            qDebug()<<el.name<<el.price<<el.getSocket();
+            qDebug()<<"01";
             if(config.motherboard.getSocket()!=""&&config.motherboard.getSocket()!=el.getSocket())
                {
+                    qDebug()<<"1";
                     compatible=false;
                     feedback+="-Материнской платой:\n"
                              "Сокет Мат.платы: "+config.motherboard.getSocket()+"\tПротив "+el.getSocket()+"\n";
                 }
+            qDebug()<<"02";
             if((config.ram.getMemType()=="DDR3"&&el.getMaxMemFreqDDR3()==0)||(config.ram.getMemType()=="DDR4"&&el.getMaxMemFreqDDR4()==0))
             {
+                qDebug()<<"2";
                 compatible=false;
                 feedback+="-Оперативной памятью:\n"
                           "Тип Оперативной памяти: "+config.ram.getMemType()+"\tМакс.частота DDR4: "+el.getMaxMemFreqDDR4()+" Макс.частота DDR3: "+el.getMaxMemFreqDDR3()+"\n";
 
             }
+            qDebug()<<"03";
             if(config.ram.getMemType()=="DDR4"&&el.getMaxMemFreqDDR4()!=0&&config.ram.getMemFreq()>(int)el.getMaxMemFreqDDR4())
             {
+                qDebug()<<"3";
                 compatible=false;
                 feedback+="-Оперативной памятью:\n"
                           "Частота Оперативной памяти DDR4: "+config.ram.getMemFreq()+"\tПротив "+el.getMaxMemFreqDDR4()+"\n";
             }
+            qDebug()<<"04";
             if(config.ram.getMemType()=="DDR3"&&el.getMaxMemFreqDDR3()!=0&&config.ram.getMemFreq()>(int)el.getMaxMemFreqDDR3())
             {
+                qDebug()<<"4";
                 compatible=false;
                 feedback+="-Оперативной памятью:\n"
                           "Частота Оперативной памяти DDR3: "+config.ram.getMemFreq()+"\tПротив "+el.getMaxMemFreqDDR3()+"\n";
             }
+            qDebug()<<"05";
             if(config.cooler.getTDP()!=0&&el.getTDP()!=0&&config.cooler.getTDP()<el.getTDP())
             {
+                qDebug()<<"5";
                 compatible=false;
                 feedback+="-Кулером:\n"
                           "Отвод тепла кулера: "+QString::number(config.cooler.getTDP())+"\tПротив Тепловыделения "+el.getTDP()+"\n";
             }
-            if(config.cooler.getName()!=""&&!CheckCoolerSoket(el.getSocket(),config.cooler.getSockets()))
+            qDebug()<<"06";
+            if(config.cooler.getName()!="")
             {
-                compatible=false;
-                feedback+="-Кулером\n"
-                          "Сокет процессора не подходит к поддерживающимся сокетам кулера\n";
+                qDebug()<<"in 6";
+                    if(!CheckCoolerSoket(el.getSocket(),config.cooler.getSockets()))
+                {
+                    qDebug()<<"6";
+                    compatible=false;
+                    feedback+="-Кулером\n"
+                              "Сокет процессора не подходит к поддерживающимся сокетам кулера\n";
+                }
             }
-
+         qDebug("case 0 end");
+         break;
         }
+
     case 1:
     {
-
+        qDebug()<<"mother";
         MotherBoard el(newEl);
         qDebug()<<"check mother";
         if(config.processor.getSocket()!=""&&el.getSocket()!=0&&el.getSocket()!=config.processor.getSocket())
@@ -724,6 +743,7 @@ bool DataLoader::CheckCompatibility(QVector<QString> &newEl,int typeEl,QString& 
             feedback+="-Корпусом:\n"
                       "Форм-фактор Мат.платы в корпусе: "+config.box.getMotherForm()+"\t Против "+el.getForm()+"\n";
         }
+        break;
     }
     case 2:
         {
@@ -736,6 +756,7 @@ bool DataLoader::CheckCompatibility(QVector<QString> &newEl,int typeEl,QString& 
                 feedback+="-Блоком питания:\n"
                           "Мощность блока питания: "+QString::number(config.power.getPower())+"\t Против требуемой "+el.getPower()+"\n";
             }
+            break;
         }
     case 3:
     {
@@ -777,28 +798,31 @@ bool DataLoader::CheckCompatibility(QVector<QString> &newEl,int typeEl,QString& 
             feedback+="-Материнской платой:\n"
                       "Макс частота ОП у мат.платы: "+QString::number(config.motherboard.getMaxFreq())+"\tПротив "+el.getMemFreq()+"\n";
         }
-
+        break;
     }
     case 4:
     {
         Cooler el(newEl);
         qDebug()<<"check cooler";
-        if(config.processor.getSocket()!=""&&!CheckCoolerSoket(config.processor.getSocket(),el.getSockets()))
-        {
-            compatible=false;
-            feedback+="-Процессором:\n"
-                      "Сокет процессора не подходит к поддерживающимся сокетам кулера.\n";
-        }
+        if(config.processor.getSocket()!="")
+                if(!CheckCoolerSoket(config.processor.getSocket(),el.getSockets()))
+                {
+                    compatible=false;
+                    feedback+="-Процессором:\n"
+                              "Сокет процессора не подходит к поддерживающимся сокетам кулера.\n";
+                }
         if(config.processor.getTDP()!=0&&config.processor.getTDP()>el.getTDP())
         {
             compatible=false;
             feedback+="-Процессором:\n"
                       "Тепловыделение процессора: "+QString::number(config.processor.getTDP())+"\tПротив Теплоотвода "+el.getTDP()+"\n";
         }
+        break;
     }
     case 5:
     {
         compatible=true;
+        break;
     }
     case 6:
     {
@@ -810,6 +834,7 @@ bool DataLoader::CheckCompatibility(QVector<QString> &newEl,int typeEl,QString& 
             feedback+="-Материнской платой\n"
                       "У материнской платы отсутствует разъем M.2\n";
         }
+        break;
     }
     case 7:
     {
@@ -821,6 +846,7 @@ bool DataLoader::CheckCompatibility(QVector<QString> &newEl,int typeEl,QString& 
             feedback+="-Видеокартой\n"
                       "Требуемая мощность БП для видеокарты: "+QString::number(config.graphicscard.getPower())+"\tПротив "+el.getPower()+"\n";
         }
+        break;
     }
     case 8:
     {
@@ -832,9 +858,11 @@ bool DataLoader::CheckCompatibility(QVector<QString> &newEl,int typeEl,QString& 
             feedback+="-Материнской платой\n"
                       "Форм фактор мат.платы: "+config.motherboard.getForm()+"\t Против "+el.getMotherForm();
         }
+        break;
     }
 
     }
+    qDebug("end func");
     if(compatible)
         feedback="";
     return compatible;
