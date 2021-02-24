@@ -638,6 +638,120 @@ bool DataLoader::ChooseCase(int index,int sum, int &surplus)
     return compatible;
 
 }
+bool DataLoader::CheckCompatibility(QVector<QString> &newEl,int typeEl,QString& feedback)
+{
+    bool compatible=true;
+    feedback="Элемент не совместим c\n";
+    switch(typeEl)
+    {
+        case 0:
+        {
+            Processor el(newEl);
+            if(config.motherboard.getSocket()!=""&&config.motherboard.getSocket()!=el.getSocket())
+               {
+                    compatible=false;
+                    feedback+="-Материнской платой:\n"
+                             "Сокет Мат.платы: "+config.motherboard.getSocket()+"\tПротив "+el.getSocket()+"\n";
+                }
+            if((config.ram.getMemType()=="DDR3"&&el.getMaxMemFreqDDR3()==0)||(config.ram.getMemType()=="DDR4"&&el.getMaxMemFreqDDR4()==0))
+            {
+                compatible=false;
+                feedback+="-Оперативной памятью:\n"
+                          "Тип Оперативной памяти: "+config.ram.getMemType()+"\tМакс.частота DDR4: "+el.getMaxMemFreqDDR4()+" Макс.частота DDR3: "+el.getMaxMemFreqDDR3()+"\n";
+
+            }
+            if(config.ram.getMemType()=="DDR4"&&el.getMaxMemFreqDDR4()!=0&&config.ram.getMemFreq()>(int)el.getMaxMemFreqDDR4())
+            {
+                compatible=false;
+                feedback+="-Оперативной памятью:\n"
+                          "Частота Оперативной памяти DDR4: "+config.ram.getMemFreq()+"\tПротив "+el.getMaxMemFreqDDR4()+"\n";
+            }
+            if(config.ram.getMemType()=="DDR3"&&el.getMaxMemFreqDDR3()!=0&&config.ram.getMemFreq()>(int)el.getMaxMemFreqDDR3())
+            {
+                compatible=false;
+                feedback+="-Оперативной памятью:\n"
+                          "Частота Оперативной памяти DDR3: "+config.ram.getMemFreq()+"\tПротив "+el.getMaxMemFreqDDR3()+"\n";
+            }
+            if(config.cooler.getTDP()!=0&&el.getTDP()!=0&&config.cooler.getTDP()<el.getTDP())
+            {
+                compatible=false;
+                feedback+="-Кулером:\n"
+                          "Отвод тепла кулера: "+QString::number(config.cooler.getTDP())+"\tПротив Тепловыделения "+el.getTDP()+"\n";
+            }
+
+        }
+    case 1:
+    {
+        MotherBoard el(newEl);
+        if(config.processor.getSocket()!=""&&el.getSocket()!=0&&el.getSocket()!=config.processor.getSocket())
+        {
+            compatible=false;
+            feedback+="-Процессором:\n"
+                      "Сокет процессора: "+config.processor.getSocket()+"\tПротив "+el.getSocket()+"\n";
+        }
+        if((config.ram.getMemType()=="DDR4"&&el.getDDR4count()==0)||(config.ram.getMemType()=="DDR3"&&el.getDDR3count()==0))
+        {
+            compatible=false;
+            feedback+="-Оперативной памятью:\n"
+                      "Тип ОП: "+config.ram.getMemType()+"\t Количество планок для DDR4: "+el.getDDR4count()+" для DDR3: "+el.getDDR3count()+"\n";
+        }
+        if(config.ram.getMemFreq()!=0&&config.ram.getMemFreq()>el.getMaxFreq())
+        {
+            compatible=false;
+            feedback+="-Оперативной памятью:\n"
+                      "Частота ОП:"+config.ram.getMemFreq()+"\t Против максимальной "+el.getMaxFreq()+"\n";
+        }
+        if(el.getMaxMem()!=0&&config.ram.getSumMem()>el.getMaxMem())
+        {
+            compatible=false;
+            feedback+="-Оперативной памятью:\n"
+                      "Общее количество ОП: "+QString::number(config.ram.getSumMem())+"\t Против максимального "+el.getMaxMem()+"\n";
+        }
+        if(config.box.getMotherForm()!=""&&config.box.getMotherForm()!=el.getForm())
+        {
+            compatible=false;
+            feedback+="-Корпусом:\n"
+                      "Форм-фактор Мат.платы в корпусе: "+config.box.getMotherForm()+"\t Против "+el.getForm()+"\n";
+        }
+    }
+    case 2:
+        {
+            GraphicsCard el(newEl);
+            if(config.power.getPower()!=0&&el.getPower()!=0&&config.power.getPower()<el.getPower())
+            {
+                compatible=false;
+                feedback+="-Блоком питания:\n"
+                          "Мощность блока питания: "+QString::number(config.power.getPower())+"\t Против требуемой "+el.getPower()+"\n";
+            }
+        }
+    case 3:
+    {
+        RAM el(newEl);
+        if(config.processor.getName()!=""&&((el.getMemType()=="DDR3"&&config.processor.getMaxMemFreqDDR3()==0)||(el.getMemType()=="DDR4"&&config.processor.getMaxMemFreqDDR4()==0)))
+        {
+            compatible=false;
+            feedback+="-Процессором:\n"
+                      "У процессора макс.частота DDR4: "+QString::number(config.processor.getMaxMemFreqDDR4())+" DDR3: "+config.processor.getMaxMemFreqDDR3()+"\tТип памяти "+el.getMemType()+"\n";
+        }
+        if((config.processor.getMaxMemFreqDDR4()!=0&&(int)config.processor.getMaxMemFreqDDR4()<el.getMemFreq())||(config.processor.getMaxMemFreqDDR3()!=0&&(int)config.processor.getMaxMemFreqDDR3()<el.getMemFreq()))
+        {
+            compatible=false;
+            feedback+="-Процессором:\n"
+                      "У процессора макс частота : "+QString::number(config.processor.getMaxMemFreqDDR4())+"\tПротив "+el.getMemFreq()+"\n";
+        }
+        if(config.motherboard.getMaxMem()!=0&&config.motherboard.getMaxMem()<el.getSumMem())
+        {
+            compatible=false;
+            feedback+"-Материнской платой:\n"
+                     "Макс ОП у мат платы: "+config.motherboard.getMaxMem()+"\tПротив "+el.getSumMem()+"\n";
+        }
+    }
+
+    }
+    if(compatible)
+        feedback="";
+    return compatible;
+}
 template<class T>
 void DataLoader::GetMinMaxIndexes(QVector<T> & arr,int min,int max,int i)
 {

@@ -117,6 +117,7 @@ public:
     bool ChoosePower(int index,int sum,int & surplus);
     bool ChooseCase(int index,int sum,int & surplus);
     bool CheckCoolerSoket(QString findSocket,QString coolerSockets);
+    bool CheckCompatibility(QVector<QString>& newEl,int typeEl,QString & feedback);
     void GenerateConfig(int minsum,int maxsum,int type);
 
 };
