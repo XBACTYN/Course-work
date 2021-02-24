@@ -1,5 +1,5 @@
 #include "cooler.h"
-
+#include <QtDebug>
 int Cooler::getPrice() const
 {
     return price;
@@ -122,17 +122,30 @@ Cooler::Cooler(QVector<QString> &data)
 
 void Cooler::RepairSockets(QString &str)
 {
-    QRegExp reg("R>(.{3,20})(?:/|<B)");
-    QString nstr="<BR>";
-    nstr+=str;
-    nstr+="<BR>";
-    str.clear();
-    int lastPos = 0;
-    while( ( lastPos = reg.indexIn( nstr, lastPos ) ) != -1 )
+    //Проверка на готовый список
+    QRegExp test("(<B)");
+    int lastPos=0;
+    QString teststr="";
+    while((lastPos=test.indexIn(str,lastPos))!=-1)
     {
-        lastPos += reg.matchedLength();
+        lastPos+=test.matchedLength();
+        teststr+=test.cap(1);
+        qDebug()<<test.cap(1);
+    }
+    if(teststr!="")
+    {
+        QRegExp reg("R>(.{3,20})(?:/|<B)");
+        QString nstr="<BR>";
+        nstr+=str;
+        nstr+="<BR>";
+        str.clear();
+        lastPos = 0;
+        while( ( lastPos = reg.indexIn( nstr, lastPos ) ) != -1 )
+        {
+            lastPos += reg.matchedLength();
             str+=reg.cap(1)+" ";
 
+        }
     }
 }
 
