@@ -642,7 +642,7 @@ bool DataLoader::CheckCompatibility(QVector<QString> &newEl,int typeEl,QString& 
 {
     qDebug()<<"CheckCompatibility()";
     bool compatible=true;
-    feedback="Для добавления элемента нижмите ОК\nДля отмены добавления закройте окно\n\nЭлемент не совместим c\n";
+    feedback="Если хотите добавить несовместимый элемент,нажмите YES\nДля отмены добавления закройте окно\n\nЭлемент не совместим c\n";
     switch(typeEl)
     {
         case 0:
