@@ -279,7 +279,7 @@ void ModelViewWidget::load_data()
 }
 void ModelViewWidget::generate()
 {
-   if(spinprice1->value()<=spinprice2->value())
+   if(spinprice1->value()<spinprice2->value())
     {
     loader->GenerateConfig(spinprice1->value(),spinprice2->value(),combotype->currentIndex());
     arrline[0]->setText(loader->config.processor.getName());
@@ -303,11 +303,133 @@ void ModelViewWidget::tab_clicked(int index)
     tabIndex=index;
 
 }
-
+void ModelViewWidget::AddElement(QVector<QString>& data,int type)
+{
+    switch(type)
+    {
+    case 0:
+    {
+        dConfProcessor();
+        loader->config.processor=Processor(data);
+        loader->demand.Price+=loader->config.processor.getPrice();
+        arrline[0]->setText(loader->config.processor.getName());
+        priceline->setText(QString::number(loader->demand.Price));
+        break;
+    }
+    case 1:
+    {   dConfMotherBoard();
+        loader->config.motherboard=MotherBoard(data);
+        loader->demand.Price+=loader->config.motherboard.getPrice();
+        arrline[1]->setText(loader->config.motherboard.getName());
+        priceline->setText(QString::number(loader->demand.Price));
+        break;
+    }
+    case 2:
+    {   dConfGraphicCard();
+        loader->config.graphicscard=GraphicsCard(data);
+        loader->demand.Price+=loader->config.graphicscard.getPrice();
+        arrline[2]->setText(loader->config.graphicscard.getName());
+        priceline->setText(QString::number(loader->demand.Price));
+        break;
+    }
+    case 3:
+    {
+        dConfRAM();
+        loader->config.ram=RAM(data);
+        loader->demand.Price+=loader->config.ram.getPrice();
+        arrline[3]->setText(loader->config.ram.getName());
+        priceline->setText(QString::number(loader->demand.Price));
+        break;
+    }
+    case 4:
+    {
+        dConfCooler();
+        loader->config.cooler=Cooler(data);
+        loader->demand.Price+=loader->config.cooler.getPrice();
+        arrline[4]->setText(loader->config.cooler.getName());
+        priceline->setText(QString::number(loader->demand.Price));
+        break;
+    }
+    case 5:
+    {
+        dConfHDD();
+        loader->config.hdd=HDD(data);
+        loader->demand.Price+=loader->config.hdd.getPrice();
+        arrline[5]->setText(loader->config.hdd.getName());
+        priceline->setText(QString::number(loader->demand.Price));
+        break;
+    }
+    case 6:
+    {
+        dConfSSD();
+        loader->config.ssd=SSD(data);
+        loader->demand.Price+=loader->config.ssd.getPrice();
+        arrline[6]->setText(loader->config.ssd.getName());
+        priceline->setText(QString::number(loader->demand.Price));
+        break;
+    }
+    case 7:
+    {
+        dConfPower();
+        loader->config.power=Power(data);
+        loader->demand.Price+=loader->config.power.getPrice();
+        arrline[7]->setText(loader->config.power.getName());
+        priceline->setText(QString::number(loader->demand.Price));
+        break;
+    }
+    case 8:
+    {
+        dConfCase();
+        loader->config.box=Case(data);
+        loader->demand.Price+=loader->config.box.getPrice();
+        arrline[8]->setText(loader->config.box.getName());
+        priceline->setText(QString::number(loader->demand.Price));
+        break;
+    }
+    }
+}
 void ModelViewWidget::add()
 {
-    qDebug()<<combotype->currentIndex();
+    qDebug()<<"tabIndex: "<<tabIndex;
+    bool compatible=true;
+    QString feedback="";
+    TabForm * form=NULL;
+    form=(TabForm*)tabw->widget(tabIndex);
+        if(form->listptr->selectionModel()->hasSelection())
+          {
+            const QModelIndex index = form->listptr->selectionModel()->currentIndex();
+            qDebug()<<"Selected elem "<<form->infomodel->ptr[index.row()]->name;
+            QVector<QString> temp(form->infomodel->ptr[index.row()]->GetValues());
+            temp.insert(1,temp[0]);
+            if(tabIndex==0)
+                temp.insert(4,"");
+            qDebug()<<temp;
+            compatible=loader->CheckCompatibility(temp,tabIndex,feedback);
+            qDebug()<<"compatible checked";
+            if(!compatible)
+            {
+                QMessageBox msg("Информация",
+                                feedback,
+                                QMessageBox::Information,
+                                QMessageBox::Yes,
+                                QMessageBox::No,
+                                QMessageBox::Cancel | QMessageBox::Escape);
+                int ret=msg.exec();
+                if(ret==QMessageBox::Yes)
+                {
+                    qDebug()<<"add elem";
+                    AddElement(temp,tabIndex);
+
+                }
+            }
+            else
+            {
+                qDebug()<<"add el";
+                AddElement(temp,tabIndex);
+            }
+          }
 }
+
 
 void ModelViewWidget::get_info()
 {
@@ -426,6 +548,7 @@ void ModelViewWidget::iConfCase()
 }
 void ModelViewWidget::dConfProcessor()
 {
+    qDebug()<<"in dConfProcessor";
     loader->demand.Price-=loader->config.processor.getPrice();
     loader->demand.FreqDDR3=0;
     loader->demand.FreqDDR4=0;

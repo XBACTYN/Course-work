@@ -90,6 +90,7 @@ private slots:
     void dConfSSD();
     void dConfPower();
     void dConfCase();
+    void AddElement(QVector<QString>&data,int type);
 public:
     ModelViewWidget( QWidget* parent = 0 );
     ~ModelViewWidget();

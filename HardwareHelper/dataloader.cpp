@@ -44,7 +44,7 @@ DataLoader::DataLoader()
     pages[4]=1;
     pages[5]=1;
     pages[7]=1;
-
+    ClearConfig();
     srand(time(0));
 
 };
@@ -533,8 +533,8 @@ bool DataLoader::CheckCoolerSoket(QString find,QString list)
     QString socket2="";
     QString isEmpty1="";
     QString isEmpty2="";
-    //qDebug()<<"socket on processor"<<find;
-   // qDebug()<<"cooler sockets"<<list;
+    qDebug()<<"socket on processor"<<find;
+    qDebug()<<"cooler sockets"<<list;
     int lastPos = 0;
 
         while( ( lastPos = amd.indexIn( find, lastPos ) ) != -1 )
@@ -548,7 +548,7 @@ bool DataLoader::CheckCoolerSoket(QString find,QString list)
             lastPos += intel.matchedLength();
             socket2=intel.cap( 1 );
         }
-    //qDebug()<<"socket1"<<socket1<<"socket2"<<socket2;
+    qDebug()<<"socket1"<<socket1<<"socket2"<<socket2;
     if(socket1!="")
     {
         QRegExp socket("("+socket1+")");
@@ -557,7 +557,7 @@ bool DataLoader::CheckCoolerSoket(QString find,QString list)
         {
             lastPos+=socket.matchedLength();
             isEmpty2=socket.cap(1);
-            //qDebug()<<"isEmpty2:"<<isEmpty2<<"socket cap"<<socket.cap(1);
+            qDebug()<<"isEmpty2:"<<isEmpty2<<"socket cap"<<socket.cap(1);
         }
 
 
@@ -570,10 +570,10 @@ bool DataLoader::CheckCoolerSoket(QString find,QString list)
         {
             lastPos+=socket.matchedLength();
             isEmpty2=socket.cap(1);
-            //qDebug()<<"isEmpty2:"<<isEmpty2<<"socket cap"<<socket.cap(1);
+            qDebug()<<"isEmpty2:"<<isEmpty2<<"socket cap"<<socket.cap(1);
         }
     }
-   // qDebug()<<"1st empty"<<isEmpty1<<"2nd empty"<<isEmpty2;
+    qDebug()<<"1st empty"<<isEmpty1<<"2nd empty"<<isEmpty2;
     if(isEmpty1!=""||isEmpty2!="")
         compatible=true;
     return compatible;
@@ -637,6 +637,216 @@ bool DataLoader::ChooseCase(int index,int sum, int &surplus)
         }
     return compatible;
 
+}
+bool DataLoader::CheckCompatibility(QVector<QString> &newEl,int typeEl,QString& feedback)
+{
+    qDebug()<<"CheckCompatibility()";
+    bool compatible=true;
+    feedback="Если хотите добавить несовместимый элемент,нажмите YES\nДля отмены добавления закройте окно\n\nЭлемент не совместим c\n";
+    switch(typeEl)
+    {
+        case 0:
+        {
+
+            Processor el(newEl);
+            if(config.motherboard.getSocket()!=""&&config.motherboard.getSocket()!=el.getSocket())
+               {
+                    compatible=false;
+                    feedback+="-Материнской платой:\n"
+                             "Сокет Мат.платы: "+config.motherboard.getSocket()+"\tПротив "+el.getSocket()+"\n";
+                }
+            if((config.ram.getMemType()=="DDR3"&&el.getMaxMemFreqDDR3()==0)||(config.ram.getMemType()=="DDR4"&&el.getMaxMemFreqDDR4()==0))
+            {
+                compatible=false;
+                feedback+="-Оперативной памятью:\n"
+                          "Тип Оперативной памяти: "+config.ram.getMemType()+"\tМакс.частота DDR4: "+el.getMaxMemFreqDDR4()+" Макс.частота DDR3: "+el.getMaxMemFreqDDR3()+"\n";
+
+            }
+            if(config.ram.getMemType()=="DDR4"&&el.getMaxMemFreqDDR4()!=0&&config.ram.getMemFreq()>(int)el.getMaxMemFreqDDR4())
+            {
+                compatible=false;
+                feedback+="-Оперативной памятью:\n"
+                          "Частота Оперативной памяти DDR4: "+config.ram.getMemFreq()+"\tПротив "+el.getMaxMemFreqDDR4()+"\n";
+            }
+            if(config.ram.getMemType()=="DDR3"&&el.getMaxMemFreqDDR3()!=0&&config.ram.getMemFreq()>(int)el.getMaxMemFreqDDR3())
+            {
+                compatible=false;
+                feedback+="-Оперативной памятью:\n"
+                          "Частота Оперативной памяти DDR3: "+config.ram.getMemFreq()+"\tПротив "+el.getMaxMemFreqDDR3()+"\n";
+            }
+            if(config.cooler.getTDP()!=0&&el.getTDP()!=0&&config.cooler.getTDP()<el.getTDP())
+            {
+                compatible=false;
+                feedback+="-Кулером:\n"
+                          "Отвод тепла кулера: "+QString::number(config.cooler.getTDP())+"\tПротив Тепловыделения "+el.getTDP()+"\n";
+            }
+            if(config.cooler.getName()!="")
+            {
+                    if(!CheckCoolerSoket(el.getSocket(),config.cooler.getSockets()))
+                {
+                    compatible=false;
+                    feedback+="-Кулером\n"
+                              "Сокет процессора не подходит к поддерживающимся сокетам кулера\n";
+                }
+            }
+         break;
+        }
+
+    case 1:
+    {
+        MotherBoard el(newEl);
+        if(config.processor.getSocket()!=""&&el.getSocket()!=0&&el.getSocket()!=config.processor.getSocket())
+        {
+            compatible=false;
+            feedback+="-Процессором:\n"
+                      "Сокет процессора: "+config.processor.getSocket()+"\tПротив "+el.getSocket()+"\n";
+        }
+        if((config.ram.getMemType()=="DDR4"&&el.getDDR4count()==0)||(config.ram.getMemType()=="DDR3"&&el.getDDR3count()==0))
+        {
+            compatible=false;
+            feedback+="-Оперативной памятью:\n"
+                      "Тип ОП: "+config.ram.getMemType()+"\t Количество планок для DDR4: "+el.getDDR4count()+" для DDR3: "+el.getDDR3count()+"\n";
+        }
+        if(config.ram.getMemFreq()!=0&&config.ram.getMemFreq()>el.getMaxFreq())
+        {
+            compatible=false;
+            feedback+="-Оперативной памятью:\n"
+                      "Частота ОП:"+config.ram.getMemFreq()+"\t Против максимальной "+el.getMaxFreq()+"\n";
+        }
+        if(el.getMaxMem()!=0&&config.ram.getSumMem()>el.getMaxMem())
+        {
+            compatible=false;
+            feedback+="-Оперативной памятью:\n"
+                      "Общее количество ОП: "+QString::number(config.ram.getSumMem())+"\t Против максимального "+el.getMaxMem()+"\n";
+        }
+        if(config.box.getMotherForm()!=""&&config.box.getMotherForm()!=el.getForm())
+        {
+            compatible=false;
+            feedback+="-Корпусом:\n"
+                      "Форм-фактор Мат.платы в корпусе: "+config.box.getMotherForm()+"\t Против "+el.getForm()+"\n";
+        }
+        break;
+    }
+    case 2:
+        {
+
+            GraphicsCard el(newEl);
+            qDebug()<<"check graphiccard";
+            if(config.power.getPower()!=0&&el.getPower()!=0&&config.power.getPower()<el.getPower())
+            {
+                compatible=false;
+                feedback+="-Блоком питания:\n"
+                          "Мощность блока питания: "+QString::number(config.power.getPower())+"\t Против требуемой "+el.getPower()+"\n";
+            }
+            break;
+        }
+    case 3:
+    {
+        RAM el(newEl);
+        qDebug()<<"check ram";
+        if(config.processor.getName()!=""&&((el.getMemType()=="DDR3"&&config.processor.getMaxMemFreqDDR3()==0)||(el.getMemType()=="DDR4"&&config.processor.getMaxMemFreqDDR4()==0)))
+        {
+            compatible=false;
+            feedback+="-Процессором:\n"
+                      "У процессора макс.частота DDR4: "+QString::number(config.processor.getMaxMemFreqDDR4())+" DDR3: "+config.processor.getMaxMemFreqDDR3()+"\tТип памяти "+el.getMemType()+"\n";
+        }
+        if((config.processor.getMaxMemFreqDDR4()!=0&&(int)config.processor.getMaxMemFreqDDR4()<el.getMemFreq())||(config.processor.getMaxMemFreqDDR3()!=0&&(int)config.processor.getMaxMemFreqDDR3()<el.getMemFreq()))
+        {
+            compatible=false;
+            feedback+="-Процессором:\n"
+                      "У процессора макс частота : "+QString::number(config.processor.getMaxMemFreqDDR4())+"\tПротив "+el.getMemFreq()+"\n";
+        }
+        if(config.motherboard.getName()!=""&&config.motherboard.getDDR4count()==0&&el.getMemType()=="DDR4")
+        {
+            compatible=false;
+            feedback+="-Материнской платой:\n"
+                      "Макс. планок мат.платы типа DDR4: "+QString::number(config.motherboard.getDDR4count())+"\tТип Оперативной памяти: DDR4\n";
+        }
+        if(config.motherboard.getName()!=""&&config.motherboard.getDDR3count()==0&&el.getMemType()=="DDR3")
+        {
+            compatible=false;
+            feedback+="-Материнской платой:\n"
+                      "Макс. планок мат.платы типа DDR3: "+QString::number(config.motherboard.getDDR3count())+"\tТип Оперативной памяти: DDR3\n";
+        }
+        if(config.motherboard.getMaxMem()!=0&&config.motherboard.getMaxMem()<el.getSumMem())
+        {
+            compatible=false;
+            feedback+="-Материнской платой:\n"
+                     "Макс ОП у мат. платы: "+QString::number(config.motherboard.getMaxMem())+"\tПротив "+el.getSumMem()+"\n";
+        }
+        if(config.motherboard.getMaxFreq()!=0&&config.motherboard.getMaxFreq()<el.getMemFreq())
+        {
+            compatible=false;
+            feedback+="-Материнской платой:\n"
+                      "Макс частота ОП у мат.платы: "+QString::number(config.motherboard.getMaxFreq())+"\tПротив "+el.getMemFreq()+"\n";
+        }
+        break;
+    }
+    case 4:
+    {
+        Cooler el(newEl);
+        qDebug()<<"check cooler";
+        if(config.processor.getSocket()!="")
+                if(!CheckCoolerSoket(config.processor.getSocket(),el.getSockets()))
+                {
+                    compatible=false;
+                    feedback+="-Процессором:\n"
+                              "Сокет процессора не подходит к поддерживающимся сокетам кулера.\n";
+                }
+        if(config.processor.getTDP()!=0&&config.processor.getTDP()>el.getTDP())
+        {
+            compatible=false;
+            feedback+="-Процессором:\n"
+                      "Тепловыделение процессора: "+QString::number(config.processor.getTDP())+"\tПротив Теплоотвода "+el.getTDP()+"\n";
+        }
+        break;
+    }
+    case 5:
+    {
+        compatible=true;
+        break;
+    }
+    case 6:
+    {
+        SSD el(newEl);
+        qDebug()<<"check ssd";
+        if(config.motherboard.getName()!=""&&config.motherboard.getM2()==0&&el.getForm()=="M.2")
+        {
+            compatible=false;
+            feedback+="-Материнской платой\n"
+                      "У материнской платы отсутствует разъем M.2\n";
+        }
+        break;
+    }
+    case 7:
+    {
+        Power el(newEl);
+        qDebug()<<"check power";
+        if(config.graphicscard.getName()!=0&&config.graphicscard.getPower()>el.getPower())
+        {
+            compatible=false;
+            feedback+="-Видеокартой\n"
+                      "Требуемая мощность БП для видеокарты: "+QString::number(config.graphicscard.getPower())+"\tПротив "+el.getPower()+"\n";
+        }
+        break;
+    }
+    case 8:
+    {
+        Case el(newEl);
+        qDebug()<<"check case";
+        if(config.motherboard.getForm()!=""&&config.motherboard.getForm()!=el.getMotherForm())
+        {
+            compatible=false;
+            feedback+="-Материнской платой\n"
+                      "Форм фактор мат.платы: "+config.motherboard.getForm()+"\t Против "+el.getMotherForm();
+        }
+        break;
+    }
+
+    }
+    if(compatible)
+        feedback="";
+    return compatible;
 }
 template<class T>
 void DataLoader::GetMinMaxIndexes(QVector<T> & arr,int min,int max,int i)
@@ -727,13 +937,9 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
     demand.Socket="";
     demand.TDP=0;
 
-
     int surplus=0;
     int checkIndex=0;
     FindAllVariants(minsum,maxsum,type);
-
-
-    qDebug()<<"TYPE of CONFIG"<<type;
 
     //МАТЕРИНКА
     bool compatible=false;
@@ -765,7 +971,6 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
     {
         if(availableIndexes[2].size()==1)
         {
-            qDebug()<<"выбрана нулевая видюха";
             checkIndex=0;
         }
         else
@@ -789,7 +994,6 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
         if(!compatible)
            { if(surplus!=0&&minSum[0]!=0&&availableIndexes[0].size()==1)
                 {
-                qDebug()<<"correct processor min max";
                 maxSum[0]+=surplus;
                 surplus=0;
                 minSum[0]=0;
@@ -861,14 +1065,10 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
         {
             if(surplus!=0&&minSum[6]!=0&&availableIndexes[6].size()==1)
             {
-                qDebug()<<"correct ssd min max";
-                qDebug()<<"surplus"<<surplus;
                 maxSum[6]+=surplus;
-                qDebug()<<"max sum ssd"<<maxSum[6];
                 surplus=0;
                 minSum[6]=0;
                 GetMinMaxIndexes(arrSSDs,minSum[6],maxSum[6],6);
-                qDebug()<<availableIndexes[6];
             }
             else
                 availableIndexes[6].remove(checkIndex);
@@ -890,14 +1090,10 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
         {
             if(surplus!=0&&minSum[7]!=0&&availableIndexes[7].size()==1)
             {
-                qDebug()<<"correct power min max";
-                qDebug()<<"surplus"<<surplus;
                 maxSum[7]+=surplus;
-                qDebug()<<"max sum power"<<maxSum[7];
                 surplus=0;
                 minSum[7]=0;
                 GetMinMaxIndexes(arrPowers,minSum[7],maxSum[7],7);
-                qDebug()<<availableIndexes[7];
             }
             else
                 availableIndexes[7].remove(checkIndex);
@@ -920,14 +1116,10 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
         {
             if(surplus!=0&&minSum[8]!=0&&availableIndexes[8].size()==1)
             {
-                qDebug()<<"correct case min max";
-                qDebug()<<"surplus"<<surplus;
                 maxSum[8]+=surplus;
-                qDebug()<<"max sum case"<<maxSum[8];
                 surplus=0;
                 minSum[8]=0;
                 GetMinMaxIndexes(arrCases,minSum[8],maxSum[8],8);
-                qDebug()<<availableIndexes[8];
             }
             else
                 availableIndexes[8].remove(checkIndex);
