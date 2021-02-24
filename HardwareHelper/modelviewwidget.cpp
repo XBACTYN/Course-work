@@ -318,12 +318,22 @@ void ModelViewWidget::add()
             const QModelIndex index = form->listptr->selectionModel()->currentIndex();
             qDebug()<<"Selected elem "<<form->infomodel->ptr[index.row()]->name;
             QVector<QString> temp(form->infomodel->ptr[index.row()]->GetValues());
+            temp.insert(1,temp[0]);
+            qDebug()<<temp;
             compatible=loader->CheckCompatibility(temp,tabIndex,feedback);
             if(!compatible)
             {
-                QMessageBox msg;
-                msg.setText(feedback);
+                QMessageBox msg("Информация",
+                                feedback,
+                                QMessageBox::Information,
+                                QMessageBox::Yes,
+                                QMessageBox::No,
+                                QMessageBox::Cancel | QMessageBox::Escape);
                 int ret=msg.exec();
+                if(ret==QMessageBox::Yes)
+                {
+                    qDebug()<<"add elem";
+                }
             }
             else{
                 qDebug()<<"add el";
