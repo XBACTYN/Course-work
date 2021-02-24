@@ -308,7 +308,27 @@ void ModelViewWidget::tab_clicked(int index)
 
 void ModelViewWidget::add()
 {
-    qDebug()<<combotype->currentIndex();
+    qDebug()<<"tabIndex: "<<tabIndex;
+    bool compatible=true;
+    QString feedback="";
+    TabForm * form=NULL;
+    form=(TabForm*)tabw->widget(tabIndex);
+        if(form->listptr->selectionModel()->hasSelection())
+            {
+            const QModelIndex index = form->listptr->selectionModel()->currentIndex();
+            qDebug()<<"Selected elem "<<form->infomodel->ptr[index.row()]->name;
+            QVector<QString> temp(form->infomodel->ptr[index.row()]->GetValues());
+            compatible=loader->CheckCompatibility(temp,tabIndex,feedback);
+            if(!compatible)
+            {
+                QMessageBox msg;
+                msg.setText(feedback);
+                int ret=msg.exec();
+            }
+            else{
+                qDebug()<<"add el";
+            }
+            }
 }
 
 void ModelViewWidget::get_info()
