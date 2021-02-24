@@ -432,6 +432,7 @@ void ModelViewWidget::add()
           }
 }
 
+
 void ModelViewWidget::get_info()
 {
     TabForm * form=NULL;

@@ -533,8 +533,8 @@ bool DataLoader::CheckCoolerSoket(QString find,QString list)
     QString socket2="";
     QString isEmpty1="";
     QString isEmpty2="";
-    //qDebug()<<"socket on processor"<<find;
-   // qDebug()<<"cooler sockets"<<list;
+    qDebug()<<"socket on processor"<<find;
+    qDebug()<<"cooler sockets"<<list;
     int lastPos = 0;
 
         while( ( lastPos = amd.indexIn( find, lastPos ) ) != -1 )
@@ -548,7 +548,7 @@ bool DataLoader::CheckCoolerSoket(QString find,QString list)
             lastPos += intel.matchedLength();
             socket2=intel.cap( 1 );
         }
-    //qDebug()<<"socket1"<<socket1<<"socket2"<<socket2;
+    qDebug()<<"socket1"<<socket1<<"socket2"<<socket2;
     if(socket1!="")
     {
         QRegExp socket("("+socket1+")");
@@ -557,7 +557,7 @@ bool DataLoader::CheckCoolerSoket(QString find,QString list)
         {
             lastPos+=socket.matchedLength();
             isEmpty2=socket.cap(1);
-            //qDebug()<<"isEmpty2:"<<isEmpty2<<"socket cap"<<socket.cap(1);
+            qDebug()<<"isEmpty2:"<<isEmpty2<<"socket cap"<<socket.cap(1);
         }
 
 
@@ -570,10 +570,10 @@ bool DataLoader::CheckCoolerSoket(QString find,QString list)
         {
             lastPos+=socket.matchedLength();
             isEmpty2=socket.cap(1);
-            //qDebug()<<"isEmpty2:"<<isEmpty2<<"socket cap"<<socket.cap(1);
+            qDebug()<<"isEmpty2:"<<isEmpty2<<"socket cap"<<socket.cap(1);
         }
     }
-   // qDebug()<<"1st empty"<<isEmpty1<<"2nd empty"<<isEmpty2;
+    qDebug()<<"1st empty"<<isEmpty1<<"2nd empty"<<isEmpty2;
     if(isEmpty1!=""||isEmpty2!="")
         compatible=true;
     return compatible;
