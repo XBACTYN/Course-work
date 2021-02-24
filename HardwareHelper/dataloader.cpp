@@ -45,6 +45,17 @@ DataLoader::DataLoader()
     pages[5]=1;
     pages[7]=1;
     ClearConfig();
+    demand.Price=0;
+    demand.DDRtype="";
+    demand.FreqDDR3=0;
+    demand.FreqDDR4=0;
+    demand.M2=0;
+    demand.MaxFreqRAM=0;
+    demand.MinPower=0;
+    demand.MotherForm="";
+    demand.PowerForm="";
+    demand.Socket="";
+    demand.TDP=0;
     srand(time(0));
 
 };
