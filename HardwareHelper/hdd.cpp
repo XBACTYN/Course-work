@@ -103,6 +103,8 @@ HDD::HDD(QVector<QString> &data)
 
 void HDD::RepairInterface(QString &str)
 {
+    if(str.at(0)!=" ")
+    {
     QRegExp reg("R>(.{4,6})<B");
     QString nstr="<BR>";
     nstr+=str;
@@ -114,6 +116,8 @@ void HDD::RepairInterface(QString &str)
         lastPos += reg.matchedLength();
             str+=reg.cap(1)+" ";
 
+    }
+    str=" "+str;
     }
 }
 

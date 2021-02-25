@@ -123,17 +123,10 @@ Cooler::Cooler(QVector<QString> &data)
 void Cooler::RepairSockets(QString &str)
 {
     //Проверка на готовый список
-    QRegExp test("(<B)");
-    int lastPos=0;
-    QString teststr="";
-    while((lastPos=test.indexIn(str,lastPos))!=-1)
+
+    if(str.at(0)!=" ")
     {
-        lastPos+=test.matchedLength();
-        teststr+=test.cap(1);
-        qDebug()<<test.cap(1);
-    }
-    if(teststr!="")
-    {
+        int lastPos=0;
         QRegExp reg("R>(.{3,20})(?:/|<B)");
         QString nstr="<BR>";
         nstr+=str;
@@ -146,6 +139,7 @@ void Cooler::RepairSockets(QString &str)
             str+=reg.cap(1)+" ";
 
         }
+        str=" "+str;
     }
 }
 
