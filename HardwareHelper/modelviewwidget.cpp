@@ -59,10 +59,12 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     rbExpens->setText("Сначала дорогие");
     connect(rbExpens, SIGNAL(toggled(bool)), this, SLOT(radio2_toggled(bool)));
     panelLayout->addWidget(rbExpens);
-    QPushButton* bAdd = new QPushButton("Добавить");
+    bAdd = new QPushButton("Добавить");
+    bAdd->setEnabled(false);
     connect(bAdd,SIGNAL(clicked()),SLOT(add()));
     panelLayout->addWidget( bAdd );
     bInfo = new QPushButton("Информация");
+    bInfo->setEnabled(false);
     connect( bInfo, SIGNAL( clicked() ), SLOT( get_info() ) );
     panelLayout->addWidget( bInfo,0,Qt::AlignTop );
 
@@ -114,7 +116,7 @@ ModelViewWidget::ModelViewWidget( QWidget* parent ) : QWidget( parent ) //кон
     pricelab=new QLabel("Общая цена:");
     priceline=new QLineEdit;
     priceline->setReadOnly(true); 
-    QPushButton* savebn=new QPushButton("Сохранить сборку в txt");
+    savebn=new QPushButton("Сохранить сборку в txt");
     connect(savebn,SIGNAL(clicked()),this,SLOT(savetxt()));
     saveLay->addWidget(pricelab);
     saveLay->addWidget(priceline);
@@ -274,8 +276,8 @@ void ModelViewWidget::load_data()
  }
  bSort->setEnabled(true);
  buttonstart->setEnabled(true);
- //bInfo->setEnabled(true);
- //сюда функцию для активации всех кнопок.
+ bAdd->setEnabled(true);
+ bInfo->setEnabled(true);
 }
 void ModelViewWidget::generate()
 {
@@ -299,7 +301,6 @@ void ModelViewWidget::generate()
 
 void ModelViewWidget::tab_clicked(int index)
 {
-    qDebug()<<"tab_clicked";
     tabIndex=index;
 
 }
@@ -390,7 +391,6 @@ void ModelViewWidget::AddElement(QVector<QString>& data,int type)
 }
 void ModelViewWidget::add()
 {
-    qDebug()<<"tabIndex: "<<tabIndex;
     bool compatible=true;
     QString feedback="";
     TabForm * form=NULL;
@@ -398,14 +398,11 @@ void ModelViewWidget::add()
         if(form->listptr->selectionModel()->hasSelection())
           {
             const QModelIndex index = form->listptr->selectionModel()->currentIndex();
-            qDebug()<<"Selected elem "<<form->infomodel->ptr[index.row()]->name;
             QVector<QString> temp(form->infomodel->ptr[index.row()]->GetValues());
             temp.insert(1,temp[0]);
             if(tabIndex==0)
                 temp.insert(4,"");
-            qDebug()<<temp;
             compatible=loader->CheckCompatibility(temp,tabIndex,feedback);
-            qDebug()<<"compatible checked";
             if(!compatible)
             {
                 QMessageBox msg("Информация",
@@ -417,14 +414,12 @@ void ModelViewWidget::add()
                 int ret=msg.exec();
                 if(ret==QMessageBox::Yes)
                 {
-                    qDebug()<<"add elem";
                     AddElement(temp,tabIndex);
 
                 }
             }
             else
             {
-                qDebug()<<"add el";
                 AddElement(temp,tabIndex);
             }
           }
@@ -459,7 +454,6 @@ void ModelViewWidget::radio2_toggled(bool value)
 }
 void ModelViewWidget::savetxt()
 {
-    qDebug()<<"Попытка сохранить";
     QFile file("configFile.txt");
     QTextStream stream(&file);
    if(file.open(QIODevice::WriteOnly|QIODevice::Text))
@@ -482,12 +476,10 @@ void ModelViewWidget::sort_all()
 {
     if(bycheap)
     {
-        qDebug()<<"sort from cheapest to expensive";
         loader->SortFromCheapest();
     }
     else
     {
-        qDebug()<<"sort from expensiest to cheap";
         loader->SortFromMostExpensive();
     }
 }
@@ -548,7 +540,6 @@ void ModelViewWidget::iConfCase()
 }
 void ModelViewWidget::dConfProcessor()
 {
-    qDebug()<<"in dConfProcessor";
     loader->demand.Price-=loader->config.processor.getPrice();
     loader->demand.FreqDDR3=0;
     loader->demand.FreqDDR4=0;
@@ -623,6 +614,5 @@ void ModelViewWidget::dConfCase()
 }
 ModelViewWidget::~ModelViewWidget()
 {
-    qDebug()<<"DESTRUCTOR MODELVIEW";
     delete tabw;
 }

@@ -178,27 +178,7 @@ void DataLoader::SetRegexCooler()
     fields[4]=11;
 }
 
-void DataLoader::RepairCooler(QString & str) //              УДАЛИТЬ
-{
-   QRegExp reg("R>(.{2,22})(?:/|<B)");
-   QString nstr="<BR>";
-   nstr+=str;
-   nstr+="<BR>";
-  // qDebug()<<nstr;
-   nstr.replace("/","//");
-   qDebug()<<nstr;
-   str.clear();
-   int lastPos = 0;
-   while( ( lastPos = reg.indexIn( nstr, lastPos ) ) != -1 )
-   {
-       lastPos += reg.matchedLength();
-           qDebug()<<reg.cap(1);
-           str+=reg.cap(1)+" ";
 
-   }
-  qDebug()<<str;
-
-}
 void DataLoader::SetRegexHDD()
 {
     vectorReg2.push_back(QRegExp("<meta name=.description. content=.Цена: от (\\d{3,6}) р. до (\\d{3,6}) р."
@@ -215,23 +195,7 @@ void DataLoader::SetRegexHDD()
                                  ));
      fields[5]=10;
 }
-void DataLoader::RepairHDD(QString &str)     //              УДАЛИТЬ
-{
-    QRegExp reg("R>(.{4,6})<B");
-    QString nstr="<BR>";
-    nstr+=str;
-    nstr.replace("<br>","<BR>");
-    str.clear();
-    int lastPos = 0;
-    while( ( lastPos = reg.indexIn( nstr, lastPos ) ) != -1 )
-    {
-        lastPos += reg.matchedLength();
-            qDebug()<<reg.cap(1);
-            str+=reg.cap(1)+" ";
 
-    }
-   qDebug()<<str;
-}
 void DataLoader::SetRegexSSD()
 {
     vectorReg2.push_back((QRegExp("<meta name=.description. content=.Цена: от (\\d{3,6}) р. до (\\d{3,6}) р."
@@ -287,7 +251,7 @@ void DataLoader::SetRegexCase() //нету поля длины видеокар�
                                   ));
      fields[8]=12;
 }
-void DataLoader::DownloadPage(QString &Html,QUrl &url) //максимально 24 процессора на странице. потом /(n-1)/ к адресу страницы
+void DataLoader::DownloadPage(QString &Html,QUrl &url)
 {
     qDebug()<<"in DownloadPage()";
     QNetworkReply *response = manager->get(QNetworkRequest(url));
@@ -426,14 +390,11 @@ bool DataLoader::ChooseGraphicCard(int index,int sum, int &surplus)
 {
    qDebug()<<"ChooseGraphicCard()";
    bool compatible=false;
-   //if(arrGraphicsCards[index].getPrice()>0.5*sum)
-   //{
    config.graphicscard=arrGraphicsCards[index];
    demand.MinPower=config.graphicscard.getPower();
    demand.Price+=config.graphicscard.getPrice();
    surplus+=sum-config.graphicscard.getPrice();
    compatible=true;
-   // }
    return compatible;
 }
 bool DataLoader::ChooseProcessor(int index,int sum, int &surplus,int type)
@@ -539,7 +500,6 @@ bool DataLoader::CheckCoolerSoket(QString find,QString list)
     bool compatible=false;
     QRegExp amd("AMD.*(..\\d\\+?)");
     QRegExp intel("Intel.*(\\d{3,4}.?v?\\d?)");
-    //QRegExp amdModel("AMD.+(.M\\d)");
     QString socket1="";
     QString socket2="";
     QString isEmpty1="";
@@ -559,7 +519,6 @@ bool DataLoader::CheckCoolerSoket(QString find,QString list)
             lastPos += intel.matchedLength();
             socket2=intel.cap( 1 );
         }
-    qDebug()<<"socket1"<<socket1<<"socket2"<<socket2;
     if(socket1!="")
     {
         QRegExp socket("("+socket1+")");
@@ -568,10 +527,7 @@ bool DataLoader::CheckCoolerSoket(QString find,QString list)
         {
             lastPos+=socket.matchedLength();
             isEmpty2=socket.cap(1);
-            qDebug()<<"isEmpty2:"<<isEmpty2<<"socket cap"<<socket.cap(1);
         }
-
-
     }
     if(socket2!="")
     {
@@ -581,10 +537,8 @@ bool DataLoader::CheckCoolerSoket(QString find,QString list)
         {
             lastPos+=socket.matchedLength();
             isEmpty2=socket.cap(1);
-            qDebug()<<"isEmpty2:"<<isEmpty2<<"socket cap"<<socket.cap(1);
         }
     }
-    qDebug()<<"1st empty"<<isEmpty1<<"2nd empty"<<isEmpty2;
     if(isEmpty1!=""||isEmpty2!="")
         compatible=true;
     return compatible;
@@ -653,7 +607,7 @@ bool DataLoader::CheckCompatibility(QVector<QString> &newEl,int typeEl,QString& 
 {
     qDebug()<<"CheckCompatibility()";
     bool compatible=true;
-    feedback="Если хотите добавить несовместимый элемент,нажмите YES\nДля отмены добавления закройте окно\n\nЭлемент не совместим c\n";
+    feedback="Если хотите добавить несовместимый элемент,нажмите YES\n\nЭлемент не совместим c\n";
     switch(typeEl)
     {
         case 0:
@@ -741,8 +695,7 @@ bool DataLoader::CheckCompatibility(QVector<QString> &newEl,int typeEl,QString& 
     case 2:
         {
 
-            GraphicsCard el(newEl);
-            qDebug()<<"check graphiccard";
+         GraphicsCard el(newEl);
             if(config.power.getPower()!=0&&el.getPower()!=0&&config.power.getPower()<el.getPower())
             {
                 compatible=false;
@@ -754,7 +707,6 @@ bool DataLoader::CheckCompatibility(QVector<QString> &newEl,int typeEl,QString& 
     case 3:
     {
         RAM el(newEl);
-        qDebug()<<"check ram";
         if(config.processor.getName()!=""&&((el.getMemType()=="DDR3"&&config.processor.getMaxMemFreqDDR3()==0)||(el.getMemType()=="DDR4"&&config.processor.getMaxMemFreqDDR4()==0)))
         {
             compatible=false;
@@ -796,7 +748,6 @@ bool DataLoader::CheckCompatibility(QVector<QString> &newEl,int typeEl,QString& 
     case 4:
     {
         Cooler el(newEl);
-        qDebug()<<"check cooler";
         if(config.processor.getSocket()!="")
                 if(!CheckCoolerSoket(config.processor.getSocket(),el.getSockets()))
                 {
@@ -808,7 +759,7 @@ bool DataLoader::CheckCompatibility(QVector<QString> &newEl,int typeEl,QString& 
         {
             compatible=false;
             feedback+="-Процессором:\n"
-                      "Тепловыделение процессора: "+QString::number(config.processor.getTDP())+"\tПротив Теплоотвода "+el.getTDP()+"\n";
+                      "Тепловыделение процессора: "+QString::number(config.processor.getTDP())+"\tПротив Теплоотвода "+QString::number(el.getTDP())+"\n";
         }
         break;
     }
@@ -820,7 +771,6 @@ bool DataLoader::CheckCompatibility(QVector<QString> &newEl,int typeEl,QString& 
     case 6:
     {
         SSD el(newEl);
-        qDebug()<<"check ssd";
         if(config.motherboard.getName()!=""&&config.motherboard.getM2()==0&&el.getForm()=="M.2")
         {
             compatible=false;
@@ -832,7 +782,6 @@ bool DataLoader::CheckCompatibility(QVector<QString> &newEl,int typeEl,QString& 
     case 7:
     {
         Power el(newEl);
-        qDebug()<<"check power";
         if(config.graphicscard.getName()!=0&&config.graphicscard.getPower()>el.getPower())
         {
             compatible=false;
@@ -844,7 +793,6 @@ bool DataLoader::CheckCompatibility(QVector<QString> &newEl,int typeEl,QString& 
     case 8:
     {
         Case el(newEl);
-        qDebug()<<"check case";
         if(config.motherboard.getForm()!=""&&config.motherboard.getForm()!=el.getMotherForm())
         {
             compatible=false;
@@ -868,16 +816,12 @@ void DataLoader::GetMinMaxIndexes(QVector<T> & arr,int min,int max,int i)
     int maxIndex;
     maxSum[i]=max;
     minSum[i]=min;
-
-
         maxIndex=BinaryIndex(arr,arr.size(),maxSum[i]);
         minIndex=BinaryIndex(arr,arr.size(),minSum[i]);
         if(minIndex!=0)
             --minIndex;
-        qDebug()<<minIndex;
         if(maxIndex!=0)
             --maxIndex;
-        qDebug()<<maxIndex;
         for(int j=minIndex;j<=maxIndex;++j)
         {
             temp.push_back(j);
@@ -902,11 +846,11 @@ void DataLoader::FindAllVariants(int min,int max, int configType)
 {
     SortFromCheapest();
     if(configType==0)
-    for(int i=0;i<9;++i)
-    {
-        maxSum[i]=(max*gamerConfig[i])/100;
-        minSum[i]=(min*gamerConfig[i])/100;
-    }
+        for(int i=0;i<9;++i)
+        {
+            maxSum[i]=(max*gamerConfig[i])/100;
+            minSum[i]=(min*gamerConfig[i])/100;
+        }
     if(configType==1)
     {
         for(int i=0;i<9;++i)
@@ -971,7 +915,6 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
             compatible=ChooseMotherBoard(availableIndexes[1][checkIndex],maxSum[1],surplus);
             if(!compatible) 
                 availableIndexes[1].remove(checkIndex);
-
 
         }
 
@@ -1047,6 +990,7 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
             availableIndexes[4].remove(checkIndex);
 
     }
+    //HDD
     compatible=false;
     while(!compatible&&maxSum[5]>arrHDDs[0].getPrice()&&availableIndexes[5].size()!=0)
     {
@@ -1137,7 +1081,6 @@ void DataLoader::GenerateConfig(int minsum,int maxsum,int type)
         }
 
     }
-
 }
 
 

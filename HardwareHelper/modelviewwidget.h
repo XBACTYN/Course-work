@@ -53,6 +53,8 @@ private:
     QVector<QHBoxLayout*> arrlay;
     QVector<QPushButton*> infbn;
     QVector<QPushButton*> arrbn;
+    QPushButton* bAdd;
+    QPushButton* savebn;
     QProgressBar *progbar;
     QPushButton* bInfo;
     QPushButton* bSort;
